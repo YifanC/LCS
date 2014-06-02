@@ -1,0 +1,36 @@
+#include <pthread.h>
+
+
+void* DAQ_exec(void*)
+{
+  pid_t pid;
+  
+ 
+  
+  for(int i=0; i<3; i++)
+    { 
+      //creazione del nuovo processo che esegue daq_main
+      if((pid = fork())== 0)
+	execv("./daqmain",arg_vecor egli errori per la fork
+      if( pid < 0 )
+	perror("Fork Error"),exit(1);
+      
+      while(!waitpid(pid, NULL, WNOHANG));
+      //sleep(10);
+    }
+
+  return (void*)0;
+}
+
+int main()
+{
+  pthread_t th_loop;
+  int r_value;
+  
+  if(r_value = pthread_create(&th_loop, NULL, DAQ_exec, NULL))
+    perror("\npthread_create error\n"),exit(1); 
+
+  return 0;
+}
+
+

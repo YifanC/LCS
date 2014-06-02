@@ -1,0 +1,348 @@
+bigi  Tot_events=11295   Process= -c
+kill= kill -9 11295
+sh: line 0: kill: (11295) - No such process
+shm_del =1
+daqpar.runnum   = 100u 
+daqpar.nchannel = 8u 
+daqpar.nevents  = 2u 
+loops           = 1 
+
+daqpar.board_number= 8ublt_size    = 16400 bytes
+blt_size_32 = 4100 32bitW
+event_size  = 32800 32bitW
+buffer_size = 328000 32bitW
+Buffer 0x2a95685010
+ROC FPGA Firmware Revsion Ret = 0
+ROC_FPGA_Firmware_X = 256x
+ROC_FPGA_Firmware_Y = 7x
+
+Software reset register  ret = 0 
+Front panel I/O Control DATA  ret = 0 
+Front panel I/O Control DATA = 0x 
+Channel Configuration ret = 0 
+Channel Configuration DATA = 144x 
+Channel Enable Mask Ret   = 0 
+Channel Enable Mask Value = 255x 
+Monitor Mode Ret   = 0 
+Monitor Mode Value = 2x 
+
+Analog Monitor Mode Ret   = 0 
+Analog Monitor Mode Value = 786431x 
+Post trigger settings  ret = 0 
+Post trigger settings DATA = 300x 
+
+ Buffer Organization = 9x
+
+ Trigger IN Enable 0x810C  DATA = -1073741569x
+
+ Trigger IN Enable 0x810C  DATA = 15x
+
+ Trigger OUT Enable 0x810C  DATA = 1073741824x
+
+ DAC Level[0] = 32000x
+ DAC Level[1] = 32000x
+ DAC Level[2] = 32000x
+ DAC Level[3] = 32000x
+ Board_id= 0 	 Custom size = 512
+ BLT Event Number to be Transferred = 1x
+
+ Downsampling factor is = 40 
+VME Control Ret   = 0 
+VME Control Value = 16x 
+
+ Acquisition Control (4) = 20x
+
+Base Address= 839909376x 
+MCST Base Address Ret   = 0 
+MCST Base Address Value = 699x 
+
+ROC FPGA Firmware Revsion Ret = 0
+ROC_FPGA_Firmware_X = 256x
+ROC_FPGA_Firmware_Y = 7x
+
+Software reset register  ret = 0 
+Front panel I/O Control DATA  ret = 0 
+Front panel I/O Control DATA = 0x 
+Channel Configuration ret = 0 
+Channel Configuration DATA = 144x 
+Channel Enable Mask Ret   = 0 
+Channel Enable Mask Value = 255x 
+Monitor Mode Ret   = 0 
+Monitor Mode Value = 2x 
+
+Analog Monitor Mode Ret   = 0 
+Analog Monitor Mode Value = 786431x 
+Post trigger settings  ret = 0 
+Post trigger settings DATA = 300x 
+
+ Buffer Organization = 9x
+
+ Trigger IN Enable 0x810C  DATA = -1073741569x
+
+ Trigger IN Enable 0x810C  DATA = 15x
+
+ Trigger OUT Enable 0x810C  DATA = 1073741824x
+
+ DAC Level[0] = 32000x
+ DAC Level[1] = 32000x
+ DAC Level[2] = 32000x
+ DAC Level[3] = 32000x
+ Board_id= 1 	 Custom size = 512
+ BLT Event Number to be Transferred = 1x
+
+ Downsampling factor is = 40 
+VME Control Ret   = 0 
+VME Control Value = 16x 
+
+ Acquisition Control (4) = 20x
+
+Base Address= 839974912x 
+MCST Base Address Ret   = 0 
+MCST Base Address Value = 955x 
+
+ROC FPGA Firmware Revsion Ret = 0
+ROC_FPGA_Firmware_X = 256x
+ROC_FPGA_Firmware_Y = 7x
+
+Software reset register  ret = 0 
+Front panel I/O Control DATA  ret = 0 
+Front panel I/O Control DATA = 0x 
+Channel Configuration ret = 0 
+Channel Configuration DATA = 144x 
+Channel Enable Mask Ret   = 0 
+Channel Enable Mask Value = 255x 
+Monitor Mode Ret   = 0 
+Monitor Mode Value = 2x 
+
+Analog Monitor Mode Ret   = 0 
+Analog Monitor Mode Value = 786431x 
+Post trigger settings  ret = 0 
+Post trigger settings DATA = 300x 
+
+ Buffer Organization = 9x
+
+ Trigger IN Enable 0x810C  DATA = -1073741569x
+
+ Trigger IN Enable 0x810C  DATA = 15x
+
+ Trigger OUT Enable 0x810C  DATA = 1073741824x
+
+ DAC Level[0] = 32000x
+ DAC Level[1] = 32000x
+ DAC Level[2] = 32000x
+ DAC Level[3] = 32000x
+ Board_id= 2 	 Custom size = 512
+ BLT Event Number to be Transferred = 1x
+
+ Downsampling factor is = 40 
+VME Control Ret   = 0 
+VME Control Value = 16x 
+
+ Acquisition Control (4) = 20x
+
+Base Address= 840040448x 
+MCST Base Address Ret   = 0 
+MCST Base Address Value = 955x 
+
+ROC FPGA Firmware Revsion Ret = 0
+ROC_FPGA_Firmware_X = 256x
+ROC_FPGA_Firmware_Y = 7x
+
+Software reset register  ret = 0 
+Front panel I/O Control DATA  ret = 0 
+Front panel I/O Control DATA = 0x 
+Channel Configuration ret = 0 
+Channel Configuration DATA = 144x 
+Channel Enable Mask Ret   = 0 
+Channel Enable Mask Value = 255x 
+Monitor Mode Ret   = 0 
+Monitor Mode Value = 2x 
+
+Analog Monitor Mode Ret   = 0 
+Analog Monitor Mode Value = 786431x 
+Post trigger settings  ret = 0 
+Post trigger settings DATA = 300x 
+
+ Buffer Organization = 9x
+
+ Trigger IN Enable 0x810C  DATA = -1073741569x
+
+ Trigger IN Enable 0x810C  DATA = 15x
+
+ Trigger OUT Enable 0x810C  DATA = 1073741824x
+
+ DAC Level[0] = 32000x
+ DAC Level[1] = 32000x
+ DAC Level[2] = 32000x
+ DAC Level[3] = 32000x
+ Board_id= 3 	 Custom size = 512
+ BLT Event Number to be Transferred = 1x
+
+ Downsampling factor is = 40 
+VME Control Ret   = 0 
+VME Control Value = 16x 
+
+ Acquisition Control (4) = 20x
+
+Base Address= 840105984x 
+MCST Base Address Ret   = 0 
+MCST Base Address Value = 955x 
+
+ROC FPGA Firmware Revsion Ret = 0
+ROC_FPGA_Firmware_X = 768x
+ROC_FPGA_Firmware_Y = 2x
+
+Software reset register  ret = 0 
+Front panel I/O Control DATA  ret = 0 
+Front panel I/O Control DATA = 0x 
+Channel Configuration ret = 0 
+Channel Configuration DATA = 144x 
+Channel Enable Mask Ret   = 0 
+Channel Enable Mask Value = 255x 
+Monitor Mode Ret   = 0 
+Monitor Mode Value = 2x 
+
+Analog Monitor Mode Ret   = 0 
+Analog Monitor Mode Value = 786431x 
+Post trigger settings  ret = 0 
+Post trigger settings DATA = 300x 
+
+ Buffer Organization = 9x
+
+ Trigger IN Enable 0x810C  DATA = -1073741569x
+
+ Trigger IN Enable 0x810C  DATA = 15x
+
+ Trigger OUT Enable 0x810C  DATA = 1073741824x
+
+ DAC Level[0] = 32000x
+ DAC Level[1] = 32000x
+ DAC Level[2] = 32000x
+ DAC Level[3] = 32000x
+ Board_id= 4 	 Custom size = 512
+ BLT Event Number to be Transferred = 1x
+
+ Downsampling factor is = -1 
+VME Control Ret   = 0 
+VME Control Value = 16x 
+
+ Acquisition Control (4) = 20x
+
+Base Address= 840171520x 
+MCST Base Address Ret   = 0 
+MCST Base Address Value = 955x 
+
+ROC FPGA Firmware Revsion Ret = 0
+ROC_FPGA_Firmware_X = 768x
+ROC_FPGA_Firmware_Y = 2x
+
+Software reset register  ret = 0 
+Front panel I/O Control DATA  ret = 0 
+Front panel I/O Control DATA = 0x 
+Channel Configuration ret = 0 
+Channel Configuration DATA = 144x 
+Channel Enable Mask Ret   = 0 
+Channel Enable Mask Value = 255x 
+Monitor Mode Ret   = 0 
+Monitor Mode Value = 2x 
+
+Analog Monitor Mode Ret   = 0 
+Analog Monitor Mode Value = 786431x 
+Post trigger settings  ret = 0 
+Post trigger settings DATA = 300x 
+
+ Buffer Organization = 9x
+
+ Trigger IN Enable 0x810C  DATA = -1073741569x
+
+ Trigger IN Enable 0x810C  DATA = 15x
+
+ Trigger OUT Enable 0x810C  DATA = 1073741824x
+
+ DAC Level[0] = 32000x
+ DAC Level[1] = 32000x
+ DAC Level[2] = 32000x
+ DAC Level[3] = 32000x
+ Board_id= 5 	 Custom size = 512
+ BLT Event Number to be Transferred = 1x
+
+ Downsampling factor is = -1 
+VME Control Ret   = 0 
+VME Control Value = 16x 
+
+ Acquisition Control (4) = 20x
+
+Base Address= 840237056x 
+MCST Base Address Ret   = 0 
+MCST Base Address Value = 955x 
+
+ROC FPGA Firmware Revsion Ret = 0
+ROC_FPGA_Firmware_X = 768x
+ROC_FPGA_Firmware_Y = 2x
+
+Software reset register  ret = 0 
+Front panel I/O Control DATA  ret = 0 
+Front panel I/O Control DATA = 0x 
+Channel Configuration ret = 0 
+Channel Configuration DATA = 144x 
+Channel Enable Mask Ret   = 0 
+Channel Enable Mask Value = 255x 
+Monitor Mode Ret   = 0 
+Monitor Mode Value = 2x 
+
+Analog Monitor Mode Ret   = 0 
+Analog Monitor Mode Value = 786431x 
+Post trigger settings  ret = 0 
+Post trigger settings DATA = 300x 
+
+ Buffer Organization = 9x
+
+ Trigger IN Enable 0x810C  DATA = -1073741569x
+
+ Trigger IN Enable 0x810C  DATA = 15x
+
+ Trigger OUT Enable 0x810C  DATA = 1073741824x
+
+ DAC Level[0] = 32000x
+ DAC Level[1] = 32000x
+ DAC Level[2] = 32000x
+ DAC Level[3] = 32000x
+ Board_id= 6 	 Custom size = 512
+ BLT Event Number to be Transferred = 1x
+
+ Downsampling factor is = -1 
+VME Control Ret   = 0 
+VME Control Value = 16x 
+
+ Acquisition Control (4) = 20x
+
+Base Address= 840302592x 
+MCST Base Address Ret   = 0 
+MCST Base Address Value = 955x 
+
+ROC FPGA Firmware Revsion Ret = 0
+ROC_FPGA_Firmware_X = 768x
+ROC_FPGA_Firmware_Y = 2x
+
+Software reset register  ret = 0 
+Front panel I/O Control DATA  ret = 0 
+Front panel I/O Control DATA = 0x 
+Channel Configuration ret = 0 
+Channel Configuration DATA = 144x 
+Channel Enable Mask Ret   = 0 
+Channel Enable Mask Value = 255x 
+Monitor Mode Ret   = 0 
+Monitor Mode Value = 2x 
+
+Analog Monitor Mode Ret   = 0 
+Analog Monitor Mode Value = 786431x 
+Post trigger settings  ret = 0 
+Post trigger settings DATA = 300x 
+
+ Buffer Organization = 9x
+
+ Trigger IN Enable 0x810C  DATA = -1073741569x
+
+ Trigger IN Enable 0x810C  DATA = 15x
+
+ Trigger OUT Enable 0x810C  DATA = 1073741824x

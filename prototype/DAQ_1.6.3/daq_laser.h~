@@ -1,0 +1,9 @@
+
+/* definitions */
+#define EIB_TCP_TIMEOUT   5000   /* timeout for TCP connection in ms      */
+#define NUM_OF_AXIS       4      /* number of axes of the EIB             */
+#define NUM_OF_IO         4      /* number of inputs and outputs          */
+#define MAX_SRT_DATA      200    /* maximum size of soft realtime data    */
+#define MAX_TEXT_LEN      200    /* maximum size of console input string  */
+#define TIMESTAMP_PERIOD  1000   /* Timestamp Period = 1 ms = 1000us      */
+#define TRIGGER_PERIOD    500000 /* Trigger Period = 0.5 sec = 500000us   */

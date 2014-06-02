@@ -1,0 +1,21 @@
+//  QSqlCursor main( "main" );
+//   QSqlRecord *buf_0 = main.primeInsert();
+//   buf_0->setValue( "run_nr",  RunSpinBox->value() );
+//   buf_0->setValue( "ev_set",  EventSpinBox->value() );
+//   buf_0->setValue( "m_type",  bgMeasureType->selectedId() );
+//   buf_0->setValue( "f_type",  bgFilling->selectedId() );
+//   buf_0->setValue( "shifter", Res_LE[0][0]->text() );
+//   buf_0->setValue( "led_on",  cbLED_ON->isChecked() );
+
+
+// QSqlCursor led_set( "led_set" );
+//       QSqlRecord *buf_1 = led_set.primeInsert();
+//       buf_1->setValue( "multipl", Amplitude->text() );
+//       buf_1->setValue( "width", Width->text() );
+//       buf_1->setValue( "rise", RiseTime->text() );
+//       buf_1->setValue( "fall", FallTime->text() );
+//       buf_1->setValue( "rate", Rate->text() );
+//       //      buf_0->setValue( "led_set", Max_query );
+//       led_set.insert();
+ main.insert();
+  //  led_set.insert();

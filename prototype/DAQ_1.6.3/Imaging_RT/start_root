@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export ROOTSYS=/opt/root5.26
+export PATH=$ROOTSYS/bin:$PATH
+export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH

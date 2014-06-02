@@ -1,0 +1,2 @@
+daq       7390  7389  0 10:56 pts/1    00:00:00 sh -c ps -efa | grep ../Imaging_RT/Tmonitor >tmp.txt
+daq       7392  7390  0 10:56 pts/1    00:00:00 sh -c ps -efa | grep ../Imaging_RT/Tmonitor >tmp.txt

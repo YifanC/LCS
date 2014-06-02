@@ -1,0 +1,3 @@
+
+gcc -c -Wall -I../zlib-1.2.3 gunzip_data.c
+gcc -o gunzip_data gunzip_data.o gziplib.o -L../zlib-1.2.3 -lz

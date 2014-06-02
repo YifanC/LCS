@@ -1,0 +1,6 @@
+g++ -c -Wall -g -O2  -I/opt/root/include Tmonitor.cc
+make -f MakeGUItest
+make[1]: Entering directory `/data/LAr_SW_backup/DAQ_1.6/Imaging_RT'
+g++ -O -Wall -m64 -fPIC -D_CPLUSPLUS_ -DLINUX -Df2cFortran -g -I/opt/root/include   -c -o GUItest.o GUItest.cc
+Generating dictionary GUItestCint.cc...
+make[1]: Leaving directory `/data/LAr_SW_backup/DAQ_1.6/Imaging_RT'

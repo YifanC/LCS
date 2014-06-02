@@ -1,0 +1,7 @@
+bigi  Tot_events=21280   Process= -c
+kill= kill -9 21280
+shm_del =1
+
+daqpar.board_number= 8uBuffer 0x7ff6e7bf5010
+
+EIB741 firmware version: 63328109
