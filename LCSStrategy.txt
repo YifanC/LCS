@@ -8,7 +8,8 @@ Laser Calibration Strategy
 
 2. Obtaining Laser Tracks (Operational mode)
 --------------------------------------------
- Two independent laser systems are mounted on each end of the TPC. A table of optimal (with respect to speed and shadows due to field cage rings) positions and laser attenuation is obtained during cold commissioning and stored. During cold commissioning the optimal settings of the motor movement (acceleration, maximal speed, torque, ...) has to be determined as well. As trigger source a signal from a photodiode is used, the signal is attenuated and connected to a TTL to NIM converter (acting as a discriminator with ns delay) and fed to a logic fan-in-fan out box for distribution. The signal is distributed to the TPC readout and the feedtrough position encoder hardware.
+ Two independent laser systems are mounted on each end of the TPC. A table of optimal positions (with respect to speed and shadows due to field cage rings) and laser attenuation is obtained during cold commissioning and stored. During cold commissioning the optimal settings of the motor movement (acceleration, maximal speed, torque, ...) has to be determined as well. As trigger source a signal from a photodiode registering laser pulses is used, the signal is attenuated and connected to a TTL to NIM converter (acting as a discriminator with ns delay) and fed to a logic fan-in-fan out box for distribution. The signal is brought to the TPC readout trigger input and the feedthrough position encoder hardware trigger input.
+ In the following a description of the anticipated normal operation sequence is given. The described procedures apply for one single laser system, before no definite plan exist for the final optimal scanning procedure the two identical laser systems can be seen as independent.
 
  2.1 Hardware Flow
   0. Device initialization - After turn on
@@ -47,7 +48,7 @@ Laser Calibration Strategy
  
 
  > Possible errors: 
-  - Lost TPC/UDP package with feedtrough positions
+  - Lost TPC/UDP package with feedthrough positions
   - No Communication with any of the devices --> need feedback/error handling!
 
 
@@ -56,7 +57,7 @@ Laser Calibration Strategy
  - Network layout, are there two network cards available in the server? Yes: good, No: Need an ip address for encoder controller (anyway better so we can access controller independently)
  - Define interface with uBooNE database for collected dataset by the laser system
  - How are the 
- - (1.) alternating left/right shots or full scan left then right?
+ - (1.) alternating left/right shots or full scan left then right? --> needs timing of the two laser system!
  - (0.4 and 0.3) If once positioned: Can we switch them off and leave them in position?
  - Is there a favored position for the cold mirror when not used?
  - Finite-state machine needed? - According to points in 2.
@@ -82,5 +83,5 @@ Laser Calibration Strategy
 -------------------
  > Requirements:
   - TPC event display of a laser shot ~ seconds scale display of the recorded event
-  - Intuitive steering of the feedtrough, last mirror, laser energy
+  - Intuitive steering of the feedthrough, last mirror, laser energy
   - Graphical representation of the cold mirror with respect ot the TPC
