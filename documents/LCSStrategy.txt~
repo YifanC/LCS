@@ -19,8 +19,8 @@ B. Obtaining Laser Tracks (Operational mode)
   1. Device initialization
    0.1 Polling devices (find out which COM port belongs to which device)
    0.2 Laser is warmed up (takes ~25 Minutes)
-   0.3 Aperture position is set (stays normally fixed)
-   0.4 Warm mirror positions are set 
+   0.3 Aperture position is checked and if necessary repositioned (stays normally fixed)
+   0.4 Mirror positions are checked and if necessary repositioned (stays normally fixed)
    0.5 Motor controller is initialized, movement parameters are set
    0.6 Encoder controller is initialized for triggered readout
    0.7 Reference movement (homing) of the two axes is performed
