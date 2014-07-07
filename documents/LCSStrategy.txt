@@ -78,6 +78,7 @@ B. Obtaining Laser Tracks (Operational mode)
  - Issue with on/off switching of devices: Are COM ports issued always in the same order?
  - How does the position/attenuation table look like: Relative movement map + Attenuation + Measured optimal positions 
  - Feedback loop from DAQ TPC readout to feedthrough movement needed (in other words: Was there a laser track present in the readout - yes: good, no: abort run?)? Probably the reconstruction is too slow for that!
+ - How are backups of our servers organized?
 
  
 
