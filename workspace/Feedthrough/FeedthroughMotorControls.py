@@ -5,6 +5,9 @@ import serial
 
 sgn = lambda x : (x>0) - (x<0)
 
+ROTARYAXIS = 1
+LINEARAXIS = 2
+
 
 MICROSTEPS = 256                # one full evolution of the motor has:
                                 #   - steps: 200 
@@ -134,17 +137,31 @@ def AxisMoving(AxisNr):
 
 
 def HomeAxis(AxisNr):
-  # define homing procedure
+
+  if AxisNr == ROTARYAXIS:
+    SetParameter(ROTARYAXIS,"VM",6000)       # reduce spped so we move slowly into endswitch
+    SetParameter(ROTARYAXIS,"S2","1,1,0")    # set counterclockwise endswitch as home switch
+  elif AxisNr == LINEARAXIS:
+    print "will not home linear axis: no procedure defined yet!"
+    return -1
+    # do whatever you need 
+
+  # do homing procedure
   serFeedtrough.write("\n"+ str(AxisNr) + "HM 1\n")
   # 1 - Slew at VM in the minus direction and Creep at VI in the plus direction.
   # 2 - Slew at VM in the minus direction and Creep at VI in the minus direction.
   # 3 - Slew at VM in the plus direction and Creep at VI in the minus direction.
   # 4 - Slew at VM in the plus direction and Creep at VI in the plus direction.
+  
   while AxisMoving(AxisNr):
     print "Homing Axis " + str(AxisNr)
     time.sleep(0.5)
   pos = getPosition(AxisNr)
   print "Axis " + str(AxisNr) + " homed at position: " + pos
+
+  if AxisNr == ROTARYAXIS:
+    # redefine homeswitch to be the end switch again
+    SetParameter(ROTARYAXIS,"S2","3,1,0")
 
 
 def ReadParameter(AxisNr, ParameterStr):
