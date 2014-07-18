@@ -36,6 +36,8 @@ def initAxis1():
         # set start speed and end speed of the movement
         serFeedtrough.write("\n1VI=1000\n")
         serFeedtrough.write("\n1VM=20000\n")
+        # max velocity is stable up to 80000 M/s
+
 
         # set holding and run current in percent
         serFeedtrough.write("\n1HC=5\n")
@@ -79,17 +81,6 @@ def initAxis2():
         ##initialVelocity = float(readValue(reply,"VI"))
         ##acceleration =  float(readValue(reply,"A"))
         ##tstart = (maxVelocity-initialVelocity)/acceleration
-        
-def readValue(feed, inst):
-        # read the value of the given string from the feed obtained by getInfo
-        n = len(inst) + 3
-        start = feed.find(inst + " = ")
-        end = feed.find('\n',start)
-        
-        ##if inst in feed[start:end]:     
-        ##        print inst + " = " + feed[start+n:end]
-        ##        return float(feed[start+n:end])
-        ##else: sys.exit('Error while reading setup')
 
 def getInfo(AxisNr):
         # obtain all the control parameters from the motor
@@ -137,32 +128,31 @@ def AxisMoving(AxisNr):
 
 
 def HomeAxis(AxisNr):
+	if AxisNr == ROTARYAXIS:
+		InitialMaxVelocity = ReadParameter(ROTARYAXIS, "VM")
+		SetParameter(ROTARYAXIS,"VM",6000)       # reduce spped so we move slowly into endswitch
+		SetParameter(ROTARYAXIS,"S2","1,1,0")    # set counterclockwise endswitch as home switch
+	elif AxisNr == LINEARAXIS:
+		print "will not home linear axis: no procedure defined yet!"
+		return -1
+		# do whatever you need 
 
-  if AxisNr == ROTARYAXIS:
-    SetParameter(ROTARYAXIS,"VM",6000)       # reduce spped so we move slowly into endswitch
-    SetParameter(ROTARYAXIS,"S2","1,1,0")    # set counterclockwise endswitch as home switch
-  elif AxisNr == LINEARAXIS:
-    print "will not home linear axis: no procedure defined yet!"
-    return -1
-    # do whatever you need 
-
-  # do homing procedure
-  serFeedtrough.write("\n"+ str(AxisNr) + "HM 1\n")
-  # 1 - Slew at VM in the minus direction and Creep at VI in the plus direction.
-  # 2 - Slew at VM in the minus direction and Creep at VI in the minus direction.
-  # 3 - Slew at VM in the plus direction and Creep at VI in the minus direction.
-  # 4 - Slew at VM in the plus direction and Creep at VI in the plus direction.
+  	# do homing procedure
+  	serFeedtrough.write("\n"+ str(AxisNr) + "HM 1\n")
+  	# 1 - Slew at VM in the minus direction and Creep at VI in the plus direction.
+  	# 2 - Slew at VM in the minus direction and Creep at VI in the minus direction.
+  	# 3 - Slew at VM in the plus direction and Creep at VI in the minus direction.
+  	# 4 - Slew at VM in the plus direction and Creep at VI in the plus direction.
   
-  while AxisMoving(AxisNr):
-    print "Homing Axis " + str(AxisNr)
-    time.sleep(0.5)
-  pos = getPosition(AxisNr)
-  print "Axis " + str(AxisNr) + " homed at position: " + pos
-
-  if AxisNr == ROTARYAXIS:
-    # redefine homeswitch to be the end switch again
-    SetParameter(ROTARYAXIS,"S2","3,1,0")
-
+  	while AxisMoving(AxisNr):
+  		print "Homing Axis " + str(AxisNr)
+  		time.sleep(0.5)
+  		pos = getPosition(AxisNr)
+  		print "Axis " + str(AxisNr) + " homed at position: " + pos
+	
+	if AxisNr == ROTARYAXIS: #redefine homeswitch to be the end switch again
+		SetParameter(ROTARYAXIS,"S2","3,1,0")
+		SetParameter(ROTARYAXIS,"VM",str(InitialMaxVelocity))
 
 def ReadParameter(AxisNr, ParameterStr):
   serFeedtrough.write("\n"+ str(AxisNr) + "PR " + ParameterStr + "\n")
@@ -191,5 +181,19 @@ def initFeedtrough():
    print serFeedtrough.isOpen()
    print serFeedtrough.portstr
 
+
+def CalcMovementTime(Microsteps,Acceleration,Deceleration,MaxSpeed,MinSpeed):
+  # calculates the movement time according with a trapezoidal model with the given
+  # parameters. N
+	TAcceleration = (MaxSpeed-MinSpeed)/Acceleration
+  	StepsAcceleration = TAcceleration*Acceleration
+
+	TDeceleration = (MaxSpeed-MinSpeed)/Acceleration
+	StepsDeceleration = TDeceleration*Deceleration
+	TConstantSpeed = (Microsteps - (StepsAcceleration + StepsDeceleration))/MaxSpeed
+  
+	TTotal = TAcceleration+TDeceleration+TConstantSpeed
+
+	return TTotal
 
 ####################### End Feed-trough control ################################
