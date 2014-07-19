@@ -14,7 +14,12 @@ MICROSTEPS = 256                # one full evolution of the motor has:
                                 #   - microsteps: 200*MS (200*256=51200)        
 ONETURN = 200*MICROSTEPS        # steps of on full turn
 
-MAXVELOCITY = 1000              # maximum velocity in microsteps/s
+
+ROTARY_MAXVELOCITY = 20000
+ROTARY_MINVELOCITY = 1000 
+ROTARY_ACCELERATION = 10000
+ROTARY_DECELERATION = 10000
+
 
 TURNSPERDEGHOR = ONETURN/(3.6)
 TURNSPERDEGVER = ONETURN/14.501537
@@ -30,12 +35,12 @@ def initAxis1():
         serFeedtrough.write("\n1MS "+str(MICROSTEPS)+"\n")
         
         # set acceleration and deceleration to 100000 microsteps/s
-        serFeedtrough.write("\n1A=10000\n")
-        serFeedtrough.write("\n1D=10000\n")
+        serFeedtrough.write("\n1A=" + str(ROTARY_ACCELERATION) + "\n")
+        serFeedtrough.write("\n1D=" + str(ROTARY_DECELERATION) + "\n")
         
         # set start speed and end speed of the movement
-        serFeedtrough.write("\n1VI=1000\n")
-        serFeedtrough.write("\n1VM=20000\n")
+        serFeedtrough.write("\n1VI=" + str(ROTARY_MINVELOCITY) + "\n")
+        serFeedtrough.write("\n1VM=" + str(ROTARY_MAXVELOCITY) + "\n")
         # max velocity is stable up to 80000 M/s
 
 
@@ -147,8 +152,9 @@ def HomeAxis(AxisNr):
   	while AxisMoving(AxisNr):
   		print "Homing Axis " + str(AxisNr)
   		time.sleep(0.5)
-  		pos = getPosition(AxisNr)
-  		print "Axis " + str(AxisNr) + " homed at position: " + pos
+  	
+	pos = getPosition(AxisNr)
+  	print "Axis " + str(AxisNr) + " homed at position: " + pos
 	
 	if AxisNr == ROTARYAXIS: #redefine homeswitch to be the end switch again
 		SetParameter(ROTARYAXIS,"S2","3,1,0")
@@ -181,8 +187,12 @@ def initFeedtrough():
    print serFeedtrough.isOpen()
    print serFeedtrough.portstr
 
+def CalcMovementTimeDefault(Microsteps):
+	T = CalcMovementTimeGeneral(abs(Microsteps),ROTARY_MAXVELOCITY, ROTARY_MINVELOCITY, ROTARY_ACCELERATION, ROTARY_DECELERATION)
+	return T
 
-def CalcMovementTime(Microsteps,Acceleration,Deceleration,MaxSpeed,MinSpeed):
+
+def CalcMovementTimeGeneral(Microsteps,Acceleration,Deceleration,MaxSpeed,MinSpeed):
   # calculates the movement time according with a trapezoidal model with the given
   # parameters. N
 	TAcceleration = (MaxSpeed-MinSpeed)/Acceleration
@@ -190,7 +200,7 @@ def CalcMovementTime(Microsteps,Acceleration,Deceleration,MaxSpeed,MinSpeed):
 
 	TDeceleration = (MaxSpeed-MinSpeed)/Acceleration
 	StepsDeceleration = TDeceleration*Deceleration
-	TConstantSpeed = (Microsteps - (StepsAcceleration + StepsDeceleration))/MaxSpeed
+	TConstantSpeed = (abs(Microsteps) - (StepsAcceleration + StepsDeceleration))/MaxSpeed
   
 	TTotal = TAcceleration+TDeceleration+TConstantSpeed
 
