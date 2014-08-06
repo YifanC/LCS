@@ -1,0 +1,19 @@
+Log Description
+---------------
+Frozen files can be found in the corresponding file. 
+
+
+laserlog3.txt  
+	First test. Homing after each horizontal scan. Laser only in one direction
+laserlog4.txt
+	Changed laser com port timeout and some ordering in the script. Introduced backward shooting. Did not work out
+laserlog5.tzt
+	Removed waiting for answer from laser after setting the shutter. Intoduced a sleep before starting a scan in either direction. Works.
+laserlog6.txt
+	Same script as log5 but with a higher VMAX
+loglaser7.txt
+	Modified script to start/stop the laser shooting during the movement. Did not work 	well. Still VMAX=15000
+loglaser8.txt
+	Improvement of run 7. Forgot to change the sign of the back movement
+loglaser9.txt
+	Put in the sign and defined a slower movement. Worked well.

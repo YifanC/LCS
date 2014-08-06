@@ -1,0 +1,46 @@
+Log Description
+---------------
+Frozen files can be found in the corresponding file. The goal is to obtain a model of the movement with precise monitoring of the movement with the encoder. I measurement includes several different velocities and accelerations. From this dataset also the backlash can be calculated. The homing procedure was always the same with Vmax=15000/Vmin=1000
+
+logmovement1
+	Vmax = 20000; Vmin=1000; A=D=10000; Steps = 100000.
+logmovement2
+	Vmax = 20000; Vmin=3000; A=D=20000; Steps = 100000.
+	Homing did not look very well
+logmovement3
+	Vmax = 20000; Vmin=1000; A=D=20000; Steps = 100000.
+	Down to Vmin=1000 again because of previous test. Again homing did not work fine 	in the beginning
+logmovement3
+	Vmax = 20000; Vmin=1000; A=D=40000; Steps = 100000.
+	Down to Vmin=1000 again because of previous test.
+
+
+Increased distance of first movement so the switch is further away, for better homing.
+
+logmovement5
+	Vmax = 20000; Vmin=1000; A=D=60000; Steps = 100000.
+
+logmovement6
+	Vmax = 30000; Vmin=1000; A=D=60000; Steps = 100000.
+logmovement7
+	Vmax = 15000; Vmin=1000; A=D=30000; Steps = 100000.
+	Driving aroud. Had problems with the homing here. Movement was not stopped by the 	controller after homing switch went to 0 again.
+logmovement8
+	Vmax = 15000; Vmin=1000; A=D=30000; Steps = 100000.
+	Same as 8 but without prior moving around
+logmovement9
+	Vmax = 10000; Vmin=1000; A=D=30000; Steps = 100000.
+
+logmovement10
+	Vmax = 8000; Vmin=1000; A=D=30000; Steps = 100000.
+
+———————————————————————————————————————————-
+Improved / corrected time calculation for movement. Will now always upload all necessary scripts for reconstruction.
+
+logmovement11
+	Model is maybe underestimating the needed time. Here not time for stopping was 		set.
+logmovement12 V=10000
+	Added a 1s stop inletween movement.
+logmovement13 V=15000
+logmovement14 V = 5000	
+logmovement15 steps increased t0 200000, so we can measure the steps2deg
