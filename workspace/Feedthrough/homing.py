@@ -5,18 +5,12 @@
 #End Switches:
 # - Liear Axis: I1 = Upper Limit, I2 = Lower Limit
 # - Rotary Axis: I1 = 
-
 from FeedthroughMotorControls import *
 import os
 import sys
+LaserCOM = 10
 
-initFeedtrough()
-
-SetParameter(1,"VM",6000)
-SetParameter(1,"S2","1,1,0")
-SetParameter(1,"LM",1)
+initFeedtrough(LaserCOM)
+initAxis1()
 getInfo(1)
 HomeAxis(1)
-SetParameter(1,"S2","3,1,0")
-SetParameter(1, "HC", 0)
-SetParameter(2, "HC", 0)

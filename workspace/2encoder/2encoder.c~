@@ -37,7 +37,7 @@
 #ifdef _WIN32
 #define POS_SPEC "Trg-Cntr: %05u, Timestamp: %010lu, Status: 0x%04X, Pos: %010I64d"
 #else
-#define POS_SPEC "Trg-Cntr: %05u, Timestamp: %010lu, Status: 0x%04X, Pos: %010lld"
+#define POS_SPEC "Trg-Cntr: %05u, Timestamp: %010lu, Status: 0x%04X, Pos[deg]: %f"
 #endif
 
 
@@ -104,12 +104,14 @@ void CtrlHandler(int sig)
    */
 int main(int argc, char **argv)
 {
+   // Definitions MLuethi
    float RotaryPosDeg;
    float LinearPosDeg;
    ENCODER_POSITION RotaryCounts;
    ENCODER_POSITION RotaryInterp;
    ENCODER_POSITION LinearCounts;
    ENCODER_POSITION LinearCounts45deg = 13404540;
+   
    EIB7_MODE active;                        /* EIB741 mode for reference marks */
    EIB7_HANDLE eib;                       /* EIB handle                  */
    unsigned long ip;                      /* IP address of EIB           */
@@ -125,7 +127,9 @@ int main(int argc, char **argv)
    char fw_version[20];                   /* firmware version string     */
    char hostname[MAX_TEXT_LEN] = "192.168.1.2";           /* hostname string             */
    char TriggerConf[MAX_TEXT_LEN];        /* input string                */
+   char RefRunConfig[MAX_TEXT_LEN];        /* input string                */
    int ExtTrigger;                        /* activate external trigger   */
+   int RefRun;
    int enc_axis;                          /* actual axis index           */
    EIB7_DataRegion region;                /* actual region               */
    unsigned char udp_data[MAX_SRT_DATA];  /* buffer for udp data packet  */
@@ -162,6 +166,14 @@ int main(int argc, char **argv)
       ExtTrigger = 1;
    }
 
+   printf("do reference run (y/n)? ");
+   scanf("%s",RefRunConfig);
+   RefRun = 0;
+   if(RefRunConfig[0]=='y' || RefRunConfig[0]=='Y')
+   {
+      RefRun = 1;
+   }
+   
    /* open connection to EIB */
    CheckError(EIB7GetHostIP(hostname, &ip));
    CheckError(EIB7Open(ip, &eib, EIB_TCP_TIMEOUT, fw_version, sizeof(fw_version)));
@@ -255,15 +267,15 @@ int main(int argc, char **argv)
    /* enable SoftRealtime mode */
    CheckError(EIB7SelectMode(eib, EIB7_OM_SoftRealtime));
    
-
-   /* Do a reference movement for the rotarty encoder (get two reference marks) */
-   CheckError(EIB7StartRef(axis[RotaryEncoder], EIB7_RP_RefPos2)); // start waiting for 2 reference marks on the rotary axis
-   active = 1;   
-   while(active==1) {
-      CheckError(EIB7GetRefActive(axis[RotaryEncoder], &active));
-      printf("waiting for reference run...\r");
+   if (RefRun == 1) {
+      /* Do a reference movement for the rotarty encoder (get two reference marks) */
+      CheckError(EIB7StartRef(axis[RotaryEncoder], EIB7_RP_RefPos2)); // start waiting for 2 reference marks on the rotary axis
+      active = 1;   
+      while(active==1) {
+         CheckError(EIB7GetRefActive(axis[RotaryEncoder], &active));
+         printf("waiting for reference run...\r");
+      }
    }
-
 
    if(ExtTrigger)
    {
@@ -345,18 +357,18 @@ int main(int argc, char **argv)
          RotaryPosDeg = (float) RotaryCounts*360/20000;  
 		 
          /* calculate vertical position */
-         LinearCounts = LinearEncoderData.position - LinearCounts45deg;
-         LinearPosDeg = (float) -LinearCounts/79419.1;
+         LinearCounts = LinearEncoderData.position  - 7728478;
+         LinearPosDeg = (float) LinearCounts/69994.7111;
 
          /* print status word and position value */
 		 
 		 printf("Linear Encoder Data: ");
          printf(POS_SPEC, LinearEncoderData.TriggerCounter, LinearEncoderData.Timestamp,
-                          LinearEncoderData.status, LinearEncoderData.position);
+                          LinearEncoderData.status, LinearPosDeg);
          printf("\n");
          printf("Rotary Encoder Data: ");
          printf(POS_SPEC, RotaryEncoderData.TriggerCounter, RotaryEncoderData.Timestamp,
-                          RotaryEncoderData.status, LinearCounts);
+                          RotaryEncoderData.status, RotaryPosDeg);
          printf("\n");
 
                   

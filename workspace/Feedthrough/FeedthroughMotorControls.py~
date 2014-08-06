@@ -5,13 +5,21 @@ import serial
 
 sgn = lambda x : (x>0) - (x<0)
 
+ROTARYAXIS = 1
+LINEARAXIS = 2
+
 
 MICROSTEPS = 256                # one full evolution of the motor has:
                                 #   - steps: 200 
                                 #   - microsteps: 200*MS (200*256=51200)        
 ONETURN = 200*MICROSTEPS        # steps of on full turn
 
-MAXVELOCITY = 1000              # maximum velocity in microsteps/s
+
+ROTARY_MAXVELOCITY = 20000
+ROTARY_MINVELOCITY = 1000 
+ROTARY_ACCELERATION = 10000
+ROTARY_DECELERATION = 10000
+
 
 TURNSPERDEGHOR = ONETURN/(3.6)
 TURNSPERDEGVER = ONETURN/14.501537
@@ -27,12 +35,14 @@ def initAxis1():
         serFeedtrough.write("\n1MS "+str(MICROSTEPS)+"\n")
         
         # set acceleration and deceleration to 100000 microsteps/s
-        serFeedtrough.write("\n1A=10000\n")
-        serFeedtrough.write("\n1D=10000\n")
+        serFeedtrough.write("\n1A=" + str(ROTARY_ACCELERATION) + "\n")
+        serFeedtrough.write("\n1D=" + str(ROTARY_DECELERATION) + "\n")
         
         # set start speed and end speed of the movement
-        serFeedtrough.write("\n1VI=1000\n")
-        serFeedtrough.write("\n1VM=20000\n")
+        serFeedtrough.write("\n1VI=" + str(ROTARY_MINVELOCITY) + "\n")
+        serFeedtrough.write("\n1VM=" + str(ROTARY_MAXVELOCITY) + "\n")
+        # max velocity is stable up to 80000 M/s
+
 
         # set holding and run current in percent
         serFeedtrough.write("\n1HC=5\n")
@@ -76,17 +86,6 @@ def initAxis2():
         ##initialVelocity = float(readValue(reply,"VI"))
         ##acceleration =  float(readValue(reply,"A"))
         ##tstart = (maxVelocity-initialVelocity)/acceleration
-        
-def readValue(feed, inst):
-        # read the value of the given string from the feed obtained by getInfo
-        n = len(inst) + 3
-        start = feed.find(inst + " = ")
-        end = feed.find('\n',start)
-        
-        ##if inst in feed[start:end]:     
-        ##        print inst + " = " + feed[start+n:end]
-        ##        return float(feed[start+n:end])
-        ##else: sys.exit('Error while reading setup')
 
 def getInfo(AxisNr):
         # obtain all the control parameters from the motor
@@ -134,18 +133,32 @@ def AxisMoving(AxisNr):
 
 
 def HomeAxis(AxisNr):
-  # define homing procedure
-  serFeedtrough.write("\n"+ str(AxisNr) + "HM 1\n")
-  # 1 - Slew at VM in the minus direction and Creep at VI in the plus direction.
-  # 2 - Slew at VM in the minus direction and Creep at VI in the minus direction.
-  # 3 - Slew at VM in the plus direction and Creep at VI in the minus direction.
-  # 4 - Slew at VM in the plus direction and Creep at VI in the plus direction.
-  while AxisMoving(AxisNr):
-    print "Homing Axis " + str(AxisNr)
-    time.sleep(0.5)
-  pos = getPosition(AxisNr)
-  print "Axis " + str(AxisNr) + " homed at position: " + pos
+	if AxisNr == ROTARYAXIS:
+		InitialMaxVelocity = ReadParameter(ROTARYAXIS, "VM")
+		SetParameter(ROTARYAXIS,"VM",6000)       # reduce spped so we move slowly into endswitch
+		SetParameter(ROTARYAXIS,"S2","1,1,0")    # set counterclockwise endswitch as home switch
+	elif AxisNr == LINEARAXIS:
+		print "will not home linear axis: no procedure defined yet!"
+		return -1
+		# do whatever you need 
 
+  	# do homing procedure
+  	serFeedtrough.write("\n"+ str(AxisNr) + "HM 1\n")
+  	# 1 - Slew at VM in the minus direction and Creep at VI in the plus direction.
+  	# 2 - Slew at VM in the minus direction and Creep at VI in the minus direction.
+  	# 3 - Slew at VM in the plus direction and Creep at VI in the minus direction.
+  	# 4 - Slew at VM in the plus direction and Creep at VI in the plus direction.
+  
+  	while AxisMoving(AxisNr):
+  		print "Homing Axis " + str(AxisNr)
+  		time.sleep(0.5)
+  	
+	pos = getPosition(AxisNr)
+  	print "Axis " + str(AxisNr) + " homed at position: " + pos
+	
+	if AxisNr == ROTARYAXIS: #redefine homeswitch to be the end switch again
+		SetParameter(ROTARYAXIS,"S2","3,1,0")
+		SetParameter(ROTARYAXIS,"VM",str(InitialMaxVelocity))
 
 def ReadParameter(AxisNr, ParameterStr):
   serFeedtrough.write("\n"+ str(AxisNr) + "PR " + ParameterStr + "\n")
@@ -174,5 +187,23 @@ def initFeedtrough():
    print serFeedtrough.isOpen()
    print serFeedtrough.portstr
 
+def CalcMovementTimeDefault(Microsteps):
+	T = CalcMovementTimeGeneral(abs(Microsteps),ROTARY_MAXVELOCITY, ROTARY_MINVELOCITY, ROTARY_ACCELERATION, ROTARY_DECELERATION)
+	return T
+
+
+def CalcMovementTimeGeneral(Microsteps,Acceleration,Deceleration,MaxSpeed,MinSpeed):
+  # calculates the movement time according with a trapezoidal model with the given
+  # parameters. N
+	TAcceleration = (MaxSpeed-MinSpeed)/Acceleration
+  	StepsAcceleration = TAcceleration*Acceleration
+
+	TDeceleration = (MaxSpeed-MinSpeed)/Acceleration
+	StepsDeceleration = TDeceleration*Deceleration
+	TConstantSpeed = (abs(Microsteps) - (StepsAcceleration + StepsDeceleration))/MaxSpeed
+  
+	TTotal = TAcceleration+TDeceleration+TConstantSpeed
+
+	return TTotal
 
 ####################### End Feed-trough control ################################

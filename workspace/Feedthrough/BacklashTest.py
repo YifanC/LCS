@@ -4,11 +4,26 @@ from FeedthroughMotorControls import *
 import os
 import sys
 import subprocess
+import time
+import signal
 
-initFeedtrough()
-initAxis1()
+COMMotorControl = 10
 
 NIterations = int(sys.argv[1])
+
+initFeedtrough(COMMotorControl)
+initAxis1()
+
+
+#subprocess.Popen("cd ~/workspace/RotaryEncoder/",shell=True)
+#proc = subprocess.Popen("./2encoder > log" + str(sys.argv[2]) +  ".txt",shell=True,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
+#time.sleep(2)
+#proc.stdin.write('n\n')
+#proc.stdin.flush()
+#time.sleep(2)
+#proc.stdin.write("n\n")
+#proc.stdin.flush()
+
 
 #Acceleration = ReadParameter(ROTARYAXIS, "A")
 #Decceleration = ReadParameter(ROTARYAXIS, "D")
@@ -16,7 +31,7 @@ NIterations = int(sys.argv[1])
 #MinSpeed = ReadParameter(ROTARYAXIS, "VI")
 
 # Do this for the reference run of the rotary encoder:
-Move = 200000
+Move = 300000
 moveHorizontal(Move)
 time.sleep(CalcMovementTimeDefault(Move))
 
@@ -24,8 +39,10 @@ Move = -150000
 moveHorizontal(Move)
 time.sleep(CalcMovementTimeDefault(Move))
 
+time.sleep(2)
+
 HomeAxis(1)
-time.sleep(0.5)
+time.sleep(2)
 
 Move = 200000
 moveHorizontal(Move)
@@ -35,14 +52,31 @@ Move = -100000
 moveHorizontal(Move)
 time.sleep(CalcMovementTimeDefault(Move))
 
+deltaT = 1
+Move = 200000
+
 for i in range(NIterations):
-	Move = 100000
 	if i%2 == 0:
 		moveHorizontal(Move)
-		time.sleep(CalcMovementTimeDefault(Move)+0.5)
+		time.sleep(CalcMovementTimeDefault(Move)+deltaT) 
+		moveHorizontal(Move)
+		time.sleep(CalcMovementTimeDefault(Move)+deltaT)
+		moveHorizontal(Move)
+                time.sleep(CalcMovementTimeDefault(Move)+deltaT)
+		moveHorizontal(Move)
+                time.sleep(CalcMovementTimeDefault(Move)+deltaT)
 	elif i%2 == 1:
 		moveHorizontal(-Move)
-		time.sleep(CalcMovementTimeDefault(Move)+0.5)
-
+		time.sleep(CalcMovementTimeDefault(Move)+deltaT)
+		moveHorizontal(-Move)
+		time.sleep(CalcMovementTimeDefault(Move)+deltaT)
+		moveHorizontal(-Move)
+                time.sleep(CalcMovementTimeDefault(Move)+deltaT)
+		moveHorizontal(-Move)
+                time.sleep(CalcMovementTimeDefault(Move)+deltaT)
 HomeAxis(1)
+#proc.send_signal(signal.SIGINT)
+#time.sleep(1)
+#proc.terminate()
+
 print "Test finished"

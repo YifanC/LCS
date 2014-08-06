@@ -9,18 +9,19 @@
 from FeedthroughMotorControls import *
 import os
 import sys
-
+Move = int(sys.argv[1])
 initFeedtrough()
 initAxis1()
 #getInfo(1)
 
 
+moveHorizontal(Move)
 pos1 = getPosition(1)
 print "Pos 1 " + pos1
-moveHorizontal(-200000)
+
 while AxisMoving(1):
   print "moving"
-  time.sleep(2)
+  time.sleep(0.5)
 
 pos2 = getPosition(1)
 print "Pos 2 " + pos2

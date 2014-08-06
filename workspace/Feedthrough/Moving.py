@@ -9,20 +9,21 @@
 from FeedthroughMotorControls import *
 import os
 import sys
+
+LaserCOM=10
+
 Move = int(sys.argv[1])
-initFeedtrough()
+initFeedtrough(LaserCOM)
 initAxis1()
 #getInfo(1)
 
-
-moveHorizontal(Move)
 pos1 = getPosition(1)
 print "Pos 1 " + pos1
-
-while AxisMoving(1):
-  print "moving"
-  time.sleep(0.5)
-
+moveHorizontal(Move)
+time.sleep(CalcMovementTimeDefault(Move))
+#while AxisMoving(1):
+#  print "moving"
+#  time.sleep(0.5)
 pos2 = getPosition(1)
 print "Pos 2 " + pos2
 

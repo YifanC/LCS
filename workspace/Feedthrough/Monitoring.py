@@ -9,14 +9,14 @@
 from FeedthroughMotorControls import *
 import os
 import sys
-
+COMLaser = 10
 MonitorAxis = int(sys.argv[1])
 
 if (MonitorAxis > 2 or MonitorAxis < 1):
   print "Axis is out of range"
   sys.exit()
 
-initFeedtrough()
+initFeedtrough(COMLaser)
 
 while (1):
   try:
@@ -30,6 +30,4 @@ while (1):
   except KeyboardInterrupt:
     print "Bye"
     sys.exit()
-
-
 
