@@ -5,7 +5,7 @@ import serial
 
 sgn = lambda x : (x>0) - (x<0)
 
-MAXVELOCITY = 1000             # maximum velocity in microsteps/s
+MAXVELOCITY = 1000              # maximum velocity in microsteps/s
 MICROSTEPS = 256                # one full evolution of the motor has:
                                 #   - steps: 200 
                                 #   - microsteps: 200*MS (200*256=51200)        

@@ -1,0 +1,10 @@
+To find a home position:
+ 1. Can we drive into end switches, how is the repetability of this? -> try 500 times + plot the variability.
+ 2. If ok, job finished.
+ 3. If not: Build a software PID regulator to find a home position with the needed repeatability.
+
+
+Page 5-31 helpful for homing
+
+ What is the needed repeatability: Should be such that the regions where we shoot between the field cage rings is hit reliably.
+

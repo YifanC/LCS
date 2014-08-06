@@ -28,15 +28,10 @@ B. Obtaining Laser Tracks (Operational mode)
    0.9 "Initialization done" is sent to Run Control
   
   1. TPC Laser scan
-   1.1 Wait for anew position from Run Control 
-   1.2 Is the new position the home position? No -> continume, Yes -> Goto Finalize
-   1.3 Move to new position
-   1.4 Wait for Run Control OK for laser shot
-   1.5 Shoot laser
-   1.6 Wait for software trigger present at the encoder controller
-   1.7 Collect measured positions, laser attenuation
-   1.8 Send collected data to Run Control
-   1.9 Goto 1.1 as soon as data is transmitted
+   1.1 Drive horizontally at a defined speed. 
+   1.2 Switch laser on/off at the right timing inbetween the field cage rings
+   1.3 Make shure each trigger is synchronised with a tigger readout event by event
+   1.4 Move 
 
   2. Finalize
    2.1 Let laser cool down (20 Minutes) ->  shut down laser 
@@ -78,6 +73,7 @@ B. Obtaining Laser Tracks (Operational mode)
  - Issue with on/off switching of devices: Are COM ports issued always in the same order?
  - How does the position/attenuation table look like: Relative movement map + Attenuation + Measured optimal positions 
  - Feedback loop from DAQ TPC readout to feedthrough movement needed (in other words: Was there a laser track present in the readout - yes: good, no: abort run?)? Probably the reconstruction is too slow for that!
+ - How are backups of our servers organized?
 
  
 

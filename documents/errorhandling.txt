@@ -1,0 +1,29 @@
+Error Handling in different states, each error will thorw an error message (to where).
+
+Nomenclature: (State):(Event)
+
+3.Scan TPC
+
+(Waiting for Position):(New Position available)
+ - Timeout (30min) -> Got to Finalize
+ - Out of bounds position -> Wait for a new positon
+ - 
+
+(Moving to Position):(In Position)
+- Data not recieved (no response) by Controller (Motor/Attenuator) -> Try again (3 times) -> No effect: XXX
+- Drove into end marks (soft/hard) -> goto homing in initilaization
+- Never reached end position
+ 
+(Waiting for Shot):(Ok from Runcontrol)
+ - Timeout (10min) -> Goto Wait for Position
+ - No response from laser -> try again (3x) -> goto fialize
+ - 
+
+(Shooting):(Software Trigger from Encoder Controller)
+ - No response
+
+
+(Collecting Data):(All data valid)
+
+(Sending Data):(All data sent)
+

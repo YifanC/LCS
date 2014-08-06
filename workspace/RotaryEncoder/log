@@ -1,0 +1,17 @@
+use external trigger (y/n)? do reference run (y/n)? 
+EIB firmware version: 63328110
+
+using internal timer trigger
+
+
+press Ctrl-C to stop
+
+0000479511,4.914000
+0000480511,4.914000
+0000481511,4.914000
+0000482511,4.914000
+0000483511,4.914000
+0000484511,4.914000
+0000485511,4.914000
+
+Stopped on user request
