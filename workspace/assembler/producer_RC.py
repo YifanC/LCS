@@ -30,8 +30,8 @@ if poller.poll(100*1000): # 100s timeout in milliseconds
 	if debug: print "DEBUG INFO: Data assembler alive"
 else:
 	raise IOError("Could not connect to data assembler")
-	socket.close()
-	context.term()
+	client.close()
+	ctx.term()
 	sys.exit(0)
 
 
@@ -52,5 +52,3 @@ for request in range(10):
 	ack = msg.recvAck(client)
 	print ack
 	time.sleep(0.2)
-
- 

@@ -14,6 +14,12 @@ import sys
 import datetime as DT
 debug = 1
 
+def ExitAssembler(ExitMessage):
+	print "DATA ASSEMBLER INFO: " + ExitMessage
+	server.close()
+	ctx.term()
+	sys.exit(0)
+
 # messaging definitions
 IDrunControlData = 1 
 IDencoderData = 2
@@ -50,7 +56,7 @@ while(not(RunControlAlive and EncoderAlive)):
 	
 		msg.sendAck(server)
 	else:
-		exit("Could connect to clients, stopping.")
+		ExitAssembler("Could not connect to clients, stopping.")
 
 
 print "DATA ASSEMBLER INFO: All clients alive"
@@ -66,7 +72,7 @@ if msg.ID == IDrunControlData:
 		print "DATA ASSEMBLER INFO: Initial Run Control Data recieved"
 else:
 	msg.sendAck(server)
-	exit("no initial data from run control")
+	ExitAssembler("no initial data from run control")
 
 
 f = open('workfile', 'w')
@@ -91,7 +97,7 @@ while True:
 
 	except KeyboardInterrupt:
 		f.close()
-		exit("finished")
+		ExitAssembler("finished")
 
 
 
@@ -103,11 +109,5 @@ while True:
 # write to file
 
 # exit
- 
 
 
-def exit(ExitMessage):
- 	print "DATA ASSEMBLER INFO: " + ExitMessage
- 	server.close()
-	ctx.term()
-	sys.exit(0)

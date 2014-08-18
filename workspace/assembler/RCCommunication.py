@@ -66,6 +66,7 @@ class LaserData(object):
         self.pos_tomg_2_axis2 = pos_tomg_2_axis2    # Motorized Mirror Zaber T-OMG at flange, axis 2
 
     def __str__(self):
+        '''display the data in a nice format'''
         mstr = """DATA INFO
  Record Time: {time}\n Laser ID: {laserid}\n Rotary Position: {pos_rot}\n Linear Position: {pos_lin}\n Attenuator Position: {pos_att}
  Iris Position: {pos_iris}\n Encoder Trigger Count: {count_trigger}\n Run Control Counter: {count_run}\n Laser Shot Count: {count_laser}
@@ -86,8 +87,27 @@ class LaserData(object):
                     )
         return mstr
 
+    def dump(self):
+        '''return the data from laser in a list'''
+        return [    self.laserid,
+                    self.pos_rot,
+                    self.pos_lin,
+                    self.pos_att,
+                    self.pos_iris,
+                    self.time,
+                    self.count_trigger,
+                    self.count_run,
+                    self.count_laser,
+                    self.pos_tomg_1_axis1,
+                    self.pos_tomg_1_axis2,
+                    self.pos_tomg_2_axis1,
+                    self.pos_tomg_2_axis2 ]
+               
     def writeBinary(self,fileID):
-        f = open(fileID, 'w')
-        BinaryData = bytearray(self.laserid)
-        f.write(BinaryData)
+        '''write the data to a binary file'''
+        LaserdataList = self.dump()
+        packed_data = struct.pack('i'+'f'*(len(LaserdataList)-1),*LaserdataList) # first an int then floats follow
+        f = open(fileID, 'wb')
+        f.write(packed_data)
+        f.close()
 
