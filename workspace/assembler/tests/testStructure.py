@@ -20,4 +20,4 @@ my_laser_event.pos_tomg_2_axis2 = 1234.8; #Motorized Mirror Zaber T-OMG at flang
 
 
 
-my_laser_event.writeBinary('workfile')
+sender = RCCommunication()

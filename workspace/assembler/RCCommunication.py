@@ -1,55 +1,77 @@
 import struct # for packing integers
 import zmq
+import sys
 
-IDrunControlData = 1 
-IDencoderData = 2
 
-ID = {IDrunControlData:"Run Control Data:", IDencoderData:"Encoder Data:"}
+ID_RunControl = 1 
+ID_Encoder = 2
+debug = 1
+
+# dict for the definitions
+ID = {ID_RunControl:"Run Control Data:", ID_Encoder:"Encoder Data:"}
 
 class RCCommunication(object):
     """
-    frame 0: message identifier
-    frame 1: ControlStep 
+
     """
     ID = 99
-    ControlStep = 0
 
     def __init__(self, ID=99,ControlStep=0):
-        assert isinstance(ControlStep, int)
         assert isinstance(ID, int)
         
         self.ID = ID
-        self.ControlStep = ControlStep
-
-    def sendData(self, socket):
-        """ """
+        
+    def sendEncoderData(self, socket, LaserData):
+        """packs and sends data from the encoder"""
         ID_string = struct.pack('!i', self.ID)
-        ControlStep_string = struct.pack('!l', self.ControlStep)
-        socket.send_multipart([ID_string, ControlStep_string])
+        Msg_string = struct.pack('f'*3, LaserData.pos_rot,LaserData.pos_lin,LaserData.count_trigger) 
+        socket.send_multipart([ID_string, Msg_string])
+
+    def sendRCData(self, socket, LaserData):
+        """packs and sends data from run control"""
+        ID_string = struct.pack('!i', self.ID)
+        Msg_string = struct.pack('i'+'f'*8, LaserData.laserid,LaserData.pos_att,LaserData.pos_iris,LaserData.count_run,
+                                 LaserData.count_run,LaserData.pos_tomg_1_axis1,LaserData.pos_tomg_1_axis2,LaserData.pos_tomg_2_axis1,LaserData.pos_tomg_2_axis2) 
+        socket.send_multipart([ID_string, Msg_string])
 
     @classmethod
-    def recvData(cls, socket):
-        """123"""
-        ID_string, ControlStep_string = socket.recv_multipart()
+    def recvData(self,socket,Data):
+        """receives data and according to the message ID unpacks the data. The function returns
+        a LaserData object filled with this data."""
+        
+        # receive message and identify data
+        ID_string, Message_String = socket.recv_multipart()
         ID = struct.unpack('!i', ID_string)[0]
-        ControlStep = struct.unpack('!l',ControlStep_string)[0]
+        
+        if ID == ID_Encoder: # data from run control
+            #if debug: print "DEBUG: Received data from run control"
+            Data.pos_rot,Data.pos_lin,Data.count_trigger = struct.unpack('f'*3,Message_String)    
+        elif ID == ID_RunControl: #data from encoder
+            #if debug: print "DEBUG: Received data from encoder"
+            (Data.laserid,Data.pos_att,Data.pos_iris,Data.count_run,Data.count_run,Data.pos_tomg_1_axis1,
+            Data.pos_tomg_1_axis2,Data.pos_tomg_2_axis1,Data.pos_tomg_2_axis2) =  struct.unpack('i'+'f'*8,Message_String)
+        else:
+            print "Exiting: Message from unidentified client received (ID was " + str(ID) + ")"
+            sys.exit()
+        
+        return ID
 
-        return cls(ID=ID,ControlStep=ControlStep)
-
+    @classmethod
     def sendAck(self, socket):
         socket.send("OK")
-
+    @classmethod
     def recvAck(self, socket):
-        msg = socket.recv()
-        if msg == "OK":
-            return msg
+        com = socket.recv()
+        if com == "OK":
+            return com
         else:
             return "Fail"
+        
 
 class LaserData(object):
     def __init__(self,laserid=-1,pos_rot=-8888.,pos_lin=-9999.,pos_att=-8888.,pos_iris=-9999.,
         time=0,count_trigger=-1,count_run=-1,count_laser=-1,
-        pos_tomg_1_axis1=-66666,pos_tomg_1_axis2=-77777,pos_tomg_2_axis1=-88888,pos_tomg_2_axis2=-99999):
+        pos_tomg_1_axis1=-66666.,pos_tomg_1_axis2=-77777.,pos_tomg_2_axis1=-88888.,pos_tomg_2_axis2=-99999.):
         
         self.laserid = laserid          # which laser system: 1 or 2
         self.pos_rot = pos_rot          # Position Rotary Heidenhain Encoder 
@@ -102,7 +124,11 @@ class LaserData(object):
                     self.pos_tomg_1_axis2,
                     self.pos_tomg_2_axis1,
                     self.pos_tomg_2_axis2 ]
-               
+
+    def dumptest(self):
+        '''return the data from laser in a list'''
+        return vars(self)['__dict__']
+             
     def writeBinary(self,fileID):
         '''write the data to a binary file'''
         LaserdataList = self.dump()

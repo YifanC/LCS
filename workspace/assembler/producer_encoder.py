@@ -1,6 +1,6 @@
 
 
-# dummy RC client
+# dummy RC Producer
 
 
 from RCCommunication import *
@@ -14,27 +14,32 @@ print("Encoder Producer: Connecting to server")
 
 
 ctx = zmq.Context()
-client = ctx.socket(zmq.REQ)
-client.connect("ipc://kvmsg_selftest.ipc")
-client.setsockopt(zmq.LINGER, 0)
+Producer = ctx.socket(zmq.REQ)
+Producer.connect("ipc://kvmsg_selftest.ipc")
+Producer.setsockopt(zmq.LINGER, 0)
 
 
 # 
 poller = zmq.Poller()
-poller.register(client, zmq.POLLIN)
+poller.register(Producer, zmq.POLLIN)
+
+
+
+data = LaserData()
+
 
 
 # let's see if the data assembler is alive?
-msg = RCCommunication(1)
-msg.ID = 2
-msg.sendData(client)
+com = RCCommunication(1)
+com.ID = ID_Encoder
+com.sendEncoderData(Producer,data)
 
 if poller.poll(100*1000): # 100s timeout in milliseconds
-	ack = msg.recvAck(client)
+	com.recvAck(Producer)
 	if debug: print "DEBUG INFO: Data assembler alive"
 else:
 	raise IOError("Could not connect to data assembler")
-	client.close()
+	Producer.close()
 	ctx.term()
 	sys.exit(0)
 
@@ -43,16 +48,11 @@ else:
 time.sleep(1)
 
 
-
 # Do 10 requests, waiting each time for a response
 for request in range(1000,1400):
-
-	msg.ID = 2
-	msg.ControlStep = request
-	msg.sendData(client)
-	ack = msg.recvAck(client)
+	data.count_trigger = request
+	
+	com.sendEncoderData(Producer,data)
+	ack = com.recvAck(Producer)
 	print ack, request
 	time.sleep(0.005)
-
-
- 
