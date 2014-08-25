@@ -11,12 +11,10 @@ server.bind("ipc://kvmsg_selftest.ipc")
 Assembler = RCCommunication()
 
 data = LaserData()
-print data.dump()
-
-data = Assembler.recvData(server,data)
+Assembler.recvData(server,data)
 Assembler.sendAck(server)
 print data.dump()
-data = Assembler.recvData(server,data)
+Assembler.recvData(server,data)
 Assembler.sendAck(server)
 print data.dump()
 

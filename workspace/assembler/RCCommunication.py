@@ -23,7 +23,7 @@ class RCCommunication(object):
         
     def sendEncoderData(self, socket, LaserData):
         """packs and sends data from the encoder"""
-        ID_string = struct.pack('!i', self.ID)
+        ID_string = struct.pack('i', self.ID)
         Msg_string = struct.pack('f'*3, LaserData.pos_rot,LaserData.pos_lin,LaserData.count_trigger) 
         socket.send_multipart([ID_string, Msg_string])
 
@@ -41,13 +41,18 @@ class RCCommunication(object):
         
         # receive message and identify data
         ID_string, Message_String = socket.recv_multipart()
-        ID = struct.unpack('!i', ID_string)[0]
         
+        print ID_string , Message_String
+
+
+        ID = struct.unpack('i', ID_string)[0]
+        
+
         if ID == ID_Encoder: # data from run control
-            #if debug: print "DEBUG: Received data from run control"
+            if debug: print "DEBUG: Received data from run control"
             Data.pos_rot,Data.pos_lin,Data.count_trigger = struct.unpack('f'*3,Message_String)    
         elif ID == ID_RunControl: #data from encoder
-            #if debug: print "DEBUG: Received data from encoder"
+            if debug: print "DEBUG: Received data from encoder"
             (Data.laserid,Data.pos_att,Data.pos_iris,Data.count_run,Data.count_run,Data.pos_tomg_1_axis1,
             Data.pos_tomg_1_axis2,Data.pos_tomg_2_axis1,Data.pos_tomg_2_axis2) =  struct.unpack('i'+'f'*8,Message_String)
         else:

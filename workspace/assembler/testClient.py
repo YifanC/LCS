@@ -13,24 +13,25 @@ Producer.connect("ipc://kvmsg_selftest.ipc")
 Producer.setsockopt(zmq.LINGER, 0)
 
 com = RCCommunication()
-com.ID = 1
+com.ID = 2
 
 data = LaserData()
 print data.dump()
 
-if com.ID == 1:
+if com.ID == ID_Encoder:
+	print "sending encoder data"
+	data.pos_rot = 11.0
+	data.pos_lin = 12.0
+	data.count_trigger = 100000.00
+	com.sendEncoderData(Producer,data)
+	com.recvAck(Producer)
 
-    data.pos_rot = 11.0
-    data.pos_lin = 12.0
-    data.count_trigger = 100000
-    com.sendEncoderData(Producer,data)
-    com.recvAck(Producer)
+com.ID = 1
 
-com.ID = 2
-
-if com.ID == 2:
-    data.laserid = 9999999
-    data.pos_att = 5.43210
-    com.sendRCData(Producer, data)
-    com.recvAck(Producer)
+if com.ID == ID_RunControl:
+	print "sending run control data"
+	data.laserid = 99
+	data.pos_att = 5.43210
+	com.sendRCData(Producer, data)
+	com.recvAck(Producer)
 
