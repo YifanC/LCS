@@ -46,10 +46,10 @@ class RCCommunication(object):
         
 
         if ID == ID_Encoder: # data from run control
-            if debug: print "DEBUG: Received data from run control"
+            if debug: print "DEBUG: Received data from encoder"
             Data.pos_rot,Data.pos_lin,Data.count_trigger = struct.unpack('f'*3,Message_String)    
         elif ID == ID_RunControl: #data from encoder
-            if debug: print "DEBUG: Received data from encoder"
+            if debug: print "DEBUG: Received data from run control"
             (Data.laserid,Data.pos_att,Data.pos_iris,Data.count_run,Data.count_run,Data.pos_tomg_1_axis1,
             Data.pos_tomg_1_axis2,Data.pos_tomg_2_axis1,Data.pos_tomg_2_axis2) =  struct.unpack('i'+'f'*8,Message_String)
         else:

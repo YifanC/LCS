@@ -6,17 +6,15 @@ debug = 1
 # start server
 ctx = zmq.Context()
 server = ctx.socket(zmq.REP)
-server.bind("ipc://kvmsg_selftest.ipc")
+server.bind("ipc:///tmp/feed-laser.ipc")
 
 Assembler = RCCommunication()
 
-data = LaserData()
-Assembler.recvData(server,data)
-Assembler.sendAck(server)
-print data.dump()
-Assembler.recvData(server,data)
-Assembler.sendAck(server)
-print data.dump()
+while True:
+	data = LaserData()
+	Assembler.recvData(server,data)
+	Assembler.sendAck(server)
+	print data.dump()
 
 
 
