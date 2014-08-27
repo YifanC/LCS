@@ -29,7 +29,7 @@ class RCCommunication(object):
 
     def sendRCData(self, socket, LaserData):
         """packs and sends data from run control"""
-        ID_string = struct.pack('!i', self.ID)
+        ID_string = struct.pack('i', self.ID)
         Msg_string = struct.pack('i'+'f'*8, LaserData.laserid,LaserData.pos_att,LaserData.pos_iris,LaserData.count_run,
                                  LaserData.count_run,LaserData.pos_tomg_1_axis1,LaserData.pos_tomg_1_axis2,LaserData.pos_tomg_2_axis1,LaserData.pos_tomg_2_axis2) 
         socket.send_multipart([ID_string, Msg_string])
@@ -41,9 +41,6 @@ class RCCommunication(object):
         
         # receive message and identify data
         ID_string, Message_String = socket.recv_multipart()
-        
-        print ID_string , Message_String
-
 
         ID = struct.unpack('i', ID_string)[0]
         

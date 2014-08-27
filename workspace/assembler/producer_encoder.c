@@ -16,6 +16,13 @@ struct laser_event {
 
 
 
+
+int SerializeLaserData(struct laser_event *P_laser_event, unsigned char *P_Buffer ){
+
+
+}
+
+
 int main (void)
 {
     struct laser_event my_laser_event;
@@ -29,8 +36,6 @@ int main (void)
 
 	unsigned char data[ sizeof (my_laser_event) ];
 	memcpy(&data, &my_laser_event, sizeof(my_laser_event));
-      
-      
 
 
     //  Socket to talk to clients

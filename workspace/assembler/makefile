@@ -1,0 +1,3 @@
+
+all:
+	gcc producer_encoder.c -L/usr/local/lib -lzmq -o producer_encoder
