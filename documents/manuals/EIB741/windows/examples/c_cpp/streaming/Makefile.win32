@@ -1,0 +1,36 @@
+
+EIBLIB=..\..\..\lib\eib7.lib
+
+INC=/I..\..\..\include /I.
+
+DEBUG=/Zi
+
+CFLAGS=/nologo /c $(INC) $(DEBUG) /DWin32
+
+LIBS=user32.lib ws2_32.lib kernel32.lib
+
+
+ALL: streaming.exe
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	del /q *.obj
+
+distclean: clean
+	del /q *.obj *.exe
+
+
+#
+#
+# executables
+#
+#
+
+streaming.obj: ..\..\..\include\eib7.h streaming.c
+streaming.exe: $(EIBLIB) streaming.obj
+	cl  $(DEBUG) /o streaming.exe streaming.obj $(EIBLIB) $(LIBS)

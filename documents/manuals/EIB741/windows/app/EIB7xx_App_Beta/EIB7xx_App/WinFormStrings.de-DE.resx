@@ -1,0 +1,1557 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="descriptionCurrentIpAddress" xml:space="preserve">
+    <value>Aktuelle IP Adresse eingeben.</value>
+  </data>
+  <data name="descriptionOpMode" xml:space="preserve">
+    <value>Betriebsmodus eingeben.</value>
+  </data>
+  <data name="EIB7_OM_Polling" xml:space="preserve">
+    <value>Polling Modus</value>
+  </data>
+  <data name="EIB7_OM_RecordingRoll" xml:space="preserve">
+    <value>Recording Modus Rolling</value>
+  </data>
+  <data name="EIB7_OM_RecordingSingle" xml:space="preserve">
+    <value>Recording Modus Single Shot</value>
+  </data>
+  <data name="EIB7_OM_SoftRealtime" xml:space="preserve">
+    <value>Soft Realtime Modus</value>
+  </data>
+  <data name="EIB7_OM_Streaming" xml:space="preserve">
+    <value>Streaming Modus</value>
+  </data>
+  <data name="errorIpAddress" xml:space="preserve">
+    <value>Die IP Adresse hat ein fehlerhaftes Format!</value>
+  </data>
+  <data name="textAuxAxis" xml:space="preserve">
+    <value>Hilfsachse</value>
+  </data>
+  <data name="textAxis" xml:space="preserve">
+    <value>Achse</value>
+  </data>
+  <data name="warningCancelRun" xml:space="preserve">
+    <value>Das System befindet sich im Messmodus. Soll der Messmodus beendet werden?</value>
+  </data>
+  <data name="textDeviceOverview" xml:space="preserve">
+    <value>Geräteübersicht</value>
+  </data>
+  <data name="textEIB" xml:space="preserve">
+    <value>EIB</value>
+  </data>
+  <data name="errorInitChanged" xml:space="preserve">
+    <value>Die EIB Parameter wurden geändert. Die EIBen müssen neu initialisiert werden!</value>
+  </data>
+  <data name="textIpAddress" xml:space="preserve">
+    <value>IP Adresse</value>
+  </data>
+  <data name="categoryNetworkParameters" xml:space="preserve">
+    <value>Netzwerk Parameter</value>
+  </data>
+  <data name="textOpMode" xml:space="preserve">
+    <value>Betriebsmodus</value>
+  </data>
+  <data name="categoryOpMode" xml:space="preserve">
+    <value>Betriebsmodus Parameter</value>
+  </data>
+  <data name="warningParamChanged" xml:space="preserve">
+    <value>Die EIB Parameter wurden geändert. Sollen die EIB Parameter gespeichert werden?</value>
+  </data>
+  <data name="textWarning" xml:space="preserve">
+    <value>EIB 7xx Application Warnung</value>
+  </data>
+  <data name="errorEnumText" xml:space="preserve">
+    <value>Der eingegebene Wert hat ein fehlerhaftes Format!</value>
+  </data>
+  <data name="descriptionActivation" xml:space="preserve">
+    <value>Aktivierung der Achse</value>
+  </data>
+  <data name="descriptionEdgeEvaluation" xml:space="preserve">
+    <value>Flankenauswertung eingeben</value>
+  </data>
+  <data name="descriptionInterface" xml:space="preserve">
+    <value>Schnittstelle eingeben</value>
+  </data>
+  <data name="descriptionInterpolationFactor" xml:space="preserve">
+    <value>Interpolationsfaktor eingeben</value>
+  </data>
+  <data name="EIB7_ICE_1x" xml:space="preserve">
+    <value>Flankenauswertung 1x</value>
+  </data>
+  <data name="EIB7_ICE_2x" xml:space="preserve">
+    <value>Flankenauswertung 2x</value>
+  </data>
+  <data name="EIB7_ICE_4x" xml:space="preserve">
+    <value>Flankenauswertung 4x</value>
+  </data>
+  <data name="EIB7_ICF_100x" xml:space="preserve">
+    <value>Interpolation 100x</value>
+  </data>
+  <data name="EIB7_ICF_10x" xml:space="preserve">
+    <value>Interpolation 10x</value>
+  </data>
+  <data name="EIB7_ICF_1x" xml:space="preserve">
+    <value>Interpolation 1x</value>
+  </data>
+  <data name="EIB7_ICF_20x" xml:space="preserve">
+    <value>Interpolation 20x</value>
+  </data>
+  <data name="EIB7_ICF_25x" xml:space="preserve">
+    <value>Interpolation 25x</value>
+  </data>
+  <data name="EIB7_ICF_2x" xml:space="preserve">
+    <value>Interpolation 2x</value>
+  </data>
+  <data name="EIB7_ICF_4x" xml:space="preserve">
+    <value>Interpolation 4x</value>
+  </data>
+  <data name="EIB7_ICF_50x" xml:space="preserve">
+    <value>Interpolation 50x</value>
+  </data>
+  <data name="EIB7_ICF_5x" xml:space="preserve">
+    <value>Interpolation 5x</value>
+  </data>
+  <data name="EIB7_IT_Disabled" xml:space="preserve">
+    <value>Achse deaktiviert</value>
+  </data>
+  <data name="EIB7_IT_EnDat21" xml:space="preserve">
+    <value>Messgerät mit EnDat 2.1 Interface</value>
+  </data>
+  <data name="EIB7_IT_EnDat22" xml:space="preserve">
+    <value>Messgerät mit EnDat 2.2 Interface</value>
+  </data>
+  <data name="EIB7_IT_Incremental" xml:space="preserve">
+    <value>Messgerät mit Inkrementalsignalen (1Vss)</value>
+  </data>
+  <data name="EIB7_IT_Incremental_11u" xml:space="preserve">
+    <value>Messgerät mit Inkrementalsignalen (11μAss)</value>
+  </data>
+  <data name="textActivation" xml:space="preserve">
+    <value>Aktivierung</value>
+  </data>
+  <data name="categoryAxisParameters" xml:space="preserve">
+    <value>Achsenparameter</value>
+  </data>
+  <data name="textDisabled" xml:space="preserve">
+    <value>Deaktiviert</value>
+  </data>
+  <data name="textEdgeEvaluation" xml:space="preserve">
+    <value>Flankenauswertung</value>
+  </data>
+  <data name="textEnabled" xml:space="preserve">
+    <value>Aktiviert</value>
+  </data>
+  <data name="textInterface" xml:space="preserve">
+    <value>Schnittstelle</value>
+  </data>
+  <data name="categoryInterfaceParameters" xml:space="preserve">
+    <value>Schnittstellenparameter</value>
+  </data>
+  <data name="textInterpolationFactor" xml:space="preserve">
+    <value>Interpolationsfaktor</value>
+  </data>
+  <data name="categoryIntervalCounter" xml:space="preserve">
+    <value>Interval Counter</value>
+  </data>
+  <data name="EIB7_CantConnect" xml:space="preserve">
+    <value>Die Verbindung zum Gerät kann nicht hergestellt werden</value>
+  </data>
+  <data name="EIB7_IFVersionInv" xml:space="preserve">
+    <value>Falsche Firmwareversion</value>
+  </data>
+  <data name="errorEibCtrlError" xml:space="preserve">
+    <value>Fehler "{1}" in Funktion "{2}" bei der Ansteuerung von EIB "{0}"!</value>
+  </data>
+  <data name="textError" xml:space="preserve">
+    <value>EIB 7xx Application Fehler</value>
+  </data>
+  <data name="descriptionFirmwareVersion" xml:space="preserve">
+    <value>Aktuelle Firmware Versionsnummer.</value>
+  </data>
+  <data name="descriptionGateway" xml:space="preserve">
+    <value>Standard Gateway eingeben.</value>
+  </data>
+  <data name="descriptionSavedHostName" xml:space="preserve">
+    <value>Gespeicherten Hostnamen eingeben.</value>
+  </data>
+  <data name="descriptionIdentNumber" xml:space="preserve">
+    <value>Aktuelle Geräte-Identnummer.</value>
+  </data>
+  <data name="descriptionNetmask" xml:space="preserve">
+    <value>Netzwerkmaske eingeben.</value>
+  </data>
+  <data name="descriptionSavedIpAddress" xml:space="preserve">
+    <value>Gespeicherte IP Adresse eingeben.</value>
+  </data>
+  <data name="descriptionSerialNumber" xml:space="preserve">
+    <value>Aktuelle Seriennummer.</value>
+  </data>
+  <data name="categoryEibAddress" xml:space="preserve">
+    <value>EIB Adresse</value>
+  </data>
+  <data name="textFirmwareVersion" xml:space="preserve">
+    <value>Firmware Versionsnummer</value>
+  </data>
+  <data name="textGateway" xml:space="preserve">
+    <value>Standard Gateway</value>
+  </data>
+  <data name="textHostName" xml:space="preserve">
+    <value>Hostname</value>
+  </data>
+  <data name="textIdentNumber" xml:space="preserve">
+    <value>Geräte-Identnummer</value>
+  </data>
+  <data name="categoryInfoParameters" xml:space="preserve">
+    <value>Info Parameter</value>
+  </data>
+  <data name="textNetmask" xml:space="preserve">
+    <value>Netzwerkmaske</value>
+  </data>
+  <data name="textSerialNumber" xml:space="preserve">
+    <value>Seriennummer</value>
+  </data>
+  <data name="descriptionBootMode" xml:space="preserve">
+    <value>Aktueller Bootmodus.</value>
+  </data>
+  <data name="descriptionSavedDhcpMode" xml:space="preserve">
+    <value>DHCP-Client Flag eingeben.</value>
+  </data>
+  <data name="descriptionMacAddress" xml:space="preserve">
+    <value>Aktuelle MAC-Adresse.</value>
+  </data>
+  <data name="EIB7_BM_FactoryDefault" xml:space="preserve">
+    <value>Firmware des Auslieferungszustands (Werkseinstellung) mit Standard-Netzwerkeinstellungen</value>
+  </data>
+  <data name="EIB7_BM_FactoryUser" xml:space="preserve">
+    <value>Firmware des Auslieferungszustands (Werkseinstellung) mit Netzwerk-Benutzereinstellungen</value>
+  </data>
+  <data name="EIB7_BM_User" xml:space="preserve">
+    <value>Firmware des letzten Updates mit Netzwerk-Benutzereinstellungen</value>
+  </data>
+  <data name="EIB7_MD_Disable_SavedDhcp" xml:space="preserve">
+    <value>DHCP-Client inaktiv</value>
+  </data>
+  <data name="EIB7_MD_Enable_SavedDhcp" xml:space="preserve">
+    <value>DHCP-Client aktiv</value>
+  </data>
+  <data name="textBootMode" xml:space="preserve">
+    <value>Bootmodus</value>
+  </data>
+  <data name="textSavedDhcpMode" xml:space="preserve">
+    <value>DHCP-Client Flag</value>
+  </data>
+  <data name="textMacAddress" xml:space="preserve">
+    <value>MAC-Adresse</value>
+  </data>
+  <data name="errorStringLength" xml:space="preserve">
+    <value>Die Eingabe hat mehr als {0} Zeichen!</value>
+  </data>
+  <data name="errorStringValue" xml:space="preserve">
+    <value>Die Eingabe enthält Zeichen, die keine ASCII-Zeichen sind!</value>
+  </data>
+  <data name="descriptionCurrentHostName" xml:space="preserve">
+    <value>Aktuellen Hostnamen eingeben.</value>
+  </data>
+  <data name="descriptionCurrentDhcpMode" xml:space="preserve">
+    <value>EIB Adressmodus eingeben.</value>
+  </data>
+  <data name="textUseDhcp" xml:space="preserve">
+    <value>DHCP verwenden</value>
+  </data>
+  <data name="textCurrentDhcpMode" xml:space="preserve">
+    <value>EIB Adressmodus</value>
+  </data>
+  <data name="textUseIpAddress" xml:space="preserve">
+    <value>IP Adresse verwenden</value>
+  </data>
+  <data name="EIB7_HostNotFound" xml:space="preserve">
+    <value>IP-Adresse konnte nicht ermittelt werden</value>
+  </data>
+  <data name="errorEibEqualIp" xml:space="preserve">
+    <value>Die EIBen "{0}" und "{1}" haben die selbe IP Adresse!</value>
+  </data>
+  <data name="warningSetForAllAxis" xml:space="preserve">
+    <value>Dieser Parameter wird für alle Achsen der {0} gesetzt. Soll der Parameter gesetzt werden?</value>
+  </data>
+  <data name="warningSetForAllEibs" xml:space="preserve">
+    <value>Dieser Parameter wird für alle EIBen gesetzt. Soll der Parameter gesetzt werden?</value>
+  </data>
+  <data name="warningAuxAxisNumber" xml:space="preserve">
+    <value>Die Anzahl der Hilfsachsen {1} von {0} ist kleiner als {2}.</value>
+  </data>
+  <data name="warningAxisNumber" xml:space="preserve">
+    <value>Die Anzahl der Achsen {1} von {0} ist kleiner als {2}.</value>
+  </data>
+  <data name="descriptionAxisTermination" xml:space="preserve">
+    <value>Aktivierungszustand der Abschlusswiderstände eingeben.</value>
+  </data>
+  <data name="EIB7_MD_Disable_AxisTermination" xml:space="preserve">
+    <value>Deaktiviert</value>
+  </data>
+  <data name="EIB7_MD_Enable_AxisTermination" xml:space="preserve">
+    <value>Aktiviert</value>
+  </data>
+  <data name="textAxisTermination" xml:space="preserve">
+    <value>Abschlusswiderstände</value>
+  </data>
+  <data name="textAuxAxisNotActive" xml:space="preserve">
+    <value>Die Hilfsachse ist deaktiviert.</value>
+  </data>
+  <data name="textAxisNotActive" xml:space="preserve">
+    <value>Die Achse {0} ist deaktiviert.</value>
+  </data>
+  <data name="textAuxAxisINotActive" xml:space="preserve">
+    <value>Die Hilfsachse {0} ist deaktiviert.</value>
+  </data>
+  <data name="descriptionBandwidth" xml:space="preserve">
+    <value>Eingangsbandbreite eingeben.</value>
+  </data>
+  <data name="textBandwidth" xml:space="preserve">
+    <value>Eingangsbandbreite</value>
+  </data>
+  <data name="categoryEnDatOptions" xml:space="preserve">
+    <value>Optionen für EnDat-Schnittstellen</value>
+  </data>
+  <data name="categoryIncrementalOptions" xml:space="preserve">
+    <value>Optionen für inkrementale Schnittstellen</value>
+  </data>
+  <data name="descriptionAddInfoMode" xml:space="preserve">
+    <value>Nutzung der Zusatzinformation eingeben.</value>
+  </data>
+  <data name="descriptionCalculation" xml:space="preserve">
+    <value>tCAL des angeschlossenen Messgeräts eingeben.</value>
+  </data>
+  <data name="descriptionCompensation" xml:space="preserve">
+    <value>Online-Kompensation eingeben.</value>
+  </data>
+  <data name="descriptionEncoderType" xml:space="preserve">
+    <value>Typ des Messgeräts eingeben.</value>
+  </data>
+  <data name="descriptionEnDatClock" xml:space="preserve">
+    <value>EnDat-Taktrate eingeben.</value>
+  </data>
+  <data name="descriptionIncrement" xml:space="preserve">
+    <value>Nominalen Abstand in Signalperioden zwischen zwei festen Referenzmarken eingeben.</value>
+  </data>
+  <data name="descriptionIncSignals" xml:space="preserve">
+    <value>Verwendung der Inkrementalsignale eingeben.</value>
+  </data>
+  <data name="descriptionLinecounts" xml:space="preserve">
+    <value>Anzahl der Signalperioden pro Umdrehung eingeben.</value>
+  </data>
+  <data name="descriptionRecovery" xml:space="preserve">
+    <value>Verkürzung der Monozeit eingeben.</value>
+  </data>
+  <data name="descriptionRefmarks" xml:space="preserve">
+    <value>Art der Referenzmarken eingeben.</value>
+  </data>
+  <data name="descriptionRuntimeComp" xml:space="preserve">
+    <value>Verwendung der Laufzeitkompensation eingeben.</value>
+  </data>
+  <data name="EIB7_AIM_Fifo" xml:space="preserve">
+    <value>ZI1 / ZI2 rollierend</value>
+  </data>
+  <data name="EIB7_AIM_Fix" xml:space="preserve">
+    <value>ZI1 / ZI2 fest</value>
+  </data>
+  <data name="EIB7_AIM_None" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="EIB7_CS_CompActive" xml:space="preserve">
+    <value>Aktiviert</value>
+  </data>
+  <data name="EIB7_CS_None" xml:space="preserve">
+    <value>Deaktiviert</value>
+  </data>
+  <data name="EIB7_CT_Long" xml:space="preserve">
+    <value>&lt; 1 ms</value>
+  </data>
+  <data name="EIB7_CT_Short" xml:space="preserve">
+    <value>&lt; 15 µs</value>
+  </data>
+  <data name="EIB7_EC_Linear" xml:space="preserve">
+    <value>Längenmessgerät</value>
+  </data>
+  <data name="EIB7_EC_Rotary" xml:space="preserve">
+    <value>Winkelmessgerät / Drehgeber</value>
+  </data>
+  <data name="EIB7_RM_DistanceCoded" xml:space="preserve">
+    <value>Abstandscodierte Referenzmarken</value>
+  </data>
+  <data name="EIB7_RM_None" xml:space="preserve">
+    <value>Keine Referenzmarke</value>
+  </data>
+  <data name="EIB7_RM_One" xml:space="preserve">
+    <value>Eine Referenzmarke</value>
+  </data>
+  <data name="EIB7_RT_Long" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="EIB7_RT_Short" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="errorBadStepWidth" xml:space="preserve">
+    <value>Der Eingabewert ist kein Vielfaches von {0}!</value>
+  </data>
+  <data name="errorGreaterThanMax" xml:space="preserve">
+    <value>Der Eingabewert ist größer als {0}!</value>
+  </data>
+  <data name="errorLessThanMin" xml:space="preserve">
+    <value>Der Eingabewert ist kleiner als {0}!</value>
+  </data>
+  <data name="textAddInfoMode" xml:space="preserve">
+    <value>Nutzung der Zusatzinformation</value>
+  </data>
+  <data name="textCalculation" xml:space="preserve">
+    <value>tCAL des angeschlossenen Messgeräts</value>
+  </data>
+  <data name="textCompensation" xml:space="preserve">
+    <value>Online-Kompensation</value>
+  </data>
+  <data name="textEncoderType" xml:space="preserve">
+    <value>Typ des Messgeräts</value>
+  </data>
+  <data name="textEnDatClock" xml:space="preserve">
+    <value>EnDat-Taktrate</value>
+  </data>
+  <data name="textIncrement" xml:space="preserve">
+    <value>Nominaler Abstand in Signalperioden zwischen zwei festen Referenzmarken</value>
+  </data>
+  <data name="textIncSignals" xml:space="preserve">
+    <value>Verwendung der Inkrementalsignale</value>
+  </data>
+  <data name="textIncSignalsOff" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="textIncSignalsOn" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="textLinecounts" xml:space="preserve">
+    <value>Anzahl der Signalperioden pro Umdrehung</value>
+  </data>
+  <data name="textRecovery" xml:space="preserve">
+    <value>Verkürzung der Monozeit</value>
+  </data>
+  <data name="textRefmarks" xml:space="preserve">
+    <value>Art der Referenzmarken</value>
+  </data>
+  <data name="textRuntimeComp" xml:space="preserve">
+    <value>Verwendung der Laufzeitkompensation</value>
+  </data>
+  <data name="textRuntimeCompOff" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="textRuntimeCompOn" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="descriptionAddInfo1" xml:space="preserve">
+    <value>Zusatzinformation 1 eingeben.</value>
+  </data>
+  <data name="descriptionAddInfo2" xml:space="preserve">
+    <value>Zusatzinformation 2 eingeben.</value>
+  </data>
+  <data name="descriptionAddInfoFifo" xml:space="preserve">
+    <value>Zusatzinformation {0} eingeben.</value>
+  </data>
+  <data name="descriptionAddInfoNum" xml:space="preserve">
+    <value>Anzahl der Zusatzinformationen eingeben.</value>
+  </data>
+  <data name="EIB7_AI1_AddSensor" xml:space="preserve">
+    <value>Zusätzliche Sensoren</value>
+  </data>
+  <data name="EIB7_AI1_Diagnostic" xml:space="preserve">
+    <value>Sende Diagnosewerte</value>
+  </data>
+  <data name="EIB7_AI1_MemoryLSB" xml:space="preserve">
+    <value>Quittiere Speicherinhalt LSB</value>
+  </data>
+  <data name="EIB7_AI1_MemoryMSB" xml:space="preserve">
+    <value>Quittiere Speicherinhalt MSB</value>
+  </data>
+  <data name="EIB7_AI1_MRS" xml:space="preserve">
+    <value>Quittiere den MRS-Code</value>
+  </data>
+  <data name="EIB7_AI1_NOP" xml:space="preserve">
+    <value>Sende Zusatzinformation 1 ohne Dateninhalte</value>
+  </data>
+  <data name="EIB7_AI1_Position2_word1" xml:space="preserve">
+    <value>Sende Positionswert 2 Wort 1 LSB</value>
+  </data>
+  <data name="EIB7_AI1_Position2_word2" xml:space="preserve">
+    <value>Sende Positionswert 2 Wort 2</value>
+  </data>
+  <data name="EIB7_AI1_Position2_word3" xml:space="preserve">
+    <value>Sende Positionswert 2 Wort 3 MSB</value>
+  </data>
+  <data name="EIB7_AI1_Temperature1" xml:space="preserve">
+    <value>Sende Temperatur 1</value>
+  </data>
+  <data name="EIB7_AI1_Temperature2" xml:space="preserve">
+    <value>Sende Temperatur 2</value>
+  </data>
+  <data name="EIB7_AI1_TestCommand" xml:space="preserve">
+    <value>Quittiere Testbefehl</value>
+  </data>
+  <data name="EIB7_AI1_TestValue_word1" xml:space="preserve">
+    <value>Sende Testwerte Wort 1 LSB</value>
+  </data>
+  <data name="EIB7_AI1_TestValue_word2" xml:space="preserve">
+    <value>Sende Testwerte Wort 2</value>
+  </data>
+  <data name="EIB7_AI1_TestValue_word3" xml:space="preserve">
+    <value>Sende Testwerte Wort 3 MSB</value>
+  </data>
+  <data name="EIB7_AI2_Acceleration" xml:space="preserve">
+    <value>Sende Beschleunigung</value>
+  </data>
+  <data name="EIB7_AI2_AsyncPos_word1" xml:space="preserve">
+    <value>Asynchron Positionswert Wort 1 LSB</value>
+  </data>
+  <data name="EIB7_AI2_AsyncPos_word2" xml:space="preserve">
+    <value>Asynchron Positionswert Wort 2</value>
+  </data>
+  <data name="EIB7_AI2_AsyncPos_word3" xml:space="preserve">
+    <value>Asynchron Positionswert Wort 3 MSB</value>
+  </data>
+  <data name="EIB7_AI2_CommAndAccel" xml:space="preserve">
+    <value>Sende Kommutierung &amp; Beschleunigung</value>
+  </data>
+  <data name="EIB7_AI2_Commutation" xml:space="preserve">
+    <value>Sende Kommutierung</value>
+  </data>
+  <data name="EIB7_AI2_LimitAndAccel" xml:space="preserve">
+    <value>Sende Grenzlagensignale &amp; Beschleunigung</value>
+  </data>
+  <data name="EIB7_AI2_LimitSignal" xml:space="preserve">
+    <value>Sende Grenzlagensignale</value>
+  </data>
+  <data name="EIB7_AI2_NOP" xml:space="preserve">
+    <value>Sende Zusatzinformation 2 ohne Dateninhalte</value>
+  </data>
+  <data name="EIB7_AI2_OPSErrorSources" xml:space="preserve">
+    <value>Betriebszustandsfehlerquellen</value>
+  </data>
+  <data name="EIB7_AI2_ReservedA" xml:space="preserve">
+    <value>Reserviert</value>
+  </data>
+  <data name="EIB7_AI2_ReservedB" xml:space="preserve">
+    <value>Reserviert</value>
+  </data>
+  <data name="EIB7_AI2_ReservedC" xml:space="preserve">
+    <value>Reserviert</value>
+  </data>
+  <data name="EIB7_AI2_ReservedD" xml:space="preserve">
+    <value>Reserviert</value>
+  </data>
+  <data name="EIB7_AI2_ReservedE" xml:space="preserve">
+    <value>Reserviert</value>
+  </data>
+  <data name="textAddInfo1" xml:space="preserve">
+    <value>Zusatzinformation 1</value>
+  </data>
+  <data name="textAddInfo2" xml:space="preserve">
+    <value>Zusatzinformation 2</value>
+  </data>
+  <data name="textAddInfoFifo" xml:space="preserve">
+    <value>Zusatzinformation {0}</value>
+  </data>
+  <data name="textAddInfoNum" xml:space="preserve">
+    <value>Anzahl der Zusatzinformationen</value>
+  </data>
+  <data name="descriptionTriggerInp" xml:space="preserve">
+    <value>Parameter für Triggereingang {0} eingeben.</value>
+  </data>
+  <data name="descriptionTriggerInpDelay" xml:space="preserve">
+    <value>Verzögerung in Anzahl Taktperioden eingeben.</value>
+  </data>
+  <data name="descriptionTriggerInpMode" xml:space="preserve">
+    <value>Modus eingeben.</value>
+  </data>
+  <data name="descriptionTriggerInpTerm" xml:space="preserve">
+    <value>Aktivierungszustand des Abschlusswiderstands eingeben.</value>
+  </data>
+  <data name="descriptionTriggerPeriode" xml:space="preserve">
+    <value>Periodendauer in µs eingeben.</value>
+  </data>
+  <data name="EIB7_IOM_Logical_TriggerInput" xml:space="preserve">
+    <value>Logik-Eingang</value>
+  </data>
+  <data name="EIB7_IOM_Trigger_TriggerInput" xml:space="preserve">
+    <value>Trigger-Eingang</value>
+  </data>
+  <data name="EIB7_MD_Disable_TriggerTermination" xml:space="preserve">
+    <value>Deaktiviert</value>
+  </data>
+  <data name="EIB7_MD_Enable_TriggerTermination" xml:space="preserve">
+    <value>Aktiviert</value>
+  </data>
+  <data name="categoryExtTriggerInp" xml:space="preserve">
+    <value>Externe Triggereingänge</value>
+  </data>
+  <data name="categoryExtTriggerOut" xml:space="preserve">
+    <value>Externe Triggerausgänge</value>
+  </data>
+  <data name="categoryTimerTrigger" xml:space="preserve">
+    <value>Timer Trigger</value>
+  </data>
+  <data name="textTriggerInp" xml:space="preserve">
+    <value>Triggereingang {0}</value>
+  </data>
+  <data name="textTriggerInpDelay" xml:space="preserve">
+    <value>Verzögerung (Anzahl Taktperioden)</value>
+  </data>
+  <data name="textTriggerInpMode" xml:space="preserve">
+    <value>Modus</value>
+  </data>
+  <data name="textTriggerInpTerm" xml:space="preserve">
+    <value>Abschlusswiderstand</value>
+  </data>
+  <data name="textTriggerPeriode" xml:space="preserve">
+    <value>Periodendauer (µs)</value>
+  </data>
+  <data name="descriptionAxisTriggerEdge" xml:space="preserve">
+    <value>Triggerflanke eingeben.</value>
+  </data>
+  <data name="descriptionAxisTriggerSource" xml:space="preserve">
+    <value>Triggerquelle eingeben.</value>
+  </data>
+  <data name="descriptionMasterTriggerSource" xml:space="preserve">
+    <value>Triggerquelle eingeben.</value>
+  </data>
+  <data name="descriptionTriggerAuxAxis" xml:space="preserve">
+    <value>Triggerparameter für die Hilfsachse eingeben.</value>
+  </data>
+  <data name="descriptionTriggerAuxAxisN" xml:space="preserve">
+    <value>Triggerparameter für Hilfsachse {0} eingeben.</value>
+  </data>
+  <data name="descriptionTriggerAxis" xml:space="preserve">
+    <value>Triggerparameter für Achse {0} eingeben.</value>
+  </data>
+  <data name="descriptionTriggerOut" xml:space="preserve">
+    <value>Parameter für Triggerausgang {0} eingeben.</value>
+  </data>
+  <data name="descriptionTriggerOutEnable" xml:space="preserve">
+    <value>Aktivierungszustand des Ausgangstreibers eingeben.</value>
+  </data>
+  <data name="descriptionTriggerOutMode" xml:space="preserve">
+    <value>Modus eingeben.</value>
+  </data>
+  <data name="descriptionTriggerOutSource" xml:space="preserve">
+    <value>Triggerquelle eingeben.</value>
+  </data>
+  <data name="EIB7_AT_TrgIC" xml:space="preserve">
+    <value>Interval Counter</value>
+  </data>
+  <data name="EIB7_AT_TrgInput1" xml:space="preserve">
+    <value>Triggereingang Kanal 1</value>
+  </data>
+  <data name="EIB7_AT_TrgInput2" xml:space="preserve">
+    <value>Triggereingang Kanal 2</value>
+  </data>
+  <data name="EIB7_AT_TrgInput3" xml:space="preserve">
+    <value>Triggereingang Kanal 3</value>
+  </data>
+  <data name="EIB7_AT_TrgInput4" xml:space="preserve">
+    <value>Triggereingang Kanal 4</value>
+  </data>
+  <data name="EIB7_AT_TrgPuls" xml:space="preserve">
+    <value>Trigger Puls Zähler</value>
+  </data>
+  <data name="EIB7_AT_TrgRI" xml:space="preserve">
+    <value>Referenzimpuls {0}</value>
+  </data>
+  <data name="EIB7_AT_TrgRImaskedCH1" xml:space="preserve">
+    <value>Verknüpfter Referenzimpuls von Achse 1</value>
+  </data>
+  <data name="EIB7_AT_TrgSW1" xml:space="preserve">
+    <value>Software-Trigger Kanal 1</value>
+  </data>
+  <data name="EIB7_AT_TrgSW2" xml:space="preserve">
+    <value>Software-Trigger Kanal 2</value>
+  </data>
+  <data name="EIB7_AT_TrgSW3" xml:space="preserve">
+    <value>Software-Trigger Kanal 3</value>
+  </data>
+  <data name="EIB7_AT_TrgSW4" xml:space="preserve">
+    <value>Software-Trigger Kanal 4</value>
+  </data>
+  <data name="EIB7_AT_TrgTimer" xml:space="preserve">
+    <value>Timer Trigger</value>
+  </data>
+  <data name="EIB7_IOM_Logical_TriggerOutput" xml:space="preserve">
+    <value>Logik-Ausgang</value>
+  </data>
+  <data name="EIB7_IOM_Trigger_TriggerOutput" xml:space="preserve">
+    <value>Trigger-Ausgang</value>
+  </data>
+  <data name="EIB7_MD_Disable_TriggerEnable" xml:space="preserve">
+    <value>Deaktiviert</value>
+  </data>
+  <data name="EIB7_MD_Enable_TriggerEnable" xml:space="preserve">
+    <value>Aktiviert</value>
+  </data>
+  <data name="EIB7_OT_TrgIC" xml:space="preserve">
+    <value>Interval Counter</value>
+  </data>
+  <data name="EIB7_OT_TrgInAsync" xml:space="preserve">
+    <value>Triggereingang {0} nicht synchronisiert</value>
+  </data>
+  <data name="EIB7_OT_TrgInSync" xml:space="preserve">
+    <value>Triggereingang {0} synchronisiert</value>
+  </data>
+  <data name="EIB7_OT_TrgPuls" xml:space="preserve">
+    <value>Trigger Puls Zähler</value>
+  </data>
+  <data name="EIB7_OT_TrgRImaskedCH1" xml:space="preserve">
+    <value>Verknüpfter Referenzimpuls von Achse 1</value>
+  </data>
+  <data name="EIB7_OT_TrgSW1" xml:space="preserve">
+    <value>Software-Trigger Kanal 1</value>
+  </data>
+  <data name="EIB7_OT_TrgSW2" xml:space="preserve">
+    <value>Software-Trigger Kanal 2</value>
+  </data>
+  <data name="EIB7_OT_TrgSW3" xml:space="preserve">
+    <value>Software-Trigger Kanal 3</value>
+  </data>
+  <data name="EIB7_OT_TrgSW4" xml:space="preserve">
+    <value>Software-Trigger Kanal 4</value>
+  </data>
+  <data name="EIB7_OT_TrgTimer" xml:space="preserve">
+    <value>Timer Trigger</value>
+  </data>
+  <data name="EIB7_RI_Both" xml:space="preserve">
+    <value>Beide Flanken des Referenzimpulses</value>
+  </data>
+  <data name="EIB7_RI_Falling" xml:space="preserve">
+    <value>Fallende Flanke des Referenzimpulses</value>
+  </data>
+  <data name="EIB7_RI_Rising" xml:space="preserve">
+    <value>Steigende Flanke des Referenzimpulses</value>
+  </data>
+  <data name="categoryAxisTrigger" xml:space="preserve">
+    <value>Triggereinstellungen für die Achsen</value>
+  </data>
+  <data name="textAxisTriggerEdge" xml:space="preserve">
+    <value>Triggerflanke</value>
+  </data>
+  <data name="textAxisTriggerSource" xml:space="preserve">
+    <value>Triggerquelle</value>
+  </data>
+  <data name="categoryMasterTrigger" xml:space="preserve">
+    <value>Master-Trigger</value>
+  </data>
+  <data name="textMasterTriggerSource" xml:space="preserve">
+    <value>Triggerquelle</value>
+  </data>
+  <data name="textOfAuxAxis" xml:space="preserve">
+    <value>der Hilfsachse</value>
+  </data>
+  <data name="textOfAuxAxisN" xml:space="preserve">
+    <value>von Hilfsachse</value>
+  </data>
+  <data name="textOfAxis" xml:space="preserve">
+    <value>von Achse</value>
+  </data>
+  <data name="textTriggerAuxAxis" xml:space="preserve">
+    <value>Hilfsachse</value>
+  </data>
+  <data name="textTriggerAuxAxisN" xml:space="preserve">
+    <value>Hilfsachse {0}</value>
+  </data>
+  <data name="textTriggerAxis" xml:space="preserve">
+    <value>Achse {0}</value>
+  </data>
+  <data name="textTriggerOut" xml:space="preserve">
+    <value>Triggerausgang {0}</value>
+  </data>
+  <data name="textTriggerOutEnable" xml:space="preserve">
+    <value>Ausgangstreiber</value>
+  </data>
+  <data name="textTriggerOutMode" xml:space="preserve">
+    <value>Modus</value>
+  </data>
+  <data name="textTriggerOutSource" xml:space="preserve">
+    <value>Triggerquelle</value>
+  </data>
+  <data name="categoryPulseCounter" xml:space="preserve">
+    <value>Pulszähler</value>
+  </data>
+  <data name="descriptionIntervalCounterMode" xml:space="preserve">
+    <value>Modus eingeben.</value>
+  </data>
+  <data name="descriptionIntervalCounterPeriod" xml:space="preserve">
+    <value>Periodischen Abstand eingeben.</value>
+  </data>
+  <data name="descriptionIntervalCounterStart" xml:space="preserve">
+    <value>Startoption eingeben.</value>
+  </data>
+  <data name="descriptionIntervalCounterStartPos" xml:space="preserve">
+    <value>Startposition eingeben.</value>
+  </data>
+  <data name="descriptionPulseCounterCount" xml:space="preserve">
+    <value>Anzahl Triggerimpulse eingeben.</value>
+  </data>
+  <data name="descriptionPulseCounterStart" xml:space="preserve">
+    <value>Startimpuls eingeben.</value>
+  </data>
+  <data name="descriptionPulseCounterTrigger" xml:space="preserve">
+    <value>Triggerimpuls eingeben.</value>
+  </data>
+  <data name="EIB7_ICM_Disable" xml:space="preserve">
+    <value>Keine Triggerung</value>
+  </data>
+  <data name="EIB7_ICM_Periodic" xml:space="preserve">
+    <value>Periodische Triggerung in festen Abständen</value>
+  </data>
+  <data name="EIB7_ICM_Single" xml:space="preserve">
+    <value>Triggerung nur an einer festen Position</value>
+  </data>
+  <data name="EIB7_ICS_Current" xml:space="preserve">
+    <value>Aktuelle Position</value>
+  </data>
+  <data name="EIB7_ICS_StartPos" xml:space="preserve">
+    <value>Startposition</value>
+  </data>
+  <data name="EIB7_PS_TrgIC" xml:space="preserve">
+    <value>Interval Counter</value>
+  </data>
+  <data name="EIB7_PS_TrgInput1" xml:space="preserve">
+    <value>Triggereingang Kanal 1</value>
+  </data>
+  <data name="EIB7_PS_TrgInput2" xml:space="preserve">
+    <value>Triggereingang Kanal 2</value>
+  </data>
+  <data name="EIB7_PS_TrgInput3" xml:space="preserve">
+    <value>Triggereingang Kanal 3</value>
+  </data>
+  <data name="EIB7_PS_TrgInput4" xml:space="preserve">
+    <value>Triggereingang Kanal 4</value>
+  </data>
+  <data name="EIB7_PS_TrgRI1" xml:space="preserve">
+    <value>Referenzimpuls Achse 1</value>
+  </data>
+  <data name="EIB7_PS_TrgRI2" xml:space="preserve">
+    <value>Referenzimpuls Achse 2</value>
+  </data>
+  <data name="EIB7_PS_TrgRI3" xml:space="preserve">
+    <value>Referenzimpuls Achse 3</value>
+  </data>
+  <data name="EIB7_PS_TrgRI4" xml:space="preserve">
+    <value>Referenzimpuls Achse 4</value>
+  </data>
+  <data name="EIB7_PS_TrgRImaskedCH1" xml:space="preserve">
+    <value>Verknüpfter Referenzimpuls von Achse 1</value>
+  </data>
+  <data name="EIB7_PS_TrgSW1" xml:space="preserve">
+    <value>Software-Trigger Kanal 1</value>
+  </data>
+  <data name="EIB7_PS_TrgSW2" xml:space="preserve">
+    <value>Software-Trigger Kanal 2</value>
+  </data>
+  <data name="EIB7_PS_TrgSW3" xml:space="preserve">
+    <value>Software-Trigger Kanal 3</value>
+  </data>
+  <data name="EIB7_PS_TrgSW4" xml:space="preserve">
+    <value>Software-Trigger Kanal 4</value>
+  </data>
+  <data name="EIB7_PT_TrgIC" xml:space="preserve">
+    <value>Interval Counter</value>
+  </data>
+  <data name="EIB7_PT_TrgInput1" xml:space="preserve">
+    <value>Triggereingang Kanal 1</value>
+  </data>
+  <data name="EIB7_PT_TrgInput2" xml:space="preserve">
+    <value>Triggereingang Kanal 2</value>
+  </data>
+  <data name="EIB7_PT_TrgInput3" xml:space="preserve">
+    <value>Triggereingang Kanal 3</value>
+  </data>
+  <data name="EIB7_PT_TrgInput4" xml:space="preserve">
+    <value>Triggereingang Kanal 4</value>
+  </data>
+  <data name="EIB7_PT_TrgRI1" xml:space="preserve">
+    <value>Referenzimpuls Achse 1</value>
+  </data>
+  <data name="EIB7_PT_TrgRI2" xml:space="preserve">
+    <value>Referenzimpuls Achse 2</value>
+  </data>
+  <data name="EIB7_PT_TrgRI3" xml:space="preserve">
+    <value>Referenzimpuls Achse 3</value>
+  </data>
+  <data name="EIB7_PT_TrgRI4" xml:space="preserve">
+    <value>Referenzimpuls Achse 4</value>
+  </data>
+  <data name="EIB7_PT_TrgRImaskedCH1" xml:space="preserve">
+    <value>Verknüpfter Referenzimpuls von Achse 1</value>
+  </data>
+  <data name="EIB7_PT_TrgTimer" xml:space="preserve">
+    <value>Timer Trigger</value>
+  </data>
+  <data name="textIntervalCounterMode" xml:space="preserve">
+    <value>Modus</value>
+  </data>
+  <data name="textIntervalCounterPeriod" xml:space="preserve">
+    <value>Periodischer Abstand</value>
+  </data>
+  <data name="textIntervalCounterStart" xml:space="preserve">
+    <value>Startoption</value>
+  </data>
+  <data name="textIntervalCounterStartPos" xml:space="preserve">
+    <value>Startposition</value>
+  </data>
+  <data name="textPulseCounterCount" xml:space="preserve">
+    <value>Anzahl Triggerimpulse</value>
+  </data>
+  <data name="textPulseCounterStart" xml:space="preserve">
+    <value>Startimpuls</value>
+  </data>
+  <data name="textPulseCounterTrigger" xml:space="preserve">
+    <value>Triggerimpuls</value>
+  </data>
+  <data name="errorEibParamFileVersion" xml:space="preserve">
+    <value>Die Parameterdatei "{0}" hat eine ungültige Parameterversion!</value>
+  </data>
+  <data name="errorEibParamFileHeader" xml:space="preserve">
+    <value>Die Parameterdatei "{0}" hat einen ungültigen Dateiheader!</value>
+  </data>
+  <data name="categoryDataPacket" xml:space="preserve">
+    <value>Datenpaket</value>
+  </data>
+  <data name="descriptionDataPacketStatusWord" xml:space="preserve">
+    <value>Verwendung des Statuswortes im Datenpaket eingeben.</value>
+  </data>
+  <data name="textDataPacketNotUse" xml:space="preserve">
+    <value>wird nicht gesendet</value>
+  </data>
+  <data name="textDataPacketStatusWord" xml:space="preserve">
+    <value>Statuswort</value>
+  </data>
+  <data name="textDataPacketUse" xml:space="preserve">
+    <value>wird gesendet</value>
+  </data>
+  <data name="descriptionDataPacketAnalog" xml:space="preserve">
+    <value>Verwendung der ADC-Werte im Datenpaket eingeben.</value>
+  </data>
+  <data name="descriptionDataPacketDistCodedRef" xml:space="preserve">
+    <value>Verwendung des codierten Referenzwertes im Datenpaket eingeben.</value>
+  </data>
+  <data name="descriptionDataPacketEnDatAI1" xml:space="preserve">
+    <value>Verwendung der Zusatzinformation 1 im Datenpaket eingeben.</value>
+  </data>
+  <data name="descriptionDataPacketEnDatAI2" xml:space="preserve">
+    <value>Verwendung der Zusatzinformation 2 im Datenpaket eingeben.</value>
+  </data>
+  <data name="descriptionDataPacketPositionData" xml:space="preserve">
+    <value>Verwendung des Positionswertes im Datenpaket eingeben.</value>
+  </data>
+  <data name="descriptionDataPacketReferencePos" xml:space="preserve">
+    <value>Verwendung der Referenzpositionen 1 und 2 im Datenpaket eingeben.</value>
+  </data>
+  <data name="descriptionDataPacketTimestamp" xml:space="preserve">
+    <value>Verwendung des Zeitstempels im Datenpaket eingeben.</value>
+  </data>
+  <data name="textDataPacketAnalog" xml:space="preserve">
+    <value>ADC-Werte</value>
+  </data>
+  <data name="textDataPacketAnalogA" xml:space="preserve">
+    <value>ADC-Wert Signal A</value>
+  </data>
+  <data name="textDataPacketAnalogB" xml:space="preserve">
+    <value>ADC-Wert Signal B</value>
+  </data>
+  <data name="textDataPacketDistCodedRef" xml:space="preserve">
+    <value>Codierter Referenzwert</value>
+  </data>
+  <data name="textDataPacketEnDatAI1" xml:space="preserve">
+    <value>Zusatzinformation 1</value>
+  </data>
+  <data name="textDataPacketEnDatAI1Status" xml:space="preserve">
+    <value>Zusatzinformation 1 Status</value>
+  </data>
+  <data name="textHistoryEnDatAI1Status" xml:space="preserve">
+    <value>[{0}] Zusatzinfo. 1 Status</value>
+  </data>
+  <data name="textHistoryEnDatAI1Info" xml:space="preserve">
+    <value>[{0}] Zusatzinfo. 1 Wert</value>
+  </data>
+  <data name="textHistoryEnDatAI2Status" xml:space="preserve">
+    <value>[{0}] Zusatzinfo. 2 Status</value>
+  </data>
+  <data name="textHistoryEnDatAI2Info" xml:space="preserve">
+    <value>[{0}] Zusatzinfo. 2 Wert</value>
+  </data>
+  <data name="textDataPacketEnDatAI1Info" xml:space="preserve">
+    <value>Zusatzinformation 1 Wert</value>
+  </data>
+  <data name="textDataPacketEnDatAI2" xml:space="preserve">
+    <value>Zusatzinformation 2</value>
+  </data>
+  <data name="textDataPacketEnDatAI2Status" xml:space="preserve">
+    <value>Zusatzinformation 2 Status</value>
+  </data>
+  <data name="textDataPacketEnDatAI2Info" xml:space="preserve">
+    <value>Zusatzinformation 2 Wert</value>
+  </data>
+  <data name="textDataPacketPositionData" xml:space="preserve">
+    <value>Positionswert</value>
+  </data>
+  <data name="textDataPacketReferencePos" xml:space="preserve">
+    <value>Referenzpositionen 1 und 2</value>
+  </data>
+  <data name="textDataPacketReferencePos1" xml:space="preserve">
+    <value>Referenzposition 1</value>
+  </data>
+  <data name="textDataPacketReferencePos2" xml:space="preserve">
+    <value>Referenzposition 2</value>
+  </data>
+  <data name="textDataPacketTimestamp" xml:space="preserve">
+    <value>Zeitstempel</value>
+  </data>
+  <data name="textCorrespondingAxis" xml:space="preserve">
+    <value>der entsprechenden Achse</value>
+  </data>
+  <data name="errorSelectionNotSupported" xml:space="preserve">
+    <value>Diese Auswahl wird von dieser Applikation nicht unterstützt!</value>
+  </data>
+  <data name="textAllFiles" xml:space="preserve">
+    <value>Alle Dateien</value>
+  </data>
+  <data name="textProjectFile" xml:space="preserve">
+    <value>Projektdateien</value>
+  </data>
+  <data name="categoryTimestamp" xml:space="preserve">
+    <value>Zeitstempel Parameter</value>
+  </data>
+  <data name="descriptionTimestampPeriod" xml:space="preserve">
+    <value>Zeitstempel Periodendauer in µs eingeben.</value>
+  </data>
+  <data name="descriptionTimestampReset" xml:space="preserve">
+    <value>Rücksetzen des Zeitstempel beim Start festlegen.</value>
+  </data>
+  <data name="textNoResetOnStart" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="textResetOnStart" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="textTimestampPeriod" xml:space="preserve">
+    <value>Zeitstempel Periodendauer (µs)</value>
+  </data>
+  <data name="textTimestampReset" xml:space="preserve">
+    <value>Zeitstempel beim Start zurück setzen</value>
+  </data>
+  <data name="errorDataPacketTooLarge" xml:space="preserve">
+    <value>Die Größe des Datenpaketes ({0}) übersteigt die Puffergröße ({1})!</value>
+  </data>
+  <data name="descriptionSignalPeriod" xml:space="preserve">
+    <value>Signalperiode in µm eingeben.</value>
+  </data>
+  <data name="textSignalPeriod" xml:space="preserve">
+    <value>Signalperiode (µm)</value>
+  </data>
+  <data name="categoryDisplay" xml:space="preserve">
+    <value>Anzeigeparameter</value>
+  </data>
+  <data name="descriptionDisplayPeriod" xml:space="preserve">
+    <value>Anzeigeperiodendauer in ms eingeben.</value>
+  </data>
+  <data name="descriptionDisplayPrecision" xml:space="preserve">
+    <value>Anzeigegenauigkeit (Nachkommastellen) eingeben.</value>
+  </data>
+  <data name="textDisplayPeriod" xml:space="preserve">
+    <value>Anzeigeperiodendauer (ms)</value>
+  </data>
+  <data name="textDisplayPrecision" xml:space="preserve">
+    <value>Anzeigegenauigkeit (Nachkommastellen)</value>
+  </data>
+  <data name="infoEibAdd" xml:space="preserve">
+    <value>EIB "{0}" wurde erfolgreich dem System hinzugefügt.</value>
+  </data>
+  <data name="infoEibDel" xml:space="preserve">
+    <value>EIB "{0}" wurde erfolgreich aus dem System entfernt.</value>
+  </data>
+  <data name="infoEibInitError" xml:space="preserve">
+    <value>Fehler beim Initialisieren der EIBen:</value>
+  </data>
+  <data name="infoEibInitSuccess" xml:space="preserve">
+    <value>Die EIBen wurden erfolgreich initialisiert.</value>
+  </data>
+  <data name="infoEibLoadError" xml:space="preserve">
+    <value>Fehler beim Laden der EIB Parameter aus einer Datei:</value>
+  </data>
+  <data name="infoEibLoadSuccess" xml:space="preserve">
+    <value>Die EIB Parameter wurden erfolgreich geladen aus der Datei:</value>
+  </data>
+  <data name="infoEibReadError" xml:space="preserve">
+    <value>Fehler beim Lesen der Parameter von einer EIB:</value>
+  </data>
+  <data name="infoEibSaveError" xml:space="preserve">
+    <value>Fehler beim Speichern der EIB Parameter in eine Datei:</value>
+  </data>
+  <data name="infoEibSaveSuccess" xml:space="preserve">
+    <value>Die EIB Parameter wurden erfolgreich gespeichert in die Datei:</value>
+  </data>
+  <data name="infoEibStartError" xml:space="preserve">
+    <value>Fehler beim Start der Messung:</value>
+  </data>
+  <data name="infoEibStartSuccess" xml:space="preserve">
+    <value>Die Messung wurde erfolgreich gestartet.</value>
+  </data>
+  <data name="infoEibStopError" xml:space="preserve">
+    <value>Fehler beim Beenden der Messung:</value>
+  </data>
+  <data name="infoEibStopSuccess" xml:space="preserve">
+    <value>Die Messung wurde erfolgreich beendet.</value>
+  </data>
+  <data name="infoEibWriteError" xml:space="preserve">
+    <value>Fehler beim Schreiben der Parameter in eine EIB:</value>
+  </data>
+  <data name="infoInternalError" xml:space="preserve">
+    <value>Interner Softwarefehler:</value>
+  </data>
+  <data name="infoEibMeasureAbort" xml:space="preserve">
+    <value>Die Messung wurde auf Grund eines Fehlers abgebrochen.</value>
+  </data>
+  <data name="infoEibMeasureError" xml:space="preserve">
+    <value>Fehler während der Messung:</value>
+  </data>
+  <data name="errorDataReadTimeout" xml:space="preserve">
+    <value>Timeout beim Einlesen von Daten von EIB "{0}"!</value>
+  </data>
+  <data name="errorAllAxisDisabled" xml:space="preserve">
+    <value>Es muss mindestens eine Achse von EIB "{0}" aktiviert sein!</value>
+  </data>
+  <data name="errorEibClosed" xml:space="preserve">
+    <value>Die Verbindung zu den EIBen wurde unterbrochen. Die EIBen müssen neu initialisiert werden!</value>
+  </data>
+  <data name="errorConnectionClosed" xml:space="preserve">
+    <value>Die Verbindung zur EIB "{0}" wurde unterbrochen!</value>
+  </data>
+  <data name="infoEibResetError" xml:space="preserve">
+    <value>Fehler beim Zurücksetzen der EIB:</value>
+  </data>
+  <data name="infoEibResetSuccess" xml:space="preserve">
+    <value>Die EIB wurde erfolgreich zurückgesetzt.</value>
+  </data>
+  <data name="infoEibResetWait" xml:space="preserve">
+    <value>Das Reset der EIB wird durchgeführt...Bitte warten!</value>
+  </data>
+  <data name="infoEibMeasureWarning" xml:space="preserve">
+    <value>Warnung während der Messung:</value>
+  </data>
+  <data name="warningLostTriggerCount" xml:space="preserve">
+    <value>Bei EIB "{0}" gingen Triggerereignisse verloren!</value>
+  </data>
+  <data name="textButtonReset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="textStatusAddInfoValid" xml:space="preserve">
+    <value>Zusatzinformation gültig</value>
+  </data>
+  <data name="textStatusFanError" xml:space="preserve">
+    <value>Fehler Lüfter</value>
+  </data>
+  <data name="textStatusFrequencyError" xml:space="preserve">
+    <value>Frequenzüberschreitung</value>
+  </data>
+  <data name="textStatusLostTrigger" xml:space="preserve">
+    <value>Lost Trigger</value>
+  </data>
+  <data name="textStatusPositionValid" xml:space="preserve">
+    <value>Position gültig</value>
+  </data>
+  <data name="textStatusPositionNotValid" xml:space="preserve">
+    <value>Position ungültig</value>
+  </data>
+  <data name="textStatusPowerError" xml:space="preserve">
+    <value>Fehler Spannungsversorgung Messgerät</value>
+  </data>
+  <data name="textStatusRefPos1Saved" xml:space="preserve">
+    <value>Referenzposition 1 gespeichert</value>
+  </data>
+  <data name="textStatusRefPos2Saved" xml:space="preserve">
+    <value>Referenzposition 2 gespeichert</value>
+  </data>
+  <data name="textStatusRefPosCError" xml:space="preserve">
+    <value>Fehler codierter Referenzwert</value>
+  </data>
+  <data name="textStatusRefPosCValid" xml:space="preserve">
+    <value>Codierter Referenzwert gültig</value>
+  </data>
+  <data name="textStatusSignalError" xml:space="preserve">
+    <value>Fehler Signalamplitude</value>
+  </data>
+  <data name="textStatusContents0" xml:space="preserve">
+    <value>Inhalt I0</value>
+  </data>
+  <data name="textStatusContents1" xml:space="preserve">
+    <value>Inhalt I1</value>
+  </data>
+  <data name="textStatusContents2" xml:space="preserve">
+    <value>Inhalt I2</value>
+  </data>
+  <data name="textStatusContents3" xml:space="preserve">
+    <value>Inhalt I3</value>
+  </data>
+  <data name="textStatusContents4" xml:space="preserve">
+    <value>Inhalt I4</value>
+  </data>
+  <data name="textStatusCrcError" xml:space="preserve">
+    <value>CRC Fehler</value>
+  </data>
+  <data name="textStatusEnDatBusy" xml:space="preserve">
+    <value>EnDat Busy Bit</value>
+  </data>
+  <data name="textStatusEnDatError1" xml:space="preserve">
+    <value>EnDat Fehlermeldung 1</value>
+  </data>
+  <data name="textStatusEnDatError2" xml:space="preserve">
+    <value>EnDat Fehlermeldung 2</value>
+  </data>
+  <data name="textStatusEnDatRM" xml:space="preserve">
+    <value>EnDat RM Bit</value>
+  </data>
+  <data name="textStatusEnDatWRN" xml:space="preserve">
+    <value>EnDat WRN Bit</value>
+  </data>
+  <data name="warningBadPositionParam" xml:space="preserve">
+    <value>Fehlerhafter Parameter ({0}) zur Positionsberechnung bei EIB "{1}"!</value>
+  </data>
+  <data name="warningLostTriggerStatus" xml:space="preserve">
+    <value>Bei "Lost Trigger" Länge des EnDat-Zyklus bei EIB "{0}" überprüfen!</value>
+  </data>
+  <data name="warningDataPacketDisable" xml:space="preserve">
+    <value>"{0}" sollte im Datenpaket von EIB "{1}" aktiviert sein!</value>
+  </data>
+  <data name="textDataPacketEnDatAI1Pos2" xml:space="preserve">
+    <value>Zusatzinformation 1, Positionswert 2, Wort 1, 2, 3</value>
+  </data>
+  <data name="descriptionSaveMeasureData" xml:space="preserve">
+    <value>Speicherung der Messdaten in Datei festlegen.</value>
+  </data>
+  <data name="descriptionShowMultiturn" xml:space="preserve">
+    <value>Anzeige der Anzahl Umdrehungen bei Multiturn-Drehgebern festlegen.</value>
+  </data>
+  <data name="textSaveMeasureData" xml:space="preserve">
+    <value>Messdaten in Datei speichern</value>
+  </data>
+  <data name="textSaveMeasureDataNo" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="textSaveMeasureDataYes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="textShowMultiturn" xml:space="preserve">
+    <value>Anzahl Umdrehungen bei Multiturn-Drehgebern anzeigen</value>
+  </data>
+  <data name="textShowMultiturnNo" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="textShowMultiturnYes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="dialogDataFile" xml:space="preserve">
+    <value>Messwertdatei auswählen</value>
+  </data>
+  <data name="dialogProjectFile" xml:space="preserve">
+    <value>Projektdatei auswählen</value>
+  </data>
+  <data name="textDataFile" xml:space="preserve">
+    <value>Messwertdateien</value>
+  </data>
+  <data name="infoDataSaveSuccess" xml:space="preserve">
+    <value>Die EIB Messwerte wurden erfolgreich gespeichert in die Datei:</value>
+  </data>
+  <data name="infoDataSaveError" xml:space="preserve">
+    <value>Fehler beim Speichern der EIB Messwerte in eine Datei:</value>
+  </data>
+  <data name="textDataFileConfiguration" xml:space="preserve">
+    <value>Konfiguration:</value>
+  </data>
+  <data name="textDataFileHeader" xml:space="preserve">
+    <value>Messwertdatei</value>
+  </data>
+  <data name="textDataFileOperationMode" xml:space="preserve">
+    <value>Betriebsmodus:</value>
+  </data>
+  <data name="textDataFileAxisName" xml:space="preserve">
+    <value>Achse</value>
+  </data>
+  <data name="textDataFileEibName" xml:space="preserve">
+    <value>EIB Name</value>
+  </data>
+  <data name="textDataFileIndex" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="textDataFileTriggerCount" xml:space="preserve">
+    <value>Trigger Counter</value>
+  </data>
+  <data name="textDataFileAbsolute" xml:space="preserve">
+    <value>Absolut</value>
+  </data>
+  <data name="textDataFilePosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="textDataFileRevolutions" xml:space="preserve">
+    <value>Umdrehungen</value>
+  </data>
+  <data name="textDataFileUnit" xml:space="preserve">
+    <value>Einheit</value>
+  </data>
+  <data name="textDataFileIncremental" xml:space="preserve">
+    <value>Inkrementell</value>
+  </data>
+  <data name="textDataFileType" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="textDataFileStartTime" xml:space="preserve">
+    <value>Start der Messung:</value>
+  </data>
+  <data name="warningEnDat21Incremental" xml:space="preserve">
+    <value>Für EnDat 2.1 Messgeräte wird die absolute Positionsanzeige nicht unterstützt!</value>
+  </data>
+  <data name="categoryCrankshaftConfig" xml:space="preserve">
+    <value>Konfiguration der Messpunkte</value>
+  </data>
+  <data name="descriptionAngelMeasure" xml:space="preserve">
+    <value>Konfiguration für die Winkelmessung eingeben.</value>
+  </data>
+  <data name="descriptionMeasurePoint" xml:space="preserve">
+    <value>Konfiguration für die Messpunkt {0} eingeben.</value>
+  </data>
+  <data name="textAngelMeasure" xml:space="preserve">
+    <value>Winkelmessung</value>
+  </data>
+  <data name="textMeasurePoint" xml:space="preserve">
+    <value>Messpunkt {0}</value>
+  </data>
+  <data name="textNotUsed" xml:space="preserve">
+    <value>Nicht verwendet</value>
+  </data>
+  <data name="errorValueAlreadyUsed" xml:space="preserve">
+    <value>Dieser Wert wurde bereits verwendet!</value>
+  </data>
+  <data name="errorCrankshaftParam" xml:space="preserve">
+    <value>Die Konfigurationsparameter für die Kurbelwellenapplikation enthalten fehlerhafte Werte!</value>
+  </data>
+  <data name="categoryCrankshaftDisplay" xml:space="preserve">
+    <value>Kurbelwellenapplikation</value>
+  </data>
+  <data name="descriptionGraphAxisMax" xml:space="preserve">
+    <value>Maximalwert der Grafikachse in mm eingeben.</value>
+  </data>
+  <data name="descriptionTolerance" xml:space="preserve">
+    <value>Toleranz zur Referenzmessung in µm eingeben.</value>
+  </data>
+  <data name="textGraphAxisMax" xml:space="preserve">
+    <value>Maximalwert Grafikachse (mm)</value>
+  </data>
+  <data name="textTolerance" xml:space="preserve">
+    <value>Toleranz (µm)</value>
+  </data>
+  <data name="descriptionAngleDistance" xml:space="preserve">
+    <value>Minimalen Winkelabstand in ° eingeben.</value>
+  </data>
+  <data name="textAngleDistance" xml:space="preserve">
+    <value>Minimaler Winkelabstand (°)</value>
+  </data>
+  <data name="warningCrankshaftConfig" xml:space="preserve">
+    <value>Die Konfiguration der Kurbelwellenmessung enthält keine sinnvollen Werte!</value>
+  </data>
+  <data name="warningCrankshaftOpMode" xml:space="preserve">
+    <value>Für die Kurbelwellenmessung ist einer der Betriebsmodi: {0} erforderlich!</value>
+  </data>
+  <data name="warningCrankshaftAngel" xml:space="preserve">
+    <value>Die Datenaufnahme für die Kurbelwellenmessung wurde wegen ungültiger Winkelwerte abgebrochen!</value>
+  </data>
+  <data name="warningCrankshaftRadius" xml:space="preserve">
+    <value>Die Kurbelwellenmessung enthält ungültige Radiuswerte!</value>
+  </data>
+  <data name="warningCrankshaftSync" xml:space="preserve">
+    <value>Die Datenaufnahme für die Kurbelwellenmessung wurde wegen Problemen bei der EIB Synchronisation abgebrochen!</value>
+  </data>
+  <data name="infoDataSaveStart" xml:space="preserve">
+    <value>Die EIB Messwerte werden gespeichert...</value>
+  </data>
+  <data name="textFillLevelMeasure" xml:space="preserve">
+    <value>Füllstand des Messwertspeichers</value>
+  </data>
+  <data name="textFillLevelSave" xml:space="preserve">
+    <value>Gespeicherte Messwerte</value>
+  </data>
+  <data name="descriptionRadiusOffset" xml:space="preserve">
+    <value>Offset der Längenmessung in mm eingeben.</value>
+  </data>
+  <data name="textRadiusOffset" xml:space="preserve">
+    <value>Offset der Längenmessung (mm)</value>
+  </data>
+  <data name="dialogReferenceFile" xml:space="preserve">
+    <value>Referenzwertdatei auswählen</value>
+  </data>
+  <data name="errorEibReferenceFileHeader" xml:space="preserve">
+    <value>Die Referenzwertdatei "{0}" hat einen ungültigen Dateiheader!</value>
+  </data>
+  <data name="errorEibReferenceFileVersion" xml:space="preserve">
+    <value>Die Referenzwertdatei "{0}" hat eine ungültige Parameterversion!</value>
+  </data>
+  <data name="textReferenceFile" xml:space="preserve">
+    <value>Referenzwertdateien</value>
+  </data>
+  <data name="infoReferenceLoadError" xml:space="preserve">
+    <value>Fehler beim Laden der Referenzwerte aus einer Datei:</value>
+  </data>
+  <data name="infoReferenceLoadSuccess" xml:space="preserve">
+    <value>Die Referenzwerte wurden erfolgreich geladen aus der Datei:</value>
+  </data>
+  <data name="infoReferenceSaveError" xml:space="preserve">
+    <value>Fehler beim Speichern der Referenzwerte in eine Datei:</value>
+  </data>
+  <data name="infoReferenceSaveSuccess" xml:space="preserve">
+    <value>Die Referenzwerte wurden erfolgreich gespeichert in die Datei:</value>
+  </data>
+  <data name="warningRefPosEnDat01Invalid" xml:space="preserve">
+    <value>Die Referenzposition des EnDat 01 Messgerätes bei EIB "{0}" ist ungültig!</value>
+  </data>
+  <data name="dialogFirmwareFile" xml:space="preserve">
+    <value>Firmwaredatei auswählen</value>
+  </data>
+  <data name="infoFirmwareError" xml:space="preserve">
+    <value>Fehler bei der Aktualisierung der EIB Firmware:</value>
+  </data>
+  <data name="infoFirmwareLoadError" xml:space="preserve">
+    <value>Fehler beim Laden der Firmwaredatei:</value>
+  </data>
+  <data name="infoFirmwareSuccess" xml:space="preserve">
+    <value>Die EIB Firmware wurde erfolgreich aktualisiert aus der Datei:</value>
+  </data>
+  <data name="infoFirmwareWait" xml:space="preserve">
+    <value>Die Aktualisierung der EIB Firmware wird durchgeführt...Bitte warten!</value>
+  </data>
+  <data name="textFirmwareFile" xml:space="preserve">
+    <value>Firmwaredateien</value>
+  </data>
+  <data name="errorFirmwareTFTP" xml:space="preserve">
+    <value>Fehler "{0}" beim Schreiben von Daten über TFTP auf EIB "{1}"!</value>
+  </data>
+  <data name="errorFirmwareStatus" xml:space="preserve">
+    <value>Fehlerhafter Status "{0}" beim Aktualisieren der Firmware auf EIB "{1}"!</value>
+  </data>
+</root>

@@ -1,0 +1,36 @@
+
+EIBLIB=..\..\..\lib\eib7.lib
+
+INC=/I..\..\..\include /I.
+
+DEBUG=/Zi
+
+CFLAGS=/nologo /c $(INC) $(DEBUG) /DWin32
+
+LIBS=user32.lib ws2_32.lib kernel32.lib
+
+
+ALL: eib7info.exe
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	del /q *.obj
+
+distclean: clean
+	del /q *.obj *.exe
+
+
+#
+#
+# executables
+#
+#
+
+eib7info.obj: ..\..\..\include\eib7.h eib7info.c
+eib7info.exe: $(EIBLIB) eib7info.obj
+	cl  $(DEBUG) /o eib7info.exe eib7info.obj $(EIBLIB) $(LIBS)

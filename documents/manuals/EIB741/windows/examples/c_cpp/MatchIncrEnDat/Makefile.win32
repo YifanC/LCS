@@ -1,0 +1,36 @@
+
+EIBLIB=..\..\..\lib\eib7.lib
+
+INC=/I..\..\..\include /I.
+
+DEBUG=/Zi
+
+CFLAGS=/nologo /c $(INC) $(DEBUG) /DWin32
+
+LIBS=user32.lib ws2_32.lib kernel32.lib
+
+
+ALL: matchIncrEnDat.exe
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	del /q *.obj
+
+distclean: clean
+	del /q *.obj *.exe
+
+
+#
+#
+# executables
+#
+#
+
+matchIncrEnDat.obj: ..\..\..\include\eib7.h matchIncrEnDat.c
+matchIncrEnDat.exe: $(EIBLIB) matchIncrEnDat.obj
+	cl  $(DEBUG) /o matchIncrEnDat.exe matchIncrEnDat.obj $(EIBLIB) $(LIBS)

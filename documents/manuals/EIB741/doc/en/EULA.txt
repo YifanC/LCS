@@ -1,0 +1,47 @@
+Usage and License Conditions 
+for Free-of-Charge Temporary Software Licensing
+
+(1)
+The contractual relationship between DR. JOHANNES HEIDENHAIN GmbH (hereafter referred to 
+as HEIDENHAIN) and the Customer regarding the use of the software for the "EIB 741" and its 
+online documentation/help (hereafter referred to collectively as the Software) will be governed 
+solely by the following Usage and License Conditions. 
+Only Customers who have been trained by HEIDENHAIN (hereafter referred to as HEIDENHAIN 
+Customers) may use the Software. The Software may not be transferred to third parties.
+
+(2)
+The Software is lent to the user in the scope and condition in which they are made available for 
+downloading; the program copy does not become the property of the user. The parties agree 
+that with the present state of the art it is not possible to create error-free computer Software. 
+HEIDENHAIN shall not be held liable in any case; HEIDENHAIN assumes absolutely no liability 
+for the Software. The user is therefore recommended to test the software in protected test 
+environments before using it in productive application.
+
+(3)
+The Software is subject to the copyright law of the Federal Republic of Germany and to 
+international law. The program or any parts of it may not in any form be duplicated, reproduced, 
+processed or distributed without the express consent of HEIDENHAIN unless such action is 
+compelled by law or is required for application at the Customer's location for his own immediate 
+purposes. The customer may use the program on as many computers as desired within his 
+company; a provision of access to the program to third parties (in particular in the so-called ASP 
+mode), is prohibited.
+
+(4)
+This contractual relationship will apply for the duration of one year and is automatically extended 
+by a further year, unless one party gives notice of cancellation by at least two months before the 
+end of the contract year; the right of summary cancellation, in particular in the event of use 
+contrary to contract, remains unaffected. Cancellations in electronic form (e-mail) are effective. 
+The relinquishment of user's rights from this contract requires the consent of HEIDENHAIN.
+
+(5)
+Inasmuch as before, during or after contract conclusion HEIDENHAIN inquires as to the 
+customer's company address, the customer is obliged to provide the correct information.
+
+(6)
+If one or more of the provisions in this contract becomes partially or completely invalidated or 
+impracticable, then this does not affect the validity of the remaining provisions. Place of 
+fulfillment for all obligations arising from this contractual relationship is the head office of 
+HEIDENHAIN. In addition, the parties agree that the sole venue for all disagreements arising from 
+and in connection with the licensing of the Software shall be the head office of HEIDENHAIN. 
+This agreement shall be governed by the law of the Federal Republic of Germany.
+

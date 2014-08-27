@@ -1,0 +1,36 @@
+
+EIBLIB=..\..\..\lib\eib7.lib
+
+INC=/I..\..\..\include /I.
+
+DEBUG=/Zi
+
+CFLAGS=/nologo /c $(INC) $(DEBUG) /DWin32
+
+LIBS=user32.lib ws2_32.lib kernel32.lib
+
+
+ALL: trigger_ri.exe
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	del /q *.obj
+
+distclean: clean
+	del /q *.obj *.exe
+
+
+#
+#
+# executables
+#
+#
+
+trigger_ri.obj: ..\..\..\include\eib7.h trigger_ri.c
+trigger_ri.exe: $(EIBLIB) trigger_ri.obj
+	cl  $(DEBUG) /o trigger_ri.exe trigger_ri.obj $(EIBLIB) $(LIBS)

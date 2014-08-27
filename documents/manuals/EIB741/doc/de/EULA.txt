@@ -1,0 +1,50 @@
+Nutzungs- und Lizenzbedingungen 
+für die unentgeltliche Softwareüberlassung auf Zeit
+
+(1)
+Das Verhältnis zwischen der DR. JOHANNES HEIDENHAIN GmbH (nachfolgend: HEIDENHAIN) 
+und dem Kunden hinsichtlich der Nutzung der Software für die "EIB 741" und deren Online-
+Dokumentation/-Hilfe (nachfolgend zusammen: Software) wird ausschließlich durch die nachfol-
+genden Nutzungs- und Lizenzbedingungen geregelt. 
+Die Benutzung der Software ist nur speziell von HEIDENHAIN geschulten Kunden von 
+HEIDENHAIN-Produkten (nachfolgend: HEIDENHAIN-Kunden) gestattet; eine Weitergabe der 
+Software ist nicht gestattet.
+
+(2)
+Die Software wird an den jeweiligen Nutzer in dem Zustand und Umfang verliehen, in dem sie zum 
+Herunterladen bereitgestellt wird; ein Eigentumserwerb des Nutzers am Programmexemplar findet 
+nicht statt. Die Parteien sind sich darin einig, dass es nach dem Stand der Technik nicht möglich 
+ist, fehlerfreie Computersoftware zu erstellen. Eine Mängelhaftung durch HEIDENHAIN findet 
+nicht statt; jede Haftung von HEIDENHAIN für die Software ist ausgeschlossen. Es obliegt dem 
+Nutzer, die Software zunächst in abgeschirmten Testumgebungen zu testen, bevor sie produktiv 
+eingesetzt wird.
+
+(3)
+Die Software unterliegt dem Urheberrecht der Bundesrepublik Deutschland sowie internationalem 
+Recht. Das Programm oder Teile hiervon dürfen ohne ausdrückliche Einwilligung von 
+HEIDENHAIN in keiner Form vervielfältigt, reproduziert, bearbeitet oder verbreitet werden, es sei 
+denn, dies ist zwingend gesetzlich vorgesehen oder für den Einsatz beim Kunden zu dessen ei-
+genen unmittelbaren Zwecken notwendig. Der Kunde darf das Programm auf beliebig vielen 
+Rechnersystemen in seinem Unternehmen einsetzen; eine Zurverfügungstellung der Leistungen 
+des Programms gegenüber Dritten (insbesondere im sog. ASP-Betrieb) ist untersagt.
+
+(4)
+Das vorliegende Vertragsverhältnis läuft zunächst für die Dauer von einem Jahr und verlängert 
+sich um jeweils ein weiteres Jahr, wenn nicht eine Partei mit einer Frist von zwei Monaten zum 
+Vertragsjahresende kündigt; das Recht zur Kündigung aus wichtigem Grund, insbesondere bei 
+vertragswidriger Nutzung, bleibt unberührt. Kündigungen in elektronischer Form (E-Mail) sind 
+wirksam. Die Abtretung von Rechten des Benutzers aus diesem Vertrag bedarf der Zustimmung 
+von HEIDENHAIN. 
+
+(5)
+Sofern HEIDENHAIN vor, bei oder nach Vertragsschluss die Unternehmensadresse des Kunden 
+abfragt, hat der Kunde diese korrekt anzugeben.
+
+(6)
+Sollten eine oder mehrere Bestimmungen dieses Vertrages ganz oder teilweise unwirksam oder 
+undurchführbar sein oder werden, so berührt dies die Wirksamkeit der übrigen Bestimmungen 
+nicht. Erfüllungsort für alle Verpflichtungen aus dem Vertragsverhältnis ist der Sitz von 
+HEIDENHAIN. Die Parteien vereinbaren außerdem als ausschließlichen Gerichtsstand für alle 
+Streitigkeiten aus und im Zusammenhang mit der Softwareüberlassung den Sitz von 
+HEIDENHAIN. Es gilt das Recht der Bundesrepublik Deutschland.
+

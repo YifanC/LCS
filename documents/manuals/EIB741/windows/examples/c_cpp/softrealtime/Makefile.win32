@@ -1,0 +1,36 @@
+
+EIBLIB=..\..\..\lib\eib7.lib
+
+INC=/I..\..\..\include /I.
+
+DEBUG=/Zi
+
+CFLAGS=/nologo /c $(INC) $(DEBUG) /DWin32
+
+LIBS=user32.lib ws2_32.lib kernel32.lib
+
+
+ALL: softrealtime.exe
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	del /q *.obj
+
+distclean: clean
+	del /q *.obj *.exe
+
+
+#
+#
+# executables
+#
+#
+
+softrealtime.obj: ..\..\..\include\eib7.h softrealtime.c
+softrealtime.exe: $(EIBLIB) softrealtime.obj
+	cl  $(DEBUG) /o softrealtime.exe softrealtime.obj $(EIBLIB) $(LIBS)

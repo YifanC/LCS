@@ -1,0 +1,35 @@
+
+EIBLIB=-L . -leib7
+
+INC=-I../../../include
+
+DEBUG=-g
+
+CFLAGS=$(INC) $(DEBUG) -DLinux
+
+LIBS=-lpthread
+
+
+ALL: trigger_io
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	rm -f *.o
+
+distclean: clean
+	rm -f *.o
+
+#
+#
+# executables
+#
+#
+
+trigger_io: ../../../include/eib7.h trigger_io.c
+	gcc $(CFLAGS) -o trigger_io trigger_io.c $(EIBLIB) $(LIBS)
+	    

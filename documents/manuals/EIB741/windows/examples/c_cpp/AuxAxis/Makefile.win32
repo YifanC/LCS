@@ -1,0 +1,36 @@
+
+EIBLIB=..\..\..\lib\eib7.lib
+
+INC=/I..\..\..\include /I.
+
+DEBUG=/Zi
+
+CFLAGS=/nologo /c $(INC) $(DEBUG) /DWin32
+
+LIBS=user32.lib ws2_32.lib kernel32.lib
+
+
+ALL: auxaxis.exe
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	del /q *.obj
+
+distclean: clean
+	del /q *.obj *.exe
+
+
+#
+#
+# executables
+#
+#
+
+auxaxis.obj: ..\..\..\include\eib7.h auxaxis.c
+auxaxis.exe: $(EIBLIB) auxaxis.obj
+	cl  $(DEBUG) /o auxaxis.exe auxaxis.obj $(EIBLIB) $(LIBS)

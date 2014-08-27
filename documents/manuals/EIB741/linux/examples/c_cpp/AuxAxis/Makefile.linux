@@ -1,0 +1,35 @@
+
+EIBLIB=-L . -leib7
+
+INC=-I../../../include
+
+DEBUG=-g
+
+CFLAGS=$(INC) $(DEBUG) -DLinux
+
+LIBS=-lpthread -lncurses
+
+
+ALL: auxaxis
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	rm -f *.o
+
+distclean: clean
+	rm -f *.o
+
+#
+#
+# executables
+#
+#
+
+auxaxis: ../../../include/eib7.h auxaxis.c
+	gcc $(CFLAGS) -o auxaxis auxaxis.c $(EIBLIB) $(LIBS)
+	    

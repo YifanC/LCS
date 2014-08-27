@@ -1,0 +1,39 @@
+
+EIBLIB=..\..\lib\eib7.lib
+
+INC=/I..\..\include /I.
+
+DEBUG=/Zi
+
+CFLAGS=/nologo /c $(INC) $(DEBUG) /DWin32
+
+LIBS=user32.lib ws2_32.lib kernel32.lib
+
+
+ALL: networksettings.exe
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	del /q *.obj
+
+distclean: clean
+	del /q *.obj *.exe
+
+
+#
+#
+# executables
+#
+#
+
+networksettings.obj: ..\..\include\eib7.h networksettings.c
+networksettings.exe: $(EIBLIB) networksettings.obj
+	cl  $(DEBUG) /o networksettings.exe networksettings.obj $(EIBLIB) $(LIBS)
+
+eib7.dll: ..\..\bin\eib7.dll
+	    copy ..\..\bin\eib7.dll .

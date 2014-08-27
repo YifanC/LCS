@@ -1,0 +1,36 @@
+
+EIBLIB=..\..\..\lib\eib7.lib
+
+INC=/I..\..\..\include /I.
+
+DEBUG=/Zi
+
+CFLAGS=/nologo /c $(INC) $(DEBUG) /DWin32
+
+LIBS=user32.lib ws2_32.lib kernel32.lib
+
+
+ALL: pollposition.exe
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	del /q *.obj
+
+distclean: clean
+	del /q *.obj *.exe
+
+
+#
+#
+# executables
+#
+#
+
+pollposition.obj: ..\..\..\include\eib7.h pollposition.c
+pollposition.exe: $(EIBLIB) pollposition.obj
+	cl  $(DEBUG) /o pollposition.exe pollposition.obj $(EIBLIB) $(LIBS)

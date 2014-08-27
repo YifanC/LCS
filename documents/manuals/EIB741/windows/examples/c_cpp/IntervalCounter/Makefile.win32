@@ -1,0 +1,36 @@
+
+EIBLIB=..\..\..\lib\eib7.lib
+
+INC=/I..\..\..\include /I.
+
+DEBUG=/Zi
+
+CFLAGS=/nologo /c $(INC) $(DEBUG) /DWin32
+
+LIBS=user32.lib ws2_32.lib kernel32.lib
+
+
+ALL: intervalcounter.exe
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	del /q *.obj
+
+distclean: clean
+	del /q *.obj *.exe
+
+
+#
+#
+# executables
+#
+#
+
+intervalcounter.obj: ..\..\..\include\eib7.h intervalcounter.c
+intervalcounter.exe: $(EIBLIB) intervalcounter.obj
+	cl  $(DEBUG) /o intervalcounter.exe intervalcounter.obj $(EIBLIB) $(LIBS)
