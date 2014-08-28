@@ -52,7 +52,7 @@
 #define MAX_SRT_DATA      200    /* maximum size of recording data    */
 #define MAX_TEXT_LEN      200    /* maximum size of console input string  */
 #define TIMESTAMP_PERIOD  1000   /* Timestamp Period = 1 ms = 1000us      */
-#define TRIGGER_PERIOD    500000 /* Trigger Period = 0.5 sec = 500000us   */
+#define TRIGGER_PERIOD    1000 /* Trigger Period = 0.5 sec = 500000us   */
 
 
 /* struct for soft realtime mode data */
@@ -187,8 +187,9 @@ int main(int argc, char **argv)
    zmq_recv (encoder, BufferReply, 2, 0);
 
    printf ("Received:%c \n", BufferReply[1]);
-
-
+  
+   // sleep for some time before continue, remove before operation!!!
+   usleep(1000);
 /* register console handler for program termination on user request */
 #ifdef _WIN32
    SetConsoleCtrlHandler( (PHANDLER_ROUTINE) CtrlHandler, TRUE );
@@ -429,11 +430,11 @@ int main(int argc, char **argv)
          /* print status word and position value */
 		 printf("Linear Encoder Data: ");
          printf(POS_SPEC, LinearEncoderData.TriggerCounter, LinearEncoderData.Timestamp,
-                          LinearEncoderData.status, LinearPosDeg);
+                          LinearEncoderData.status,EventData.LinearPosDeg);
          printf("\n");
          printf("Rotary Encoder Data: ");
          printf(POS_SPEC, RotaryEncoderData.TriggerCounter, RotaryEncoderData.Timestamp,
-                          RotaryEncoderData.status, RotaryPosDeg);
+                          RotaryEncoderData.status, EventData.RotaryPosDeg);
          printf("\n");
 
          
@@ -451,13 +452,17 @@ int main(int argc, char **argv)
 #ifdef _WIN32          /* wait for 50 ms to minmize processor load */
       Sleep(50);
 #else
-      usleep(50);
+      usleep(5);
 #endif
 
    } /* end of loop */
 
 
    printf("\nStopped on user request\n");
+  
+   // Close the zmq stuff
+   zmq_close (encoder);
+   zmq_ctx_destroy (context);
 
    exit(1);
 }
