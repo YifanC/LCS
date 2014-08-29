@@ -28,7 +28,7 @@ ID_Encoder = 2
 # start Assembler
 ctx = zmq.Context()
 Assembler = ctx.socket(zmq.REP)
-Assembler.bind("ipc://kvmsg_selftest.ipc")
+Assembler.bind("ipc:///tmp/feed-laser.ipc")
 Assembler.setsockopt(zmq.LINGER, 0)
 
 # 

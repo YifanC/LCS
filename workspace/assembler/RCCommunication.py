@@ -135,7 +135,7 @@ class LaserData(object):
         '''write the data to a binary file'''
         LaserdataList = self.dump()
         packed_data = struct.pack('i'+'f'*(len(LaserdataList)-1),*LaserdataList) # first an int then floats follow
-        f = open(fileID, 'wb')
+        f = open(fileID, 'ab')
         f.write(packed_data)
         f.close()
 

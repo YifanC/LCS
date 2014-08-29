@@ -14,7 +14,7 @@ print("RC Producer: Connecting to server")
 
 ctx = zmq.Context()
 Producer = ctx.socket(zmq.REQ)
-Producer.connect("ipc://kvmsg_selftest.ipc")
+Producer.connect("ipc:///tmp/feed-laser.ipc")
 Producer.setsockopt(zmq.LINGER, 0)
 
 poller = zmq.Poller()
@@ -48,7 +48,7 @@ print ack
 time.sleep(1)
 
 # send some data
-for request in range(10):
+for request in range(100):
 	data.count_run = request
 	com.sendRCData(Producer,data)
 	ack = com.recvAck(Producer)
