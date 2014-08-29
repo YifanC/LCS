@@ -20,14 +20,21 @@
 *
 -----------------------------------------------------*/
 
-
+// includes for encoder control
 #include <eib7.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
+
+// includes for zmq messaging
 #include <assert.h>
 #include <zmq.h>
+
+// includes for timing
+#include <sys/time.h> 
+#include <time.h> 
+#include <unistd.h> 
 
 
 #ifdef _WIN32
@@ -125,7 +132,7 @@ int main(int argc, char **argv)
    ENCODER_POSITION LinearCounts;
    ENCODER_POSITION LinearCounts45deg = 13404540;
    
-   EIB7_MODE active;                        /* EIB741 mode for reference marks */
+   EIB7_MODE active;                      /* EIB741 mode for reference marks */
    EIB7_HANDLE eib;                       /* EIB handle                  */
    unsigned long ip;                      /* IP address of EIB           */
    unsigned long num;                     /* number of encoder axes      */
@@ -139,10 +146,12 @@ int main(int argc, char **argv)
    EIB7_DataPacketSection packet[3];      /* Data packet configuration   */
    char fw_version[20];                   /* firmware version string     */
    char hostname[MAX_TEXT_LEN] = "192.168.1.2";           /* hostname string             */
+   char DataConf[MAX_TEXT_LEN];			  /* input string                */
    char TriggerConf[MAX_TEXT_LEN];        /* input string                */
-   char RefRunConfig[MAX_TEXT_LEN];        /* input string                */
+   char RefRunConfig[MAX_TEXT_LEN];       /* input string                */
    int ExtTrigger;                        /* activate external trigger   */
    int RefRun;
+   int SendData;
    int enc_axis;                          /* actual axis index           */
    EIB7_DataRegion region;                /* actual region               */
    unsigned char udp_data[MAX_SRT_DATA];  /* buffer for udp data packet  */
@@ -170,27 +179,17 @@ int main(int argc, char **argv)
    memcpy(&BufferID, &ID, sizeof(ID));
    unsigned char BufferData[ sizeof (EventData) ];
    memcpy(&BufferData,&EventData, sizeof(EventData));
-   //-------------------------------------------------------------------
-   
-   // Init Socket to talk to clients
-   
-   void *context = zmq_ctx_new ();
-   void *encoder = zmq_socket (context, ZMQ_REQ);
-   int rc = zmq_connect (encoder, "ipc:///tmp/feed-laser.ipc");
-   assert (rc == 0);
 
-   // Send initial empty message to assembler so he knows we are alive
-   printf("Sending Hello to assembler\n");
    char BufferReply [2];
-   zmq_send (encoder,&BufferID, sizeof(BufferID) , ZMQ_SNDMORE);
-   zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
-   zmq_recv (encoder, BufferReply, 2, 0);
 
-   printf ("Received:%c \n", BufferReply[1]);
+   void *context;
+   void *encoder; 
+   
+   struct timeval SystemTime;
+   //-------------------------------------------------------------------
   
-   // sleep for some time before continue, remove before operation!!!
-   usleep(1000);
-/* register console handler for program termination on user request */
+
+ /* register console handler for program termination on user request */
 #ifdef _WIN32
    SetConsoleCtrlHandler( (PHANDLER_ROUTINE) CtrlHandler, TRUE );
 #endif
@@ -199,7 +198,14 @@ int main(int argc, char **argv)
    signal(SIGTERM, CtrlHandler);
 #endif
 
-
+   // Init Socket to talk to clients
+  
+   printf("Send data to  (y/n)? ");
+   scanf("%s",DataConf);
+   if(DataConf[0]=='y' || DataConf[0]=='Y')
+   {
+      SendData = 1;
+   }
 
    printf("use external trigger (y/n)? ");
    scanf("%s",TriggerConf);
@@ -216,6 +222,26 @@ int main(int argc, char **argv)
    {
       RefRun = 1;
    }
+
+   if(SendData == 1)
+   {
+	   context = zmq_ctx_new ();
+	   encoder = zmq_socket (context, ZMQ_REQ);
+	   int rc = zmq_connect (encoder, "ipc:///tmp/feed-laser.ipc");
+	   assert (rc == 0);
+
+	   // Send initial empty message to assembler so he knows we are alive
+	   printf("Sending Hello to assembler\n");
+	   zmq_send (encoder,&BufferID, sizeof(BufferID) , ZMQ_SNDMORE);
+	   zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
+	   zmq_recv (encoder, BufferReply, 2, 0);
+
+	   printf ("Received:%c \n", BufferReply[1]);
+	  
+	   // sleep for some time before continue, remove before operation!!!
+	   usleep(1000);
+   }
+
    
    /* open connection to EIB */
    CheckError(EIB7GetHostIP(hostname, &ip));
@@ -346,6 +372,10 @@ int main(int argc, char **argv)
 
       if(entries > 0)
       {
+
+      	 /* Get current system time of this trigger event*/
+         gettimeofday (&SystemTime, NULL);
+
          /* read trigger counter from data packet */
          CheckError(EIB7GetDataFieldPtr(eib, udp_data, EIB7_DR_Global,
                     EIB7_PDF_TriggerCounter, &field, &sz));
@@ -437,15 +467,20 @@ int main(int argc, char **argv)
                           RotaryEncoderData.status, EventData.RotaryPosDeg);
          printf("\n");
 
-         
+         printf("System Time: ");
+         printf("%03ld:%03ld\n",SystemTime.tv_sec,SystemTime.tv_usec);
+         printf("\n");
+
          /* Send the data */
+         if(SendData == 1)
+         {
+	         memcpy(&BufferData,&EventData, sizeof(EventData));
+	         zmq_send (encoder,&BufferID, sizeof(BufferID) , ZMQ_SNDMORE);
+	         zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
+	         zmq_recv (encoder, BufferReply, 2, 0);
 
-         memcpy(&BufferData,&EventData, sizeof(EventData));
-         zmq_send (encoder,&BufferID, sizeof(BufferID) , ZMQ_SNDMORE);
-         zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
-         zmq_recv (encoder, BufferReply, 2, 0);
-
-         printf ("Received:%c \n", BufferReply[1]);
+	         printf ("Received Reply");
+	     }
 
 
       }
@@ -459,10 +494,12 @@ int main(int argc, char **argv)
 
 
    printf("\nStopped on user request\n");
-  
-   // Close the zmq stuff
-   zmq_close (encoder);
-   zmq_ctx_destroy (context);
+   if(SendData == 1)
+   {
+	   // Close the zmq stuff
+	   zmq_close (encoder);
+	   zmq_ctx_destroy (context);
+	}
 
    exit(1);
 }
