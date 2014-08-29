@@ -5,23 +5,24 @@
 # SEB running can acces and send it to the assembler
 #
 # Recieved data:
-#  - Encoder:	Trigger Number, Timestamp, Rotary Position,
-#  				Linear Position
-#  - Control:	Attenuator Position, Aperture Position
+# - Encoder:	Trigger Number, Timestamp, Rotary Position,
+# Linear Position
+# - Control:	Attenuator Position, Aperture Position
 
 from RCCommunication import *
 import sys
-import datetime as DT
+
 debug = 1
 
-def ExitAssembler(ExitMessage):
-	print "DATA ASSEMBLER INFO: " + ExitMessage
-	Assembler.close()
-	ctx.term()
-	sys.exit(0)
+
+def ExitAssembler(exitMessage):
+    print "DATA ASSEMBLER INFO: " + exitMessage
+    Assembler.close()
+    ctx.term()
+    sys.exit(0)
 
 # messaging definitions
-ID_RunControl = 1 
+ID_RunControl = 1
 ID_Encoder = 2
 
 # start Assembler
@@ -34,7 +35,6 @@ Assembler.setsockopt(zmq.LINGER, 0)
 poller = zmq.Poller()
 poller.register(Assembler, zmq.POLLIN)
 
-
 RunControlAlive = False
 EncoderAlive = False
 
@@ -42,62 +42,59 @@ com = RCCommunication()
 data = LaserData()
 # make shure clients are alive
 if debug: print "DATA ASSEMBLER INFO: Waiting for clients to connect"
-while(not(RunControlAlive and EncoderAlive)):
-	
-	# wait 10 seconds to establish connection to clients
-	if poller.poll(30*1000):	
+while (not (RunControlAlive and EncoderAlive)):
 
-		msgID = com.recvData(Assembler,data)
-		print msgID
-		if msgID == ID_RunControl and RunControlAlive == False: 
-			RunControlAlive = True
-			if debug: print "DATA ASSEMBLER INFO: Run Control alive"
-		if msgID == ID_Encoder and EncoderAlive == False: 
-			EncoderAlive = True
-			if debug: print "DATA ASSEMBLER INFO: Encoder alive"
-	
-		com.sendAck(Assembler)
-	else:
-		ExitAssembler("Could not connect to clients, stopping.")
+    # wait 10 seconds to establish connection to clients
+    if poller.poll(30 * 1000):
 
+        msgID = com.recvData(Assembler, data)
+        print msgID
+        if msgID == ID_RunControl and RunControlAlive == False:
+            RunControlAlive = True
+            if debug: print "DATA ASSEMBLER INFO: Run Control alive"
+        if msgID == ID_Encoder and EncoderAlive == False:
+            EncoderAlive = True
+            if debug: print "DATA ASSEMBLER INFO: Encoder alive"
+
+        com.sendAck(Assembler)
+    else:
+        ExitAssembler("Could not connect to clients, stopping.")
 
 print "DATA ASSEMBLER INFO: All clients alive"
 
 
 # recieve initial data from run control
-msgID = com.recvData(Assembler,data)
+msgID = com.recvData(Assembler, data)
 
 if msgID == ID_RunControl:
-	print data.dump()
-	com.sendAck(Assembler)
-	if debug: 
-		print "DATA ASSEMBLER INFO: Initial Run Control Data recieved"
+    print data.dump()
+    com.sendAck(Assembler)
+    if debug:
+        print "DATA ASSEMBLER INFO: Initial Run Control Data recieved"
 else:
-	com.sendAck(Assembler)
-	ExitAssembler("no initial data from run control")
-
+    com.sendAck(Assembler)
+    ExitAssembler("no initial data from run control")
 
 while True:
-	try:
-		msgID = com.recvData(Assembler,data)
-		if msgID == ID_RunControl: 
-			# recieve message from run control
-			print "new RC data"
-			print data.dump()
+    try:
+        msgID = com.recvData(Assembler, data)
+        if msgID == ID_RunControl:
+            # recieve message from run control
+            print "new RC data"
+            print data.dump()
 
-		if msgID == ID_Encoder:
-			# recieve data from encoder
-			
-			data.writeBinary('workfile')
-			print "new EC data"
-			print data.dump()
-			# write to file
-			
+        if msgID == ID_Encoder:
+            # recieve data from encoder
 
-		com.sendAck(Assembler)
+            data.writeBinary('workfile')
+            print "new EC data"
+            print data.dump()
+        # write to file
 
-	except KeyboardInterrupt:
-		ExitAssembler("finished")
+        com.sendAck(Assembler)
+
+    except KeyboardInterrupt:
+        ExitAssembler("finished")
 
 
 

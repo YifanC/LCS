@@ -71,9 +71,9 @@ class RCCommunication(object):
         
 
 class LaserData(object):
-    def __init__(self,laserid=-1,pos_rot=-8888.,pos_lin=-9999.,pos_att=-8888.,pos_iris=-9999.,
-        time=0,count_trigger=-1,count_run=-1,count_laser=-1,
-        pos_tomg_1_axis1=-66666.,pos_tomg_1_axis2=-77777.,pos_tomg_2_axis1=-88888.,pos_tomg_2_axis2=-99999.):
+    def __init__(self, laserid=-1, pos_rot=-8888., pos_lin=-9999., pos_att=-8888., pos_iris=-9999.,
+        time=0, count_trigger=-1, count_run=-1, count_laser=-1,
+        pos_tomg_1_axis1=-66666., pos_tomg_1_axis2=-77777., pos_tomg_2_axis1=-88888., pos_tomg_2_axis2=-99999.):
         
         self.laserid = laserid          # which laser system: 1 or 2
         self.pos_rot = pos_rot          # Position Rotary Heidenhain Encoder 
