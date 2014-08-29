@@ -1,15 +1,3 @@
-Send data to  (y/n)? use external trigger (y/n)? do reference run (y/n)? 
-EIB firmware version: 63328110
-
-using internal timer trigger
-
-
-press Ctrl-C to stop
-
-Linear Encoder Data: Trg-Cntr: 00000, Timestamp: 0000000112, Status: 0x0001, Pos[deg]: 78.329491
-Rotary Encoder Data: Trg-Cntr: 00000, Timestamp: 0000000112, Status: 0x0002, Pos[deg]: 0.000000
-System Time: 1409316153:248349
-
 Linear Encoder Data: Trg-Cntr: 00001, Timestamp: 0000000212, Status: 0x0001, Pos[deg]: 78.329475
 Rotary Encoder Data: Trg-Cntr: 00001, Timestamp: 0000000212, Status: 0x0002, Pos[deg]: 0.000000
 System Time: 1409316153:348581
@@ -7257,6 +7245,3 @@ System Time: 1409316334:350250
 Linear Encoder Data: Trg-Cntr: 01812, Timestamp: 0000181312, Status: 0x0001, Pos[deg]: 78.329460
 Rotary Encoder Data: Trg-Cntr: 01812, Timestamp: 0000181312, Status: 0x0002, Pos[deg]: 0.000000
 System Time: 1409316334:450472
-
-
-Stopped on user request
