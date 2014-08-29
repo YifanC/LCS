@@ -59,7 +59,7 @@
 #define MAX_SRT_DATA      200    /* maximum size of recording data    */
 #define MAX_TEXT_LEN      200    /* maximum size of console input string  */
 #define TIMESTAMP_PERIOD  1000   /* Timestamp Period = 1 ms = 1000us      */
-#define TRIGGER_PERIOD    1000 /* Trigger Period = 0.5 sec = 500000us   */
+#define TRIGGER_PERIOD    100000 /* Trigger Period = 0.5 sec = 500000us   */
 
 
 /* struct for soft realtime mode data */
