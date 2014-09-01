@@ -458,18 +458,17 @@ int main(int argc, char **argv)
 
 
          /* print status word and position value */
-		 printf("Linear Encoder Data: ");
-         printf(POS_SPEC, LinearEncoderData.TriggerCounter, LinearEncoderData.Timestamp,
-                          LinearEncoderData.status,EventData.LinearPosDeg);
-         printf("\n");
-         printf("Rotary Encoder Data: ");
-         printf(POS_SPEC, RotaryEncoderData.TriggerCounter, RotaryEncoderData.Timestamp,
-                          RotaryEncoderData.status, EventData.RotaryPosDeg);
-         printf("\n");
+	 //printf("Linear Encoder Data: ");
+         //printf(POS_SPEC, LinearEncoderData.TriggerCounter, LinearEncoderData.Timestamp,
+         //                 LinearEncoderData.status,EventData.LinearPosDeg);
+         //printf("\n");
+         //printf("Rotary Encoder Data: ");
+         //printf(POS_SPEC, RotaryEncoderData.TriggerCounter, RotaryEncoderData.Timestamp,
+         //                 RotaryEncoderData.status, EventData.RotaryPosDeg);
+         //printf("\n");
 
-         printf("System Time: ");
-         printf("%03ld:%03ld\n",SystemTime.tv_sec,SystemTime.tv_usec);
-         printf("\n");
+         //printf("System Time: ");
+         printf("%05u;%03ld:%03ld\n",RotaryEncoderData.TriggerCounter,SystemTime.tv_sec,SystemTime.tv_usec);
 
          /* Send the data */
          if(SendData == 1)
