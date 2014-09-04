@@ -46,9 +46,11 @@ com.sendRCData(Producer,data)
 ack = com.recvAck(Producer)
 print ack
 time.sleep(1)
-
+request = 1
 # send some data
-for request in range(100):
+#for request in range(100):
+while(1):
+	request += 1
 	data.count_run = request
 	com.sendRCData(Producer,data)
 	ack = com.recvAck(Producer)

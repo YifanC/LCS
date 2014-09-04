@@ -2,29 +2,22 @@
 *
 *  Demo programm for EIB7
 *
-*  \file    encoder.c
-*  \author  Matthias Luethi
-*  \date    01.09.2014
-*  \version $Revision: 0.1
+*  \file    softrealtime_endat.c
+*  \author  DR.JOHANNES HEIDENHAIN GmbH
+*  \date    03.11.2009
+*  \version $Revision: 1.2 $
 * 
-*  \brief   Software to control the EIB741 Encoder in
-*			for the LCS system 
+*  \brief   sample for soft realtime mode
+*           with EnDat encoders
 *  
 *  Content:
-*	This code configures the encoder controller in 
-*	specified ways. One can send the data to the 
-*	laser data assembler via zmq-messages or use it 
-*	to debug the communications. Run it as:
-*	
-*	$ ./encoder -configuration via commandline
+*  Sample programm for the soft realtime mode of
+*  the EIB. The program configures one axis
+*  of the EIB for EnDat encoders and
+*  enables the soft realtime mode. The EIB can
+*  be triggered by the internal timer trigger or
+*  by an external trigger signal.
 *
-*	with flags:
-*	 -p 			print position values
-*	 -ps 			print triggerstamp and timestamp
-*	 -t TIME_US		use internal trigger with a trigger
-*					time difference of TIME_US
-*	 -s 			initialize the zmq server    
-*	 -r 			do a reference run
 -----------------------------------------------------*/
 
 // includes for encoder control
@@ -32,7 +25,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <getopt.h>
 
 
 // includes for zmq messaging
@@ -67,6 +59,7 @@
 #define MAX_SRT_DATA      200    /* maximum size of recording data    */
 #define MAX_TEXT_LEN      200    /* maximum size of console input string  */
 #define TIMESTAMP_PERIOD  1000   /* Timestamp Period = 1 ms = 1000us      */
+#define TRIGGER_PERIOD    1000000/* Trigger Period = 0.5 sec = 500000us   */
 
 
 /* struct for soft realtime mode data */
@@ -129,7 +122,7 @@ void CtrlHandler(int sig)
    position data. The status word, the position value, the
    timestamp and the trigger counter are displayed.
    */
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
    // Definitions MLuethi
    float RotaryPosDeg;
@@ -156,7 +149,9 @@ int main(int argc, char *argv[])
    char DataConf[MAX_TEXT_LEN];			  /* input string                */
    char TriggerConf[MAX_TEXT_LEN];        /* input string                */
    char RefRunConfig[MAX_TEXT_LEN];       /* input string                */
-
+   int ExtTrigger;                        /* activate external trigger   */
+   int RefRun;
+   int SendData;
    int enc_axis;                          /* actual axis index           */
    EIB7_DataRegion region;                /* actual region               */
    unsigned char udp_data[MAX_SRT_DATA];  /* buffer for udp data packet  */
@@ -171,6 +166,8 @@ int main(int argc, char *argv[])
    struct EncData RotaryEncoderData;            /* data to display             */
    int LinearEncoder = 0;
    int RotaryEncoder = 1;
+   ExtTrigger = 1;
+
    // Initialize the laser data evet
    struct LaserEvent EventData; 
    EventData.RotaryPosDeg = -9999.0;
@@ -190,14 +187,7 @@ int main(int argc, char *argv[])
    
    struct timeval SystemTime;
    //-------------------------------------------------------------------
-
-	// Configuration init
-   int ExtTrigger = 1;                        /* activate external trigger   */
-   int RefRun = 0;
-   int SendData = 0;
-   int PrintData = 0;
-   int PrintTimeOnly = 0;
-   int TriggerPeriod = 100;	/* Trigger Period in ms  */
+  
 
  /* register console handler for program termination on user request */
 #ifdef _WIN32
@@ -208,96 +198,51 @@ int main(int argc, char *argv[])
    signal(SIGTERM, CtrlHandler);
 #endif
 
-   // go into command line mode 
-   if (argc <= 1)
+   // Init Socket to talk to clients
+  
+   printf("Send data to  (y/n)? ");
+   scanf("%s",DataConf);
+   if(DataConf[0]=='y' || DataConf[0]=='Y')
    {
-	   // Init Socket to talk to clients
+      SendData = 1;
+   }
+
+   printf("use external trigger (y/n)? ");
+   scanf("%s",TriggerConf);
+   ExtTrigger = 0;
+   if(TriggerConf[0]=='y' || TriggerConf[0]=='Y')
+   {
+      ExtTrigger = 1;
+   }
+
+   printf("do reference run (y/n)? ");
+   scanf("%s",RefRunConfig);
+   RefRun = 0;
+   if(RefRunConfig[0]=='y' || RefRunConfig[0]=='Y')
+   {
+      RefRun = 1;
+   }
+
+   if(SendData == 1)
+   {
+	   context = zmq_ctx_new ();
+	   encoder = zmq_socket (context, ZMQ_REQ);
+	   int rc = zmq_connect (encoder, "ipc:///tmp/feed-laser.ipc");
+	   assert (rc == 0);
+
+	   // Send initial empty message to assembler so he knows we are alive
+	   printf("Sending Hello to assembler\n");
+	   zmq_send (encoder,&BufferID, sizeof(BufferID) , ZMQ_SNDMORE);
+	   zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
+	   zmq_recv (encoder, BufferReply, 2, 0);
+
+	   printf ("Received:%c \n", BufferReply[1]);
 	  
-	   printf("Send data to  (y/n)? ");
-	   scanf("%s",DataConf);
-	   if(DataConf[0]=='y' || DataConf[0]=='Y')
-	   {
-	      SendData = 1;
-	   }
+	   // sleep for some time before continue, remove before operation!!!
+	   usleep(1000);
+   }
 
-	   printf("use external trigger (y/n)? ");
-	   scanf("%s",TriggerConf);
-	   ExtTrigger = 0;
-	   if(TriggerConf[0]=='y' || TriggerConf[0]=='Y')
-	   {
-	      ExtTrigger = 1;
-	   }
-
-	   printf("do reference run (y/n)? ");
-	   scanf("%s",RefRunConfig);
-	   RefRun = 0;
-	   if(RefRunConfig[0]=='y' || RefRunConfig[0]=='Y')
-	   {
-	      RefRun = 1;
-	   }
-	}
-	// check the arguments
-	else
-	{
-   		int opt;
-		while ((opt = getopt(argc, argv, "sp::t:r")) != -1)
-		{
-			switch(opt) {
-				case 's':
-					printf("Will send zmq messages\n");
-					SendData = 1;
-					break;
-				case 'p':
-					
-					if (optarg == NULL) 
-					{
-						printf("Will print position readings long\n");
-						PrintData = 1;
-						PrintTimeOnly = 0;
-						break;
-					}
-					if (!strcmp("s",optarg))
-					{
-						printf("Will print position readings short\n");
-						PrintData = 0;
-						PrintTimeOnly = 1;
-						break;
-					}
-				case 't':
-					ExtTrigger = 0;
-					TriggerPeriod = atoi(optarg);
-					printf("Using internal Trigger with a period of %ims\n",TriggerPeriod);
-					break;
-				case 'r':
-					RefRun = 1;
-					break;
-			}
-			
-		}
-	}
-
-
-	// Initializing the zmq connection if required
-	if(SendData == 1)
-	   {
-		   context = zmq_ctx_new ();
-		   encoder = zmq_socket (context, ZMQ_REQ);
-		   int rc = zmq_connect (encoder, "ipc:///tmp/feed-laser.ipc");
-		   assert (rc == 0);
-
-		   // Send initial empty message to assembler so he knows we are alive
-		   printf("Sending Hello to assembler\n");
-		   zmq_send (encoder,&BufferID, sizeof(BufferID) , ZMQ_SNDMORE);
-		   zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
-		   zmq_recv (encoder, BufferReply, 2, 0);
-
-		   printf ("Received:%c \n", BufferReply[1]);
-		  
-		   // sleep for some time before continue, remove before operation!!!
-		   usleep(1000);
-	   }
-
-
+   
    /* open connection to EIB */
    CheckError(EIB7GetHostIP(hostname, &ip));
    CheckError(EIB7Open(ip, &eib, EIB_TCP_TIMEOUT, fw_version, sizeof(fw_version)));
@@ -379,7 +324,7 @@ int main(int argc, char *argv[])
       printf("using internal timer trigger\n");
       /* set timer trigger period */
       CheckError(EIB7GetTimerTriggerTicks(eib, &TimerTicks));
-      TimerPeriod = TriggerPeriod*1000;
+      TimerPeriod = TRIGGER_PERIOD;
       TimerPeriod *= TimerTicks;
       CheckError(EIB7SetTimerTriggerPeriod(eib, TimerPeriod));
       
@@ -513,24 +458,18 @@ int main(int argc, char *argv[])
 
 
          /* print status word and position value */
-         if (PrintData == 1)
-         {
-		 	 printf("Linear Encoder Data: ");
-	         printf(POS_SPEC, LinearEncoderData.TriggerCounter, LinearEncoderData.Timestamp,
-	                          LinearEncoderData.status,EventData.LinearPosDeg);
-	         printf("\n");
-	         printf("Rotary Encoder Data: ");
-	         printf(POS_SPEC, RotaryEncoderData.TriggerCounter, RotaryEncoderData.Timestamp,
-	                          RotaryEncoderData.status, EventData.RotaryPosDeg);
-	         printf("\n");
-	         printf("System Time: ");
-	         printf("Epoch Time[s]: %03ld : %03ld [us]\n",SystemTime.tv_sec,SystemTime.tv_usec);
+	 //printf("Linear Encoder Data: ");
+         //printf(POS_SPEC, LinearEncoderData.TriggerCounter, LinearEncoderData.Timestamp,
+         //                 LinearEncoderData.status,EventData.LinearPosDeg);
+         //printf("\n");
+         //printf("Rotary Encoder Data: ");
+         //printf(POS_SPEC, RotaryEncoderData.TriggerCounter, RotaryEncoderData.Timestamp,
+         //                 RotaryEncoderData.status, EventData.RotaryPosDeg);
+         //printf("\n");
 
-	     }
-	     if (PrintTimeOnly == 1)
-	     {
-	     	printf("%05u;%03ld;%03ld\n",RotaryEncoderData.TriggerCounter,SystemTime.tv_sec,SystemTime.tv_usec);
-	     }
+         //printf("System Time: ");
+         printf("%05u;%03ld:%03ld\n",RotaryEncoderData.TriggerCounter,SystemTime.tv_sec,SystemTime.tv_usec);
+
          /* Send the data */
          if(SendData == 1)
          {
@@ -539,7 +478,7 @@ int main(int argc, char *argv[])
 	         zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
 	         zmq_recv (encoder, BufferReply, 2, 0);
 
-	         //printf ("Received Reply");
+	         printf ("Received Reply");
 	     }
 
 
