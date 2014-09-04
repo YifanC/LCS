@@ -211,8 +211,9 @@ int main(int argc, char *argv[])
    // go into command line mode 
    if (argc <= 1)
    {
-	   // Init Socket to talk to clients
-	  
+	   // Init Socket to talk to client
+
+	   PrintData = 1;  
 	   printf("Send data to  (y/n)? ");
 	   scanf("%s",DataConf);
 	   if(DataConf[0]=='y' || DataConf[0]=='Y')
