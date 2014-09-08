@@ -1,16 +1,3 @@
-Will print position readings short
-Using internal Trigger with a period of 100ms
-Will send zmq messages
-Sending Hello to assembler
-Received:K 
-
-EIB firmware version: 63328110
-
-using internal timer trigger
-
-
-press Ctrl-C to stop
-
 00000;1409823190;601410
 00001;1409823190;701889
 00002;1409823190;801225
@@ -4076,5 +4063,3 @@ press Ctrl-C to stop
 04062;1409823596;805247
 04063;1409823596;904636
 04064;1409823597;5050
-
-Stopped on user request
