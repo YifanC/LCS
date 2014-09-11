@@ -12,14 +12,14 @@ def read_datafile(file_name):
     return data
 
 
-sysTimeRaw = read_datafile("systemtime_load.log")
+sysTimeRaw = read_datafile("systemtime_heavyload.log")
 sysTime = sysTimeRaw[:, 1] + sysTimeRaw[:, 2]/1E6
 deltaSysTime = (sysTime[1:] - sysTime[:-1])*1000
 
-plt.plot(deltaSysTime,"x")
+plt.plot(deltaSysTime,"-x")
 plt.xlabel("Trigger Number")
-plt.ylabel("Time Fifference [ms]")
-plt.title("Recorded Subsequent Trigger Times")
+plt.ylabel("$\Delta$t [ms]")
+plt.title("Time Difference Between Consecutive Triggers")
 # plt.legend([hDeltaTrigger,
 # hDeltaTimestamp],
 # ["Recorded System Time", "Encoder Timer"],
@@ -29,4 +29,4 @@ plt.title("Recorded Subsequent Trigger Times")
 plt.grid()
 fig = plt.gcf()
 plt.show()
-#plot_url = py.plot_mpl(fig, filename='trigger_times')
+plot_url = py.plot_mpl(fig, filename='trigger_times')
