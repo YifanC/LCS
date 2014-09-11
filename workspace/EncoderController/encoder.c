@@ -392,11 +392,15 @@ int main(int argc, char *argv[])
    /* enable SoftRealtime mode */
    CheckError(EIB7SelectMode(eib, EIB7_OM_SoftRealtime));
    
+
+
+   printf("\n\npress Ctrl-C to stop\n\n");
+
    if (RefRun == 1) {
       /* Do a reference movement for the rotarty encoder (get two reference marks) */
       CheckError(EIB7StartRef(axis[RotaryEncoder], EIB7_RP_RefPos2)); // start waiting for 2 reference marks on the rotary axis
       active = 1;   
-      while(active==1) {
+      while(active==1 || stop == 0) {
          CheckError(EIB7GetRefActive(axis[RotaryEncoder], &active));
          printf("waiting for reference run...\r");
       }
@@ -412,7 +416,7 @@ int main(int argc, char *argv[])
    }
    
 
-   printf("\n\npress Ctrl-C to stop\n\n");
+  
 
    while(!stop)
    {
@@ -555,6 +559,7 @@ int main(int argc, char *argv[])
 
 
    printf("\nStopped on user request\n");
+   // shut down the encoder / server correctely
    if(SendData == 1)
    {
 	   // Close the zmq stuff
@@ -562,6 +567,14 @@ int main(int argc, char *argv[])
 	   zmq_ctx_destroy (context);
 	}
 
+   /* disable trigger */
+   CheckError(EIB7GlobalTriggerEnable(eib, EIB7_MD_Disable, EIB7_TS_All));
+
+   /* disable SoftRealtime mode */
+   CheckError(EIB7SelectMode(eib, EIB7_OM_Polling));
+
+   /* close connection to EIB */
+   EIB7Close(eib);
    exit(1);
 }
 
@@ -581,6 +594,9 @@ void CheckError(EIB7_ERR error)
 
 
       fprintf(stderr, "\nError %08x (%s): %s\n", error, mnemonic, message);
+
+
+
       exit(0);
    }
 }
