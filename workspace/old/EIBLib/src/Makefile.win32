@@ -1,0 +1,74 @@
+
+EIBLIB=..\bin\eib7.dll
+
+
+INC=/I..\include /I.
+
+# 
+# Debug information
+#
+# For Release version comment 'DEBUG'
+#
+#  DEBUG=/Zi
+DEBUG=
+
+
+CFLAGS=/nologo /c $(INC) $(DEBUG) /DWin32 /Gd
+
+LIBS=user32.lib ws2_32.lib kernel32.lib
+
+LFLAGS=/MD $(DEBUG) /nologo
+DLLFLAGS=/LD /DEF:eib7.def
+
+ALL: $(EIBLIB)
+
+#
+#
+# cleanup targets
+#
+#
+
+clean:
+	del /s /q ..\*.obj ..\*.ilk ..\*.*~ ..\*.pdb ..\*.exp ..\*.exe ..\*.dll ..\*.lib
+
+
+#
+#
+# library make rules
+#
+#
+
+OBJ=eib7.obj eib7_cmd.obj cmdtcp.obj win32_commtcp.obj win32_threading.obj handles.obj commands.obj fifo.obj cmdtcp_list.obj
+
+$(EIBLIB): $(OBJ) eib7.def
+	cl $(LFLAGS) $(DLLFLAGS) /o $(EIBLIB) $(OBJ) $(LIBS) /link /DEF:eib7.def /implib:..\lib\eib7.lib
+
+#
+#
+# source file dependencies
+#
+#
+
+win32_threading.obj: Makefile.win32 ../include/eib7.h win32_threading.c threading.h definitions.h win32_threading.h
+
+win32_commtcp.obj: Makefile.win32 ../include/eib7.h win32_commtcp.c commtcp.h definitions.h win32_commtcp.h
+
+cmdtcp.obj: Makefile.win32  cmdtcp.c ../include/eib7.h definitions.h commtcp.h \
+  linux_commtcp.h cmdtcp.h cmdtcp_list.h commands.h eib7_types.h threading.h \
+  linux_threading.h fifo.h
+
+cmdtcp_list.obj: Makefile.win32  cmdtcp.c cmdtcp_list.c ../include/eib7.h definitions.h \
+  cmdtcp.h cmdtcp_list.h commands.h eib7_types.h threading.h \
+  linux_threading.h fifo.h
+
+eib7.obj: Makefile.win32 eib7.c ../include/eib7.h eib7_types.h definitions.h cmdtcp.h cmdtcp_list.h \
+  commtcp.h linux_commtcp.h threading.h linux_threading.h fifo.h \
+  eib7_cmd.h commands.h handles.h eib7_errors.h 
+
+eib7_cmd.obj: Makefile.win32 eib7_cmd.c ../include/eib7.h eib7_cmd.h eib7_types.h \
+  definitions.h cmdtcp.h cmdtcp_list.h commtcp.h linux_commtcp.h threading.h \
+  linux_threading.h fifo.h commands.h handles.h
+
+fifo.obj: Makefile.win32 ../include/eib7.h eib7_types.h fifo.h fifo.c
+
+commands.obj: ../include/eib7.h commands.c commands.h commtcp.h cmdtcp_list.h
