@@ -15,7 +15,7 @@ print("Encoder Producer: Connecting to server")
 
 ctx = zmq.Context()
 Producer = ctx.socket(zmq.REQ)
-Producer.connect("ipc://kvmsg_selftest.ipc")
+Producer.connect("ipc:///tmp/feed-laser.ipc")
 Producer.setsockopt(zmq.LINGER, 0)
 
 
