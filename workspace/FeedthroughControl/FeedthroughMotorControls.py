@@ -210,7 +210,7 @@ def HomeAxis(AxisNr):
 def ReadParameter(AxisNr, ParameterStr):
     serFeedtrough.write("\n" + str(AxisNr) + "PR " + ParameterStr + "\n")
     replyStr = serFeedtrough.readline()
-    return replyStr
+    return replyStr.replace(" ", "")
 
 
 def SetParameter(AxisNr, ParameterStr, Value):
