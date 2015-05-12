@@ -16,7 +16,7 @@ initAxis1()
 for i in range(10):
 	SetHomeSwitch(1,0)
 	time.sleep(1)
-	SetLimitSwitch(1,0)
+	SetLimitSwitches(1,0)
 	time.sleep(1)
 
 

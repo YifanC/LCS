@@ -29,9 +29,6 @@ k = 0
 ########################### Feed-trough control ################################
 def initAxis1():
     print "----------- Axis 1 (Rotary) Initialization -----------"
-    # first signal on the connection
-    serFeedtrough.write("\n")
-
     # set microstep resolution to maximum
     SetParameter(ROTARYAXIS,"MS", MICROSTEPS)
 
@@ -54,35 +51,34 @@ def initAxis1():
 
     SetParameter(ROTARYAXIS, "S3", "0,0,0")
 
-    SetLimitSwitch(ROTARYAXIS, 0)
+    SetLimitSwitches(ROTARYAXIS, 0)
     ##tstart = (maxVelocity-initialVelocity)/acceleration
 
 def initAxis2():
     print '----------- Axis 2 (Linear) Initialization -----------'
-    # first signal on the connection
-    serFeedtrough.write("\n")
-
     # set motor settling time in ms
     #serFeedtrough.write("\n2MT=2000\n")
 
     # set microstep resolution to maximum
-    serFeedtrough.write("\n2MS" + str(MICROSTEPS) + "\n")
+    SetParameter(LINEARAXIS, "2MS", MICROSTEPS)
 
     # set acceleration and deceleration to 100000 microsteps/s
-    serFeedtrough.write("\n2A=50000\n")
-    serFeedtrough.write("\n2D=50000\n")
+    SetParameter(LINEARAXIS, "A", 50000)
+    SetParameter(LINEARAXIS, "D", 50000)
 
     # set start speed and end speed of the movement
-    serFeedtrough.write("\n2VI=1000")
-    serFeedtrough.write("\n2VM=40000\n")
+    SetParameter(LINEARAXIS, "VI", 1000)
+    SetParameter("VM", 40000)
 
     # set holding and run current in percent
-    serFeedtrough.write("\n2HC=10\n")
-    serFeedtrough.write("\n2RC=80\n")
+    SetParameter(LINEARAXIS, "HC", 10)
+    SetParameter(LINEARAXIS, "RC". 80)
 
     # one can only define one home switch, so make shure no other
     # switch is defined as home switch
-    serFeedtrough.write("\n1S3=0,0,0\n")
+    SetParameter(LINEARAXIS, "S3", "0,0,0")
+
+    SetLimitSwitches(LINEARAXIS, 0)
 
 
 ##maxVelocity = float(readValue(reply,"VM"))
@@ -162,21 +158,20 @@ def SetHomeSwitch(AxisNr, Attempts):
             SetHomeSwitch(ROTARYAXIS, Attempts + 1)
 
 
-def SetLimitSwitch(AxisNr, Attempts):
+def SetLimitSwitches(AxisNr, Attempts):
     time.sleep(0.5)
     if Attempts == 4:
         print "Setting the limit switch failed 5 times -> exiting"
         sys.exit()
 
-    if AxisNr == ROTARYAXIS:
-        print "Axis 1: Set S1 and S2 as limit switches"
-	setOK = SetParameter(ROTARYAXIS, "S1", "2,1,0")  # set counterclockwise endswitch as home switch
-        setOK += SetParameter(ROTARYAXIS, "S2", "3,1,0")  # set counterclockwise endswitch as home switch
-        time.sleep(0.5)
-        # check if S2 was set correctly
-        if setOK != 0:
-            print "Axis" + str(AxisNr) + " limit switches were not set correctly"
-            SetLimitSwitch(ROTARYAXIS, Attempts + 1)
+    print "Axis " + str(AxisNr) + ": Set S1 and S2 as limit switches"
+    setOK = SetParameter(AxisNr, "S1", "2,1,0")  # set counterclockwise endswitch as home switch
+    setOK += SetParameter(AxisNr, "S2", "3,1,0")  # set counterclockwise endswitch as home switch
+    time.sleep(0.5)
+    # check if S2 was set correctly
+    if setOK != 0:
+        print "Axis" + str(AxisNr) + " limit switches were not set correctly"
+        SetLimitSwitches(ROTARYAXIS, Attempts + 1)
 
 
 def HomeAxis(AxisNr):
@@ -195,7 +190,7 @@ def HomeAxis(AxisNr):
             time.sleep(0.5)
             pos = getPosition(AxisNr)
         print "Axis " + str(AxisNr) + " homed at position: " + pos
-        SetLimitSwitch(ROTARYAXIS, 0)
+        SetLimitSwitches(ROTARYAXIS, 0)
         SetParameter(ROTARYAXIS, "VM", str(InitialMaxVelocity))
     elif AxisNr == LINEARAXIS:
         print "will not home linear axis: no procedure defined yet!"
