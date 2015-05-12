@@ -33,26 +33,26 @@ def initAxis1():
     serFeedtrough.write("\n")
 
     # set microstep resolution to maximum
-    serFeedtrough.write("\n1MS " + str(MICROSTEPS) + "\n")
+    SetParameter(ROTARYAXIS,"MS", MICROSTEPS)
 
     # set acceleration and deceleration to 100000 microsteps/s
-    serFeedtrough.write("\n1A=" + str(ROTARY_ACCELERATION) + "\n")
-    serFeedtrough.write("\n1D=" + str(ROTARY_DECELERATION) + "\n")
+    SetParameter(ROTARYAXIS, "A", ROTARY_ACCELERATION)
+    SetParameter(ROTARYAXIS, "D", ROTARY_DECELERATION)
 
     # set start speed and end speed of the movement
-    serFeedtrough.write("\n1VI=" + str(ROTARY_MINVELOCITY) + "\n")
-    serFeedtrough.write("\n1VM=" + str(ROTARY_MAXVELOCITY) + "\n")
+    SetParameter(ROTARYAXIS, "VI", ROTARY_MINVELOCITY)
+    SetParameter(ROTARYAXIS, "VM", ROTARY_MAXVELOCITY)
     # max velocity is stable up to 80000 M/s
 
 
     # set holding and run current in percent
-    serFeedtrough.write("\n1HC=5\n")
-    serFeedtrough.write("\n1RC=80\n")
+    SetParameter(ROTARYAXIS, "HC", 5)
+    SetParameter(ROTARYAXIS, "RC", 80)
 
     # one can only define one home switch, so make shure no other
     # switch is defined as home switch
 
-    serFeedtrough.write("\n1S3=0,0,0\n")
+    SetParameter(ROTARYAXIS, "S3", "0,0,0")
 
     SetLimitSwitch(ROTARYAXIS, 0)
     ##tstart = (maxVelocity-initialVelocity)/acceleration
@@ -156,13 +156,9 @@ def SetHomeSwitch(AxisNr, Attempts):
 
     if AxisNr == ROTARYAXIS:
         print "Axis 1: Set S2 as home switch"
-        SetParameter(ROTARYAXIS, "S2", "1,1,0\n")  # set counterclockwise endswitch as home switch
+        setOK = SetParameter(ROTARYAXIS, "S2", "1,1,0")  # set counterclockwise endswitch as home switch
         time.sleep(0.5)
-        # check if S2 was set correctly
-        S2SetValue = ReadParameter(ROTARYAXIS, "S2")
-        print "S2 = " + S2SetValue[0:7]
-        if S2SetValue[0:7] != "1, 1, 0":
-            print "Axis" + str(AxisNr) + " homeswitch S2 was not set correctly"
+        if setOK != 0:
             SetHomeSwitch(ROTARYAXIS, Attempts + 1)
 
 
@@ -173,14 +169,13 @@ def SetLimitSwitch(AxisNr, Attempts):
         sys.exit()
 
     if AxisNr == ROTARYAXIS:
-        print "Axis 1: Set S2 as limit switch"
-        SetParameter(ROTARYAXIS, "S2", "3,1,0\n")  # set counterclockwise endswitch as home switch
+        print "Axis 1: Set S1 and S2 as limit switches"
+	setOK = SetParameter(ROTARYAXIS, "S1", "2,1,0")  # set counterclockwise endswitch as home switch
+        setOK += SetParameter(ROTARYAXIS, "S2", "3,1,0")  # set counterclockwise endswitch as home switch
         time.sleep(0.5)
         # check if S2 was set correctly
-        S2SetValue = ReadParameter(ROTARYAXIS, "S2")
-        print 'S2 = ' + S2SetValue[0:7]
-        if S2SetValue[0:7] != "3, 1, 0":
-            print "Axis" + str(AxisNr) + " limit switch S2 was not set correctly"
+        if setOK != 0:
+            print "Axis" + str(AxisNr) + " limit switches were not set correctly"
             SetLimitSwitch(ROTARYAXIS, Attempts + 1)
 
 
@@ -210,19 +205,21 @@ def HomeAxis(AxisNr):
 def ReadParameter(AxisNr, ParameterStr):
     serFeedtrough.write("\n" + str(AxisNr) + "PR " + ParameterStr + "\n")
     replyStr = serFeedtrough.readline()
-    return replyStr.replace(" ", "")
+    return replyStr[0:-2] # crop last two characters = "\r\n"
 
 
 def SetParameter(AxisNr, ParameterStr, Value):
-    print str(AxisNr) + str(ParameterStr) + " setting to" + str(Value)
+    print " SetParameter: " + str(AxisNr) + ParameterStr + "=" + str(Value),
     serFeedtrough.write("\n" + str(AxisNr) + ParameterStr + "=" + str(Value) + "\n")
+    time.sleep(0.1)
     SetValue = ReadParameter(AxisNr, ParameterStr)
 
-    print str(AxisNr) + str(ParameterStr) + " set to " + SetValue
-
-    if SetValue != str(Value):
-        print "Value set incorrectly!"
-
+    if SetValue.replace(" ","") == str(Value):
+        print "-> OK"
+        return 0
+    else:
+        print "-> FAILIURE: Controller setting is: " + SetValue.replace(" ","")
+        return -1
 
 def MonitorParameter(AxisNr, ParameterStr):
     param = ReadParameter(AxisNr, ParameterStr)
