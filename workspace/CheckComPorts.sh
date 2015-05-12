@@ -1,4 +1,5 @@
 
+# A little bash script that outputs all serial number attributes of all available ttyUSB ports
 
 N=$(($(ls /dev/ttyUSB* | wc -l) -1))
 
