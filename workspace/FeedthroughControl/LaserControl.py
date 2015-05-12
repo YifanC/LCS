@@ -1,10 +1,12 @@
-import sys, time, glob
+import sys
+import time
 import serial
+
 
 def initLaser():
         print '---------------- Laser Initialization ----------------'
         
-        timeout=0.1
+        timeout = 0.1
         print "Get Laser status:"
         serLaser.write("SE\r")
         reply = serLaser.read(20)
@@ -31,11 +33,13 @@ def initLaser():
         reply = serLaser.read(20)
         print " current mode ", reply
         print '------------------------------------------------------'
+
 def startLaser():
         print "Start Laser:"
         serLaser.write("ST 1\r")
         reply = serLaser.read(20)
         print "Laser on:", reply
+
 def stopLaser():
         print "Start Laser:"
         serLaser.write("ST 0\r")
@@ -83,7 +87,6 @@ def SHOOT1Hz(TShoot):
         serLaser.write("PD 000\r")
         reply = serLaser.readline()
         print "answer:", reply
-        
 
 def initLaserCOM(comport):
    try:
