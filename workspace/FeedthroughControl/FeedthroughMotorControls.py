@@ -214,10 +214,14 @@ def ReadParameter(AxisNr, ParameterStr):
 
 
 def SetParameter(AxisNr, ParameterStr, Value):
-    print str(AxisNr) + str(Value) + " setting to" + str(Value)
+    print str(AxisNr) + str(ParameterStr) + " setting to" + str(Value)
     serFeedtrough.write("\n" + str(AxisNr) + ParameterStr + "=" + str(Value) + "\n")
     SetValue = ReadParameter(AxisNr, ParameterStr)
-    print str(AxisNr) + str(Value) + " set to " + str(SetValue)
+
+    print str(AxisNr) + str(ParameterStr) + " set to " + str(SetValue)
+
+    if SetValue != Value:
+        print "Value set incorrectly!"
 
 
 def MonitorParameter(AxisNr, ParameterStr):
