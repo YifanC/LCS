@@ -60,7 +60,7 @@ def initAxis2():
     #serFeedtrough.write("\n2MT=2000\n")
 
     # set microstep resolution to maximum
-    SetParameter(LINEARAXIS, "2MS", MICROSTEPS)
+    SetParameter(LINEARAXIS, "MS", MICROSTEPS)
 
     # set acceleration and deceleration to 100000 microsteps/s
     SetParameter(LINEARAXIS, "A", 50000)
@@ -68,11 +68,11 @@ def initAxis2():
 
     # set start speed and end speed of the movement
     SetParameter(LINEARAXIS, "VI", 1000)
-    SetParameter("VM", 40000)
+    SetParameter(LINEARAXIS, "VM", 40000)
 
     # set holding and run current in percent
     SetParameter(LINEARAXIS, "HC", 10)
-    SetParameter(LINEARAXIS, "RC". 80)
+    SetParameter(LINEARAXIS, "RC", 80)
 
     # one can only define one home switch, so make shure no other
     # switch is defined as home switch
