@@ -218,9 +218,9 @@ def SetParameter(AxisNr, ParameterStr, Value):
     serFeedtrough.write("\n" + str(AxisNr) + ParameterStr + "=" + str(Value) + "\n")
     SetValue = ReadParameter(AxisNr, ParameterStr)
 
-    print str(AxisNr) + str(ParameterStr) + " set to " + str(SetValue)
+    print str(AxisNr) + str(ParameterStr) + " set to " + SetValue
 
-    if SetValue != Value:
+    if SetValue != str(Value):
         print "Value set incorrectly!"
 
 
