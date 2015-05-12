@@ -52,10 +52,10 @@ def initAxis1():
     # one can only define one home switch, so make shure no other
     # switch is defined as home switch
 
+    serFeedtrough.write("\n1S3=0,0,0\n")
 
-SetLimitSwitch(ROTARYAXIS, 0)
-serFeedtrough.write("\n1S3=0,0,0\n")
-##tstart = (maxVelocity-initialVelocity)/acceleration
+    SetLimitSwitch(ROTARYAXIS, 0)
+    ##tstart = (maxVelocity-initialVelocity)/acceleration
 
 def initAxis2():
     print '----------- Axis 2 (Linear) Initialization -----------'
