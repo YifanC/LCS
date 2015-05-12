@@ -1,5 +1,5 @@
 # simple script to monitor Inputs 1 to 4 on the feedthrough Motor controller. 
-# Start as python Monitoring.py X, where X is the axis you would like to monitor
+# Start as python Monitoring.py COMPort X, where X is the axis you would like to monitor
 # Axis 1 = Rotary
 # Axis 2 = Linear
 #End Switches:
@@ -9,8 +9,8 @@
 from FeedthroughMotorControls import *
 import os
 import sys
-COMLaser = 10
-MonitorAxis = int(sys.argv[1])
+COMLaser = int(sys.argv[1])
+MonitorAxis = int(sys.argv[2])
 
 if (MonitorAxis > 2 or MonitorAxis < 1):
   print "Axis is out of range"
