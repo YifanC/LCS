@@ -23,8 +23,12 @@ ROTARY_MAXVELOCITY = 15000
 ROTARY_MINVELOCITY = 1000
 ROTARY_ACCELERATION = 30000
 ROTARY_DECELERATION = 30000
+ROTARY_HOMING_SPEED = 15000
 
+
+LINEAR_HOMING_SPEED = 8000
 LINEAR_MAX_HOMING_OVERSHOOT = -18000
+
 
 TURNSPERDEGHOR = ONETURN / (3.6)
 TURNSPERDEGVER = ONETURN / 14.501537
@@ -181,26 +185,16 @@ def SetLimitSwitches(AxisNr, Attempts):
 
 def HomeAxis(AxisNr):
     if AxisNr == ROTARYAXIS:
-        InitialMaxVelocity = int(ReadParameter(AxisNr, "VM"))
-        SetParameter(AxisNr, "VM", 15000)  # reduce speed so we move slowly into endswitch
-        SetHomeSwitch(AxisNr, 0)
-	time.sleep(2)
-        SendCommand(AxisNr, "HM", 1)
-        # 1 - Slew at VM in the minus direction and Creep at VI in the plus direction.
-        # 2 - Slew at VM in the minus direction and Creep at VI in the minus direction.
-        # 3 - Slew at VM in the plus direction and Creep at VI in the minus direction.
-        # 4 - Slew at VM in the plus direction and Creep at VI in the plus direction.
-
-        while AxisMoving(AxisNr):
-            
-            time.sleep(0.5)
-            pos = getPosition(AxisNr)
-        print "Axis " + str(AxisNr) + " homed at position: " + pos
-        SetLimitSwitches(ROTARYAXIS, 0)
-        SetParameter(ROTARYAXIS, "VM", str(InitialMaxVelocity))
-    
-
+	HOMING_SPEED = ROTARY_HOMING_SPEED
+	MAX_HOMING_OVERSHOOT = ROTARY_MAX_HOMING_OVERSHOOT
+	return -1
     elif AxisNr == LINEARAXIS:
+	HOMING_SPEED = LINEAR_HOMING_SPEED
+	MAX_HOMING_OVERSHOOT = LINEAR_MAX_HOMING_OVERSHOOT
+    else:
+	print "Axis not recognised"
+	return -1
+
 	# check if manual calibration of zero position was performed
 	Counts = int(ReadParameter(AxisNr,"R1"))
 	if Counts < 1:
@@ -209,7 +203,7 @@ def HomeAxis(AxisNr):
 	
 	# reduce speed so we move slowly into endswitch
 	InitialMaxVelocity = int(ReadParameter(AxisNr, "VM"))
-	SetParameter(AxisNr, "VM", 8000)  		
+	SetParameter(AxisNr, "VM", HOMING_SPEED)  		
 
 	# start homing procedure
 	SetHomeSwitch(AxisNr, 0)	
@@ -219,7 +213,7 @@ def HomeAxis(AxisNr):
 	# monitor the movement and abort in the movemnt goes out too far from the known zero position
 	while AxisMoving(AxisNr):
 		pos = int(getPosition(AxisNr))
-		if pos < LINEAR_MAX_HOMING_OVERSHOOT:
+		if pos < MAX_HOMING_OVERSHOOT:
 			StopMovement(AxisNr)
 			SetParameter(AxisNr, ("R1", 0)
 			SetLimitSwitches(AxisNr, 0)
