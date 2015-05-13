@@ -72,7 +72,7 @@ def initAxis2():
 
     # set holding and run current in percent
     SetParameter(LINEARAXIS, "HC", 10)
-    SetParameter(LINEARAXIS, "RC". 80)
+    SetParameter(LINEARAXIS, "RC", 80)
 
     # one can only define one home switch, so make shure no other
     # switch is defined as home switch
