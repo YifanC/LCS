@@ -23,6 +23,12 @@ ROTARY_MAXVELOCITY = 15000
 ROTARY_MINVELOCITY = 1000
 ROTARY_ACCELERATION = 30000
 ROTARY_DECELERATION = 30000
+ROTARY_HOMING_SPEED = 15000
+
+
+LINEAR_HOMING_SPEED = 8000
+LINEAR_MAX_HOMING_OVERSHOOT = -18000
+
 
 TURNSPERDEGHOR = ONETURN / (3.6)
 TURNSPERDEGVER = ONETURN / 14.501537
@@ -69,7 +75,7 @@ def initLinearAxis():
 
     # set start speed and end speed of the movement
     SetParameter(LINEARAXIS, "VI", 1000)
-    SetParameter(LINEARAXIS, "VM", 40000)
+    SetParameter(LINEARAXIS, "VM", 15000)
 
     # set holding and run current in percent
     SetParameter(LINEARAXIS, "HC", 10)
@@ -179,26 +185,49 @@ def SetLimitSwitches(AxisNr, Attempts):
 
 def HomeAxis(AxisNr):
     if AxisNr == ROTARYAXIS:
-        InitialMaxVelocity = int(ReadParameter(AxisNr, "VM"))
-        SetParameter(AxisNr, "VM", 15000)  # reduce speed so we move slowly into endswitch
-        SetHomeSwitch(AxisNr, 0)
-	time.sleep(2)
-        SendCommand(AxisNr, "HM", 1)
-        # 1 - Slew at VM in the minus direction and Creep at VI in the plus direction.
-        # 2 - Slew at VM in the minus direction and Creep at VI in the minus direction.
-        # 3 - Slew at VM in the plus direction and Creep at VI in the minus direction.
-        # 4 - Slew at VM in the plus direction and Creep at VI in the plus direction.
-
-        while AxisMoving(AxisNr):
-            print "Homing Axis " + DictAxis[AxisNr]
-            time.sleep(0.5)
-            pos = getPosition(AxisNr)
-        print "Axis " + str(AxisNr) + " homed at position: " + pos
-        SetLimitSwitches(ROTARYAXIS, 0)
-        SetParameter(ROTARYAXIS, "VM", str(InitialMaxVelocity))
+	HOMING_SPEED = ROTARY_HOMING_SPEED
+	MAX_HOMING_OVERSHOOT = ROTARY_MAX_HOMING_OVERSHOOT
+	return -1
     elif AxisNr == LINEARAXIS:
-        print "will not home linear axis: no procedure defined yet!"
-        return -1
+	HOMING_SPEED = LINEAR_HOMING_SPEED
+	MAX_HOMING_OVERSHOOT = LINEAR_MAX_HOMING_OVERSHOOT
+    else:
+	print "Axis not recognised"
+	return -1
+
+	# check if manual calibration of zero position was performed
+	Counts = int(ReadParameter(AxisNr,"R1"))
+	if Counts < 1:
+		print " " + DictAxis[AxisNr] + ": Manual homing was not performed, aporting homing procedure."
+		return -1
+	
+	# reduce speed so we move slowly into endswitch
+	InitialMaxVelocity = int(ReadParameter(AxisNr, "VM"))
+	SetParameter(AxisNr, "VM", HOMING_SPEED)  		
+
+	# start homing procedure
+	SetHomeSwitch(AxisNr, 0)	
+	print " Homing Axis " + DictAxis[AxisNr]
+        SendCommand(AxisNr, "HM", 1)
+	
+	# monitor the movement and abort in the movemnt goes out too far from the known zero position
+	while AxisMoving(AxisNr):
+		pos = int(getPosition(AxisNr))
+		if pos < MAX_HOMING_OVERSHOOT:
+			StopMovement(AxisNr)
+			SetParameter(AxisNr, ("R1", 0)
+			SetLimitSwitches(AxisNr, 0)
+			print " Position went to far over home switch, movement was stopped"
+			return -1
+		print "\r" + " Position: " + str(pos),
+		sys.stdout.flush()
+		time.sleep(0.1)
+
+	# go back to normal operation
+        SetLimitSwitches(AxisNr, 0)
+	SetParameter(AxisNr, "VM", str(InitialMaxVelocity))
+	SetParameter(AxisNr, ("R1", Counts + 1)
+        return 0
 
 def ReadParameter(AxisNr, ParameterStr):
     serFeedtrough.write("\n" + str(AxisNr) + "PR " + ParameterStr + "\n")

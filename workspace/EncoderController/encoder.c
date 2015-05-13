@@ -56,7 +56,8 @@
 #ifdef _WIN32
 #define POS_SPEC "Trg-Cntr: %05u, Timestamp: %010lu, Status: 0x%04X, Pos: %010I64d"
 #else
-#define POS_SPEC "Trg-Cntr: %05u, Timestamp: %010lu, Status: 0x%04X, Pos[deg]: %f"
+#define POS_SPEC_COUNTS "Trg-Cntr: %05u, Timestamp: %010lu, Status: 0x%04X, Pos: %010lld"
+#define POS_SPEC_DEG "Trg-Cntr: %05u, Timestamp: %010lu, Status: 0x%04X, Pos[deg]: %f"
 #endif
 
 
@@ -520,12 +521,16 @@ int main(int argc, char *argv[])
          /* print status word and position value */
          if (PrintData == 1)
          {
-		 	 printf("Linear Encoder Data: ");
-	         printf(POS_SPEC, LinearEncoderData.TriggerCounter, LinearEncoderData.Timestamp,
-	                          LinearEncoderData.status,EventData.LinearPosDeg);
-	         printf("\n");
+		 printf("Linear Encoder Data: ");
+	         printf(POS_SPEC_COUNTS, LinearEncoderData.TriggerCounter, LinearEncoderData.Timestamp,
+	                          LinearEncoderData.status,LinearEncoderData.position);
+
+	         //printf(POS_SPEC_DEG, LinearEncoderData.TriggerCounter, LinearEncoderData.Timestamp,
+	         //                 LinearEncoderData.status,EventData.LinearPosDeg);
+	         
+		 printf("\n");
 	         printf("Rotary Encoder Data: ");
-	         printf(POS_SPEC, RotaryEncoderData.TriggerCounter, RotaryEncoderData.Timestamp,
+	         printf(POS_SPEC_DEG, RotaryEncoderData.TriggerCounter, RotaryEncoderData.Timestamp,
 	                          RotaryEncoderData.status, EventData.RotaryPosDeg);
 	         printf("\n");
 	         printf("System Time: ");
@@ -600,3 +605,4 @@ void CheckError(EIB7_ERR error)
       exit(0);
    }
 }
+
