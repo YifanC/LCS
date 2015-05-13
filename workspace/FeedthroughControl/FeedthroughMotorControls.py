@@ -7,8 +7,10 @@ import serial
 
 sgn = lambda x: (x > 0) - (x < 0)
 
-ROTARYAXIS = 1
-LINEARAXIS = 2
+ROTARYAXIS = 2
+LINEARAXIS = 1
+
+DictAxis = {LINEARAXIS : "Linear Axis", ROTARYAXIS : "Rotary Axis"}
 
 # one full evolution of the motor has:
 # - steps: 200
@@ -27,8 +29,8 @@ TURNSPERDEGVER = ONETURN / 14.501537
 k = 0
 
 ########################### Feed-trough control ################################
-def initAxis1():
-    print "----------- Axis 1 (Rotary) Initialization -----------"
+def initRotaryAxis():
+    print "----------- Axis " + DictAxis[ROTARYAXIS] + " Initialization -----------"
     # set microstep resolution to maximum
     SetParameter(ROTARYAXIS,"MS", MICROSTEPS)
 
@@ -54,13 +56,13 @@ def initAxis1():
     SetLimitSwitches(ROTARYAXIS, 0)
     ##tstart = (maxVelocity-initialVelocity)/acceleration
 
-def initAxis2():
-    print '----------- Axis 2 (Linear) Initialization -----------'
+def initLinearAxis():
+    print "----------- Axis " + DictAxis[LINEARAXIS] + " Initialization -----------"
     # set motor settling time in ms
     #serFeedtrough.write("\n2MT=2000\n")
 
     # set microstep resolution to maximum
-    SetParameter(LINEARAXIS, "2MS", MICROSTEPS)
+    SetParameter(LINEARAXIS, "MS", MICROSTEPS)
 
     # set acceleration and deceleration to 100000 microsteps/s
     SetParameter(LINEARAXIS, "A", 50000)
@@ -68,7 +70,7 @@ def initAxis2():
 
     # set start speed and end speed of the movement
     SetParameter(LINEARAXIS, "VI", 1000)
-    SetParameter("VM", 40000)
+    SetParameter(LINEARAXIS, "VM", 40000)
 
     # set holding and run current in percent
     SetParameter(LINEARAXIS, "HC", 10)
@@ -101,7 +103,7 @@ def moveVertical(inst):
     else:
         print 'Axis2: going down ' + str(-inst) + ' microsteps'
 
-    serFeedtrough.write('\n2MR ' + str(inst) + '\n')
+    serFeedtrough.write(str(LINEARAXIS) + "MR " + str(inst) + "\n")
 
 
 ##while AxisMoving(2):
@@ -113,7 +115,7 @@ def moveHorizontal(inst):
     else:
         print 'Axis1: going right ' + str(-inst) + ' microsteps'
 
-    serFeedtrough.write('\n1MR ' + str(inst) + '\n')
+    serFeedtrough.write(str(ROTARYAXIS) + "MR " + str(inst) + "\n")
 
 
 ##while AxisMoving(1):
@@ -122,7 +124,7 @@ def moveHorizontal(inst):
 def moveAbsoluteHorizintal(pos):
     print "Going to " + str(pos)
 
-    serFeedtrough.write('\n1MA ' + str(pos) + '\n')
+    serFeedtrough.write(str(ROTARYAXIS) + "MA " + str(pos) + "\n")
 
 
 def getPosition(AxisNr):
@@ -151,11 +153,18 @@ def SetHomeSwitch(AxisNr, Attempts):
         sys.exit()
 
     if AxisNr == ROTARYAXIS:
-        print "Axis 1: Set S2 as home switch"
+        print DictAxis[AxisNr] + " Set S2 as home switch"
         setOK = SetParameter(ROTARYAXIS, "S2", "1,1,0")  # set counterclockwise endswitch as home switch
         time.sleep(0.5)
         if setOK != 0:
             SetHomeSwitch(ROTARYAXIS, Attempts + 1)
+    
+    if AxisNr == LINEARAXIS:
+        print DictAxis[AxisNr] + " Set S2 as home switch"
+        setOK = SetParameter(LINEARAXIS, "S2", "1,1,0")  # set lower endswitch as home switch
+        time.sleep(0.5)
+        if setOK != 0:
+            SetHomeSwitch(LINEARAXIS, Attempts + 1)
 
 
 def SetLimitSwitches(AxisNr, Attempts):
@@ -164,21 +173,21 @@ def SetLimitSwitches(AxisNr, Attempts):
         print "Setting the limit switch failed 5 times -> exiting"
         sys.exit()
 
-    print "Axis " + str(AxisNr) + ": Set S1 and S2 as limit switches"
+    print DictAxis[AxisNr] + ": Set S1 and S2 as limit switches"
     setOK = SetParameter(AxisNr, "S1", "2,1,0")  # set counterclockwise endswitch as home switch
     setOK += SetParameter(AxisNr, "S2", "3,1,0")  # set counterclockwise endswitch as home switch
     time.sleep(0.5)
     # check if S2 was set correctly
     if setOK != 0:
-        print "Axis" + str(AxisNr) + " limit switches were not set correctly"
-        SetLimitSwitches(ROTARYAXIS, Attempts + 1)
+        print DictAxis[AxisNr] + " limit switches were not set correctly"
+        SetLimitSwitches(AxisNr, Attempts + 1)
 
 
 def HomeAxis(AxisNr):
     if AxisNr == ROTARYAXIS:
-        InitialMaxVelocity = int(ReadParameter(ROTARYAXIS, "VM"))
-        SetParameter(ROTARYAXIS, "VM", 15000)  # reduce spped so we move slowly into endswitch
-        SetHomeSwitch(ROTARYAXIS, 0)
+        InitialMaxVelocity = int(ReadParameter(AxisNr, "VM"))
+        SetParameter(AxisNr, "VM", 15000)  # reduce spped so we move slowly into endswitch
+        SetHomeSwitch(AxisNr, 0)
         serFeedtrough.write("\n" + str(AxisNr) + "HM 1\n")
         # 1 - Slew at VM in the minus direction and Creep at VI in the plus direction.
         # 2 - Slew at VM in the minus direction and Creep at VI in the minus direction.
@@ -186,7 +195,7 @@ def HomeAxis(AxisNr):
         # 4 - Slew at VM in the plus direction and Creep at VI in the plus direction.
 
         while AxisMoving(AxisNr):
-            print "Homing Axis " + str(AxisNr)
+            print "Homing Axis " + DictAxis[AxisNr]
             time.sleep(0.5)
             pos = getPosition(AxisNr)
         print "Axis " + str(AxisNr) + " homed at position: " + pos
@@ -196,7 +205,6 @@ def HomeAxis(AxisNr):
         print "will not home linear axis: no procedure defined yet!"
         return -1
 
-
 def ReadParameter(AxisNr, ParameterStr):
     serFeedtrough.write("\n" + str(AxisNr) + "PR " + ParameterStr + "\n")
     replyStr = serFeedtrough.readline()
@@ -204,7 +212,7 @@ def ReadParameter(AxisNr, ParameterStr):
 
 
 def SetParameter(AxisNr, ParameterStr, Value):
-    print " SetParameter: " + str(AxisNr) + ParameterStr + "=" + str(Value),
+    print " SetParameter: " + DictAxis[AxisNr] + " " + ParameterStr + "=" + str(Value),
     serFeedtrough.write("\n" + str(AxisNr) + ParameterStr + "=" + str(Value) + "\n")
     time.sleep(0.1)
     SetValue = ReadParameter(AxisNr, ParameterStr)
@@ -264,9 +272,9 @@ def CalcMovementTimeGeneral(Microsteps, MaxSpeed, MinSpeed, Acceleration, Decele
 
 def StopMovement(AxisNr):
     serFeedtrough.write(str(AxisNr) + "\x1B")
-    print "Stop Axis " + str(AxisNr)
+    print "Stop " + DictAxis[AxisNr]
     Move = ReadParameter(AxisNr, "MV")
-    print "Axis " + str(AxisNr) + " MV = " + Move
+    print DictAxis[AxisNr] + " MV = " + Move
 
 
 ####################### End Feed-trough control ################################
