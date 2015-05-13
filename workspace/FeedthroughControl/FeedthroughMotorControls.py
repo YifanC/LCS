@@ -10,7 +10,7 @@ sgn = lambda x: (x > 0) - (x < 0)
 ROTARYAXIS = 2
 LINEARAXIS = 1
 
-DictAxis = {LINEARAXIS : "Linear Axis", ROTARYAXIS : "Rotary Axis"}
+DictAxis = {LINEARAXIS: "Linear Axis", ROTARYAXIS: "Rotary Axis"}
 
 # one full evolution of the motor has:
 # - steps: 200
@@ -24,21 +24,20 @@ ROTARY_MINVELOCITY = 1000
 ROTARY_ACCELERATION = 30000
 ROTARY_DECELERATION = 30000
 ROTARY_HOMING_SPEED = 15000
-
+ROTARY_MAX_HOMING_OVERSHOOT = 0
 
 LINEAR_HOMING_SPEED = 8000
 LINEAR_MAX_HOMING_OVERSHOOT = -18000
-
 
 TURNSPERDEGHOR = ONETURN / (3.6)
 TURNSPERDEGVER = ONETURN / 14.501537
 k = 0
 
-########################### Feed-trough control ################################
+# ########################## Feed-trough control ################################
 def initRotaryAxis():
     print "----------- " + DictAxis[ROTARYAXIS] + " Initialization -----------"
     # set microstep resolution to maximum
-    SetParameter(ROTARYAXIS,"MS", MICROSTEPS)
+    SetParameter(ROTARYAXIS, "MS", MICROSTEPS)
 
     # set acceleration and deceleration to 100000 microsteps/s
     SetParameter(ROTARYAXIS, "A", ROTARY_ACCELERATION)
@@ -61,6 +60,7 @@ def initRotaryAxis():
 
     SetLimitSwitches(ROTARYAXIS, 0)
     ##tstart = (maxVelocity-initialVelocity)/acceleration
+
 
 def initLinearAxis():
     print "----------- " + DictAxis[LINEARAXIS] + " Initialization -----------"
@@ -110,6 +110,7 @@ def moveVertical(inst):
 
     SendCommand(LINEARAXIS, "MR", str(inst))
 
+
 ##while AxisMoving(2):
 ##        print 'Axis2 Position: ' + getPosition(2)
 
@@ -121,6 +122,7 @@ def moveHorizontal(inst):
 
     SendCommand(ROTARYAXIS, "MR", str(inst))
 
+
 ##while AxisMoving(1):
 ##        print 'Axis1 Position: ' + getPosition(1)
 
@@ -130,13 +132,13 @@ def moveAbsoluteHorizintal(pos):
 
 
 def getPosition(AxisNr):
-    reply = ReadParameter(AxisNr,"P")
+    reply = ReadParameter(AxisNr, "P")
     return int(reply)
 
 
 def AxisMoving(AxisNr):
     # returns: 1 if axis is moving, 0 if not. And -1 for non-identifiable answer
-    reply = ReadParameter(AxisNr,"MV")
+    reply = ReadParameter(AxisNr, "MV")
     if ('0' in reply):
         return 0
     elif ('1' in reply):
@@ -158,7 +160,7 @@ def SetHomeSwitch(AxisNr, Attempts):
         time.sleep(0.5)
         if setOK != 0:
             SetHomeSwitch(ROTARYAXIS, Attempts + 1)
-    
+
     if AxisNr == LINEARAXIS:
         print DictAxis[AxisNr] + " Set S2 as home switch"
         setOK = SetParameter(LINEARAXIS, "S2", "1,1,0")  # set lower endswitch as home switch
@@ -185,54 +187,55 @@ def SetLimitSwitches(AxisNr, Attempts):
 
 def HomeAxis(AxisNr):
     if AxisNr == ROTARYAXIS:
-	HOMING_SPEED = ROTARY_HOMING_SPEED
-	MAX_HOMING_OVERSHOOT = ROTARY_MAX_HOMING_OVERSHOOT
-	return -1
+        HOMING_SPEED = ROTARY_HOMING_SPEED
+        MAX_HOMING_OVERSHOOT = ROTARY_MAX_HOMING_OVERSHOOT
+        return -1
     elif AxisNr == LINEARAXIS:
-	HOMING_SPEED = LINEAR_HOMING_SPEED
-	MAX_HOMING_OVERSHOOT = LINEAR_MAX_HOMING_OVERSHOOT
+        HOMING_SPEED = LINEAR_HOMING_SPEED
+        MAX_HOMING_OVERSHOOT = LINEAR_MAX_HOMING_OVERSHOOT
     else:
-	print "Axis not recognised"
-	return -1
+        print "Axis not recognised"
+        return -1
 
-	# check if manual calibration of zero position was performed
-	Counts = int(ReadParameter(AxisNr,"R1"))
-	if Counts < 1:
-		print " " + DictAxis[AxisNr] + ": Manual homing was not performed, aporting homing procedure."
-		return -1
-	
-	# reduce speed so we move slowly into endswitch
-	InitialMaxVelocity = int(ReadParameter(AxisNr, "VM"))
-	SetParameter(AxisNr, "VM", HOMING_SPEED)  		
+    # check if manual calibration of zero position was performed
+    Counts = int(ReadParameter(AxisNr, "R1"))
+    if Counts < 1:
+        print " " + DictAxis[AxisNr] + ": Manual homing was not performed, aporting homing procedure."
+        return -1
 
-	# start homing procedure
-	SetHomeSwitch(AxisNr, 0)	
-	print " Homing Axis " + DictAxis[AxisNr]
-        SendCommand(AxisNr, "HM", 1)
-	
-	# monitor the movement and abort in the movemnt goes out too far from the known zero position
-	while AxisMoving(AxisNr):
-		pos = int(getPosition(AxisNr))
-		if pos < MAX_HOMING_OVERSHOOT:
-			StopMovement(AxisNr)
-			SetParameter(AxisNr, ("R1", 0)
-			SetLimitSwitches(AxisNr, 0)
-			print " Position went to far over home switch, movement was stopped"
-			return -1
-		print "\r" + " Position: " + str(pos),
-		sys.stdout.flush()
-		time.sleep(0.1)
+    # reduce speed so we move slowly into endswitch
+    InitialMaxVelocity = int(ReadParameter(AxisNr, "VM"))
+    SetParameter(AxisNr, "VM", HOMING_SPEED)
 
-	# go back to normal operation
-        SetLimitSwitches(AxisNr, 0)
-	SetParameter(AxisNr, "VM", str(InitialMaxVelocity))
-	SetParameter(AxisNr, ("R1", Counts + 1)
-        return 0
+    # start homing procedure
+    SetHomeSwitch(AxisNr, 0)
+    print " Homing Axis " + DictAxis[AxisNr]
+    SendCommand(AxisNr, "HM", 1)
+
+    # monitor the movement and abort in the movement goes out too far from the known zero position
+    while AxisMoving(AxisNr):
+        pos = int(getPosition(AxisNr))
+        if pos < MAX_HOMING_OVERSHOOT:
+            StopMovement(AxisNr)
+            SetParameter(AxisNr, "R1", 0)
+            SetLimitSwitches(AxisNr, 0)
+            print " Position went to far over home switch, movement was stopped"
+            return -1
+        print "\r" + " Position: " + str(pos),
+        sys.stdout.flush()
+        time.sleep(0.1)
+
+    # go back to normal operation
+    SetLimitSwitches(AxisNr, 0)
+    SetParameter(AxisNr, "VM", str(InitialMaxVelocity))
+    SetParameter(AxisNr, ("R1", Counts + 1))
+    return 0
+
 
 def ReadParameter(AxisNr, ParameterStr):
     serFeedtrough.write("\n" + str(AxisNr) + "PR " + ParameterStr + "\n")
     replyStr = serFeedtrough.readline()
-    return replyStr[0:-2] # crop last two characters = "\r\n"
+    return replyStr[0:-2]  # crop last two characters = "\r\n"
 
 
 def SetParameter(AxisNr, ParameterStr, Value):
@@ -241,20 +244,23 @@ def SetParameter(AxisNr, ParameterStr, Value):
     time.sleep(0.1)
     SetValue = ReadParameter(AxisNr, ParameterStr)
 
-    if SetValue.replace(" ","") == str(Value):
+    if SetValue.replace(" ", "") == str(Value):
         print "-> OK"
         return 0
     else:
-        print "-> FAILIURE: Controller setting is: " + SetValue.replace(" ","")
+        print "-> FAILIURE: Controller setting is: " + SetValue.replace(" ", "")
         return -1
+
 
 def MonitorParameter(AxisNr, ParameterStr):
     param = ReadParameter(AxisNr, ParameterStr)
     print ParameterStr + "=" + param
 
+
 def SendCommand(AxisNr, CommandString, Attribute=""):
     print " Command sent to " + DictAxis[AxisNr] + ": " + CommandString + " " + str(Attribute) + "\n"
     serFeedtrough.write("\n" + str(AxisNr) + CommandString + " " + str(Attribute) + "\n")
+
 
 # open serial ports (select ports)
 def initFeedtrough(COMPort):
