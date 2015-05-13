@@ -198,35 +198,41 @@ def HomeAxis(AxisNr):
         print "Axis " + str(AxisNr) + " homed at position: " + pos
         SetLimitSwitches(ROTARYAXIS, 0)
         SetParameter(ROTARYAXIS, "VM", str(InitialMaxVelocity))
+    
+
     elif AxisNr == LINEARAXIS:
-	
 	# check if manual calibration of zero position was performed
-	Counts = int(ReadParameter(LINEARAXIS,("R" + str(LINEARAXIS))))
-	print Counts
+	Counts = int(ReadParameter(AxisNr,"R1"))
 	if Counts < 1:
 		print " " + DictAxis[AxisNr] + ": Manual homing was not performed, aporting homing procedure."
 		return -1
 	
+	# reduce speed so we move slowly into endswitch
 	InitialMaxVelocity = int(ReadParameter(AxisNr, "VM"))
-	SetParameter(AxisNr, "VM", 8000)  # reduce speed so we move slowly into endswitch		
-        SetHomeSwitch(AxisNr, 0)
-	
-	print "Homing Axis " + DictAxis[AxisNr]
+	SetParameter(AxisNr, "VM", 8000)  		
+
+	# start homing procedure
+	SetHomeSwitch(AxisNr, 0)	
+	print " Homing Axis " + DictAxis[AxisNr]
         SendCommand(AxisNr, "HM", 1)
+	
+	# monitor the movement and abort in the movemnt goes out too far from the known zero position
 	while AxisMoving(AxisNr):
 		pos = int(getPosition(AxisNr))
 		if pos < LINEAR_MAX_HOMING_OVERSHOOT:
 			StopMovement(AxisNr)
-			SetParameter(LINEARAXIS, ("R" + str(LINEARAXIS)), 0)
+			SetParameter(AxisNr, ("R1", 0)
 			SetLimitSwitches(AxisNr, 0)
 			print " Position went to far over home switch, movement was stopped"
 			return -1
 		print "\r" + " Position: " + str(pos),
 		sys.stdout.flush()
 		time.sleep(0.1)
+
+	# go back to normal operation
         SetLimitSwitches(AxisNr, 0)
 	SetParameter(AxisNr, "VM", str(InitialMaxVelocity))
-	SetParameter(LINEARAXIS, ("R" + str(LINEARAXIS)), Counts + 1)
+	SetParameter(AxisNr, ("R1", Counts + 1)
         return 0
 
 def ReadParameter(AxisNr, ParameterStr):
