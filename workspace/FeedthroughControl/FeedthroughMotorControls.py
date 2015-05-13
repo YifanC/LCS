@@ -24,6 +24,8 @@ ROTARY_MINVELOCITY = 1000
 ROTARY_ACCELERATION = 30000
 ROTARY_DECELERATION = 30000
 
+LINEAR_MAX_HOMING_OVERSHOOT = -18000
+
 TURNSPERDEGHOR = ONETURN / (3.6)
 TURNSPERDEGVER = ONETURN / 14.501537
 k = 0
@@ -69,7 +71,7 @@ def initLinearAxis():
 
     # set start speed and end speed of the movement
     SetParameter(LINEARAXIS, "VI", 1000)
-    SetParameter(LINEARAXIS, "VM", 40000)
+    SetParameter(LINEARAXIS, "VM", 15000)
 
     # set holding and run current in percent
     SetParameter(LINEARAXIS, "HC", 10)
@@ -190,15 +192,42 @@ def HomeAxis(AxisNr):
         # 4 - Slew at VM in the plus direction and Creep at VI in the plus direction.
 
         while AxisMoving(AxisNr):
-            print "Homing Axis " + DictAxis[AxisNr]
+            
             time.sleep(0.5)
             pos = getPosition(AxisNr)
         print "Axis " + str(AxisNr) + " homed at position: " + pos
         SetLimitSwitches(ROTARYAXIS, 0)
         SetParameter(ROTARYAXIS, "VM", str(InitialMaxVelocity))
     elif AxisNr == LINEARAXIS:
-        print "will not home linear axis: no procedure defined yet!"
-        return -1
+	
+	# check if manual calibration of zero position was performed
+	Counts = int(ReadParameter(LINEARAXIS,("R" + str(LINEARAXIS))))
+	print Counts
+	if Counts < 1:
+		print " " + DictAxis[AxisNr] + ": Manual homing was not performed, aporting homing procedure."
+		return -1
+	
+	InitialMaxVelocity = int(ReadParameter(AxisNr, "VM"))
+	SetParameter(AxisNr, "VM", 8000)  # reduce speed so we move slowly into endswitch		
+        SetHomeSwitch(AxisNr, 0)
+	
+	print "Homing Axis " + DictAxis[AxisNr]
+        SendCommand(AxisNr, "HM", 1)
+	while AxisMoving(AxisNr):
+		pos = int(getPosition(AxisNr))
+		if pos < LINEAR_MAX_HOMING_OVERSHOOT:
+			StopMovement(AxisNr)
+			SetParameter(LINEARAXIS, ("R" + str(LINEARAXIS)), 0)
+			SetLimitSwitches(AxisNr, 0)
+			print " Position went to far over home switch, movement was stopped"
+			return -1
+		print "\r" + " Position: " + str(pos),
+		sys.stdout.flush()
+		time.sleep(0.1)
+        SetLimitSwitches(AxisNr, 0)
+	SetParameter(AxisNr, "VM", str(InitialMaxVelocity))
+	SetParameter(LINEARAXIS, ("R" + str(LINEARAXIS)), Counts + 1)
+        return 0
 
 def ReadParameter(AxisNr, ParameterStr):
     serFeedtrough.write("\n" + str(AxisNr) + "PR " + ParameterStr + "\n")
