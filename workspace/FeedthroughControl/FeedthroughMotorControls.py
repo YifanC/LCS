@@ -30,7 +30,7 @@ k = 0
 
 ########################### Feed-trough control ################################
 def initRotaryAxis():
-    print "----------- Axis " + DictAxis[ROTARYAXIS] + " Initialization -----------"
+    print "----------- " + DictAxis[ROTARYAXIS] + " Initialization -----------"
     # set microstep resolution to maximum
     SetParameter(ROTARYAXIS,"MS", MICROSTEPS)
 
@@ -57,9 +57,8 @@ def initRotaryAxis():
     ##tstart = (maxVelocity-initialVelocity)/acceleration
 
 def initLinearAxis():
-    print "----------- Axis " + DictAxis[LINEARAXIS] + " Initialization -----------"
+    print "----------- " + DictAxis[LINEARAXIS] + " Initialization -----------"
     # set motor settling time in ms
-    #serFeedtrough.write("\n2MT=2000\n")
 
     # set microstep resolution to maximum
     SetParameter(LINEARAXIS, "MS", MICROSTEPS)
@@ -103,8 +102,7 @@ def moveVertical(inst):
     else:
         print 'Axis2: going down ' + str(-inst) + ' microsteps'
 
-    serFeedtrough.write(str(LINEARAXIS) + "MR " + str(inst) + "\n")
-
+    SendCommand(LINEARAXIS, "MR", str(inst))
 
 ##while AxisMoving(2):
 ##        print 'Axis2 Position: ' + getPosition(2)
@@ -115,28 +113,24 @@ def moveHorizontal(inst):
     else:
         print 'Axis1: going right ' + str(-inst) + ' microsteps'
 
-    serFeedtrough.write(str(ROTARYAXIS) + "MR " + str(inst) + "\n")
-
+    SendCommand(ROTARYAXIS, "MR", str(inst))
 
 ##while AxisMoving(1):
 ##        print 'Axis1 Position: ' + getPosition(1)
 
 def moveAbsoluteHorizintal(pos):
     print "Going to " + str(pos)
-
-    serFeedtrough.write(str(ROTARYAXIS) + "MA " + str(pos) + "\n")
+    SendCommand(ROTARYAXIS, "MA", str(pos))
 
 
 def getPosition(AxisNr):
-    serFeedtrough.write("\n" + str(AxisNr) + "PR P\n")
-    reply = serFeedtrough.read(25)
-    return reply
+    reply = ReadParameter(AxisNr,"P")
+    return int(reply)
 
 
 def AxisMoving(AxisNr):
     # returns: 1 if axis is moving, 0 if not. And -1 for non-identifiable answer
-    serFeedtrough.write("\n" + str(AxisNr) + "PR MV\n")
-    reply = serFeedtrough.readline()
+    reply = ReadParameter(AxisNr,"MV")
     if ('0' in reply):
         return 0
     elif ('1' in reply):
@@ -186,9 +180,10 @@ def SetLimitSwitches(AxisNr, Attempts):
 def HomeAxis(AxisNr):
     if AxisNr == ROTARYAXIS:
         InitialMaxVelocity = int(ReadParameter(AxisNr, "VM"))
-        SetParameter(AxisNr, "VM", 15000)  # reduce spped so we move slowly into endswitch
+        SetParameter(AxisNr, "VM", 15000)  # reduce speed so we move slowly into endswitch
         SetHomeSwitch(AxisNr, 0)
-        serFeedtrough.write("\n" + str(AxisNr) + "HM 1\n")
+	time.sleep(2)
+        SendCommand(AxisNr, "HM", 1)
         # 1 - Slew at VM in the minus direction and Creep at VI in the plus direction.
         # 2 - Slew at VM in the minus direction and Creep at VI in the minus direction.
         # 3 - Slew at VM in the plus direction and Creep at VI in the minus direction.
@@ -228,6 +223,9 @@ def MonitorParameter(AxisNr, ParameterStr):
     param = ReadParameter(AxisNr, ParameterStr)
     print ParameterStr + "=" + param
 
+def SendCommand(AxisNr, CommandString, Attribute=""):
+    print " Command sent to " + DictAxis[AxisNr] + ": " + CommandString + " " + str(Attribute) + "\n"
+    serFeedtrough.write("\n" + str(AxisNr) + CommandString + " " + str(Attribute) + "\n")
 
 # open serial ports (select ports)
 def initFeedtrough(COMPort):
@@ -271,7 +269,7 @@ def CalcMovementTimeGeneral(Microsteps, MaxSpeed, MinSpeed, Acceleration, Decele
 
 
 def StopMovement(AxisNr):
-    serFeedtrough.write(str(AxisNr) + "\x1B")
+    SendCommand(AxisNr, "\x1B")
     print "Stop " + DictAxis[AxisNr]
     Move = ReadParameter(AxisNr, "MV")
     print DictAxis[AxisNr] + " MV = " + Move
