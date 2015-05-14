@@ -25,7 +25,7 @@ def ExitAssembler(exitMessage):
 ID_RunControl = 1
 ID_Encoder = 2
 
-# start Assembler
+# start up server
 ctx = zmq.Context()
 Assembler = ctx.socket(zmq.REP)
 Assembler.bind("ipc:///tmp/feed-laser.ipc")
@@ -38,21 +38,27 @@ poller.register(Assembler, zmq.POLLIN)
 RunControlAlive = False
 EncoderAlive = False
 
+# com = communication instance, data = Laser data class
 com = RCCommunication()
+
 data = LaserData()
-# make shure clients are alive
+info = ControlMSG()
+
+
+# make sure clients are alive
 if debug: print "DATA ASSEMBLER INFO: Waiting for clients to connect"
 while (not (RunControlAlive and EncoderAlive)):
 
-    # wait 10 seconds to establish connection to clients
+    # wait 30 seconds to establish connection to clients
     if poller.poll(30 * 1000):
 
-        msgID = com.recvData(Assembler, data)
-        print msgID
-        if msgID == ID_RunControl and RunControlAlive == False:
+        msgID = com.recvData(Assembler, data, info)
+        info.dump()
+
+        if info.ID == ID_RunControl and RunControlAlive == False:
             RunControlAlive = True
             if debug: print "DATA ASSEMBLER INFO: Run Control alive"
-        if msgID == ID_Encoder and EncoderAlive == False:
+        if info.ID == ID_Encoder and EncoderAlive == False:
             EncoderAlive = True
             if debug: print "DATA ASSEMBLER INFO: Encoder alive"
 
@@ -64,9 +70,9 @@ print "DATA ASSEMBLER INFO: All clients alive"
 
 
 # recieve initial data from run control
-msgID = com.recvData(Assembler, data)
+msgID = com.recvData(Assembler, data, info)
 
-if msgID == ID_RunControl:
+if info.ID == ID_RunControl:
     print data.dump()
     com.sendAck(Assembler)
     if debug:
@@ -77,18 +83,17 @@ else:
 
 while True:
     try:
-        msgID = com.recvData(Assembler, data)
-        if msgID == ID_RunControl:
+        msgID = com.recvData(Assembler, data, info)
+        if info.ID == ID_RunControl:
             # recieve message from run control
-            print "new RC data"
-            print data.dump()
+            print "new RC data", info.Status
 
-        if msgID == ID_Encoder:
+        if info.ID == ID_Encoder:
             # recieve data from encoder
 
             data.writeBinary('workfile')
-            print "new EC data"
-            print data.dump()
+            print "new EC data", info.Status
+            print str(data)
         # write to file
 
         com.sendAck(Assembler)
