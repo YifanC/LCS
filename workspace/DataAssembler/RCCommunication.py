@@ -89,6 +89,9 @@ class RCCommunication(object):
 
 
 class ControlMSG(object):
+    ''' Control MSG dict:
+                            -1 : Server started (initial message)
+                            '''
     def __init__(self, ID=-1, Status=-1):
         self.ID = ID
         self.Status = Status
