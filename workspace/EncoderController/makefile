@@ -32,5 +32,5 @@ distclean: clean
 #
 
 encoder: encoder.c
-	gcc $(CFLAGS) -o encoder encoder.c $(EIBLIB) $(ZMQLIB) $(LIBS)
+	gcc $(CFLAGS) -o encoder.o encoder.c $(EIBLIB) $(ZMQLIB) $(LIBS)
 	    
