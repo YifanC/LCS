@@ -91,7 +91,7 @@ while True:
         if info.ID == ID_Encoder:
             # recieve data from encoder
 
-            data.writeBinary('workfile')
+            data.writeBinary('workfile.dat')
             print "new EC data", info.Status
             print str(data)
         # write to file
