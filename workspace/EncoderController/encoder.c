@@ -81,7 +81,10 @@ struct EncData
 };
 
 // Structure of the data sent to the laser data assembler
+
 struct LaserEvent {
+	long int SystemTime_sec;		// epoch time in seconds
+	long int SystemTime_usec;		// This is the rest of the elapsed time
 	float RotaryPosDeg;          //Position Rotary Encoder 
 	float LinearPosDeg;          //Position Linear Encoder 
 	float TriggerCount;    //Trigger Counter by Heidenhain Encoder
@@ -173,7 +176,9 @@ int main(int argc, char *argv[])
    int LinearEncoder = 0;
    int RotaryEncoder = 1;
    // Initialize the laser data evet
-   struct LaserEvent EventData; 
+   struct LaserEvent EventData;
+   EventData.SystemTime_sec = -1;
+   EventData.SystemTime_usec = -1;
    EventData.RotaryPosDeg = -9999.0;
    EventData.LinearPosDeg = -9999.0;
    EventData.TriggerCount = -1.;
@@ -494,7 +499,9 @@ int main(int argc, char *argv[])
          LinearCounts = LinearEncoderData.position  - 7728478;
          EventData.LinearPosDeg = ((float) LinearCounts) /69994.7111;
 
-
+	/* Add time to the struct which is sent to the server */
+   	EventData.SystemTime_sec = SystemTime.tv_sec;
+   	EventData.SystemTime_usec = SystemTime.tv_usec;
 		 // Check if trigger counters are equal as they should
          if (LinearEncoderData.TriggerCounter != RotaryEncoderData.TriggerCounter) {
          	printf("Trigger counts of the two encoders are different, something is wrong here!\n");
