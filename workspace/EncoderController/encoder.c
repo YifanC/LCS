@@ -186,9 +186,9 @@ int main(int argc, char *argv[])
    EventData.LinearPosDeg = -9999.0;
    EventData.TriggerCount = -1.;
 
-   struct EncoderInfo;
+   struct EncoderInfo EncoderInfo;
    EncoderInfo.ID = 2;
-   Encoder.Status = -1;
+   EncoderInfo.Status = -1;
 
    // initialize buffers 
    unsigned char BufferInfo[ sizeof (EncoderInfo) ];
