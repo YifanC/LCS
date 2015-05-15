@@ -75,18 +75,20 @@ class RCCommunication(object):
 
         return ControlMSG.ID
 
-    @classmethod
     def sendAck(self, socket):
         socket.send("OK")
 
-    @classmethod
+    def sendEnd(self, socket):
+        socket.send("XX")
+
     def recvAck(self, socket):
         com = socket.recv()
         if com == "OK":
             return com
         else:
             return "Fail"
-
+    def closeConnection(self, socket):
+        pass
 
 class ControlMSG(object):
     ''' Control MSG dict:
@@ -98,7 +100,7 @@ class ControlMSG(object):
         pass
 
     def dump(self):
-        print "Control Message: ", self.ID, self.Status
+        print "Control Message: ID=", self.ID, " Status=", self.Status
 
 
 class LaserData(object):
@@ -133,8 +135,7 @@ class LaserData(object):
     def __str__(self):
         '''display the data in a readable format'''
         mstr = """DATA INFO
- Laser Trigger Time: {time_sec}:{time_usec}\n Laser ID: {laserid}\n Rotary Position: {pos_rot}\n Linear Position: {pos_lin}\n Attenuator Position: {pos_att}
- Iris Position: {pos_iris}\n Encoder Trigger Count: {count_trigger}\n Run Control Counter: {count_run}\n Laser Shot Count: {count_laser}
+ Laser Trigger Time: {time_sec}:{time_usec}\n Laser ID: {laserid}\n Encoder Trigger Count: {count_trigger}\n Rotary Position: {pos_rot} Linear Position: {pos_lin}\n Attenuator Position: {pos_att} \n Iris Position: {pos_iris}\n Run Control Counter: {count_run}\n Laser Shot Count: {count_laser}
  Laser Box Mirror Position: x={pos_tomg_1_axis1} y={pos_tomg_1_axis2}\n Feedtrough Mirror Position: x={pos_tomg_2_axis1} y={pos_tomg_2_axis2}\n""".format(
             time_sec=self.trigger_time_sec,
             time_usec=self.trigger_time_usec,
