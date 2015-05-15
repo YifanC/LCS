@@ -228,7 +228,7 @@ def HomeAxis(AxisNr):
     # go back to normal operation
     SetLimitSwitches(AxisNr, 0)
     SetParameter(AxisNr, "VM", str(InitialMaxVelocity))
-    SetParameter(AxisNr, ("R1", Counts + 1))
+    SetParameter(AxisNr, "R1", Counts + 1)
     return 0
 
 
