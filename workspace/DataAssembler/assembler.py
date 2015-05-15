@@ -38,7 +38,7 @@ poller.register(Assembler, zmq.POLLIN)
 RunControlAlive = False
 EncoderAlive = False
 
-# com = communication instance, data = Laser data class
+# com = communication instance, data = Laser data class, info = Message Header
 com = RCCommunication()
 
 data = LaserData()
@@ -81,9 +81,10 @@ else:
     com.sendAck(Assembler)
     ExitAssembler("no initial data from run control")
 
+
 while True:
     try:
-        msgID = com.recvData(Assembler, data, info)
+        com.recvData(Assembler, data, info)
         if info.ID == ID_RunControl:
             # recieve message from run control
             print "new RC data", info.Status
@@ -95,10 +96,16 @@ while True:
             print "new EC data", info.Status
             print str(data)
         # write to file
-
         com.sendAck(Assembler)
 
+        if data.count_trigger == 1000:
+            com.sendEnd(Assembler)
+            break
+        else:
+            pass
     except KeyboardInterrupt:
+        com.recvData(Assembler, data, info)
+        com.sendEnd(Assembler)
         ExitAssembler("finished")
 
 

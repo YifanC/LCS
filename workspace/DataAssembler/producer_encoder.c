@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
+#include <getopt.h>
+#include <signal.h>
 
 // includes for timing
 #include <sys/time.h>
@@ -22,6 +24,17 @@ struct EncoderInfo {
     unsigned int Status;
 };
 
+static int stop = 0;
+void CtrlHandler(int sig)
+{
+   if(sig==SIGINT)
+     stop = 1;
+}
+
+
+char BufferReply [2];
+
+
 int main (void)
 {
     struct LaserEvent my_laser_event;
@@ -30,20 +43,19 @@ int main (void)
     struct EncoderInfo EncoderInfo;
 
     EncoderInfo.ID = 2;
-    EncoderInfo.Status = -88;
+    EncoderInfo.Status = 0;
 
     my_laser_event.SystemTime_sec = -1;
     my_laser_event.SystemTime_usec = -1;
-    my_laser_event.RotaryPosDeg = 11.0;          //Position Rotary Heidenhain Encoder
-    my_laser_event.LinearPosDeg = 12.0;          //Position Linear Heidenhain Encoder
-    my_laser_event.TriggerCount = 100000.00;      //Number of pulses shot with UV laser
+    my_laser_event.RotaryPosDeg = -1.;          //Position Rotary Heidenhain Encoder
+    my_laser_event.LinearPosDeg = -1.0;          //Position Linear Heidenhain Encoder
+    my_laser_event.TriggerCount = -1.0;      //Number of pulses shot with UV laser
 
-	unsigned char bufferInfo[ sizeof (EncoderInfo) ];
-	memcpy(&bufferInfo, &EncoderInfo, sizeof(EncoderInfo));
+	unsigned char BufferInfo[ sizeof (EncoderInfo) ];
+	memcpy(&BufferInfo, &EncoderInfo, sizeof(EncoderInfo));
 
-	unsigned char data[ sizeof (my_laser_event) ];
-	memcpy(&data, &my_laser_event, sizeof(my_laser_event));
-
+	unsigned char BufferData[ sizeof (my_laser_event) ];
+	memcpy(&BufferData, &my_laser_event, sizeof(my_laser_event));
 
     //  Socket to talk to clients
     void *context = zmq_ctx_new ();
@@ -51,29 +63,58 @@ int main (void)
     int rc = zmq_connect (encoder, "ipc:///tmp/feed-laser.ipc");
     assert (rc == 0);
 
-    int request_nbr;
-    for (request_nbr = 0; request_nbr != 100; request_nbr++) {
+
+    printf("Sending Hello to assembler\n");
+    zmq_send (encoder,&BufferInfo, sizeof(BufferInfo) , ZMQ_SNDMORE);
+    zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
+	zmq_recv (encoder, BufferReply, 2, 0);
+
+    nanosleep((struct timespec[]){{2, 0}}, NULL);
+
+
+    printf ("Received:%s\n", BufferReply);
+
+
+    int request_nbr = 0;
+
+    while (!stop) {
+        char buffer [2];
+
         gettimeofday (&SystemTime, NULL);
 
         my_laser_event.SystemTime_sec = (float) (SystemTime.tv_sec - 1431636031);
         my_laser_event.SystemTime_usec = (float) SystemTime.tv_usec;
 
-        printf("Epoch Time[s]: %f : %f [us]\n",my_laser_event.SystemTime_sec,my_laser_event.SystemTime_usec);
         printf("Epoch Time[s]: %lu : %lu [us]\n",SystemTime.tv_sec,SystemTime.tv_usec);
+        printf ("Sending Data Package: %d\n", request_nbr);
 
+	    my_laser_event.TriggerCount = (float) request_nbr;
 
-        char buffer [2];
-        printf ("Sending Hello %d...\n", request_nbr);
+	    memcpy(&BufferInfo, &EncoderInfo, sizeof(EncoderInfo));
+	    memcpy(&BufferData, &my_laser_event, sizeof(my_laser_event));
 
-	    memcpy(&data, &my_laser_event, sizeof(my_laser_event));
-        zmq_send (encoder,&bufferInfo, sizeof(bufferInfo) , ZMQ_SNDMORE);
-        zmq_send (encoder, &data, sizeof(data), 0);
-        
+        zmq_send (encoder,&BufferInfo, sizeof(BufferInfo) , ZMQ_SNDMORE);
+        zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
+
         zmq_recv (encoder, buffer, 2, 0);
-        printf ("Received World %d\n", request_nbr);
+
+        if (strcmp(buffer,"OK") == 0) {
+            printf ("Received: %s\n", buffer);
+        }
+        else if (strcmp(buffer,"XX") == 0) {
+            printf ("Received: %s, will end now.", buffer);
+            //stop = 1;
+        }
+        else {
+            printf ("Received: %s did not understand reply. Aborting...", buffer);
+            //stop = 1;
+        }
+        request_nbr += 1;
         nanosleep((struct timespec[]){{0, 500000000}}, NULL);
     }
+
+
+
     zmq_close (encoder);
     zmq_ctx_destroy (context);
-    return 0;
 }
