@@ -4,12 +4,17 @@
 from RCCommunication import *
 import time
 import sys
+import signal
+import subprocess as sub
 
 
 def CloseConnection():
     print "Shutting down zmq poller"
     Producer.close()
     ctx.term()
+
+
+
 
 
 debug = 1

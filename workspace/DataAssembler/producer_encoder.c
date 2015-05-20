@@ -42,6 +42,9 @@ int main (void)
 
     struct EncoderInfo EncoderInfo;
 
+   signal(SIGINT, CtrlHandler);
+   signal(SIGTERM, CtrlHandler);
+
     EncoderInfo.ID = 2;
     EncoderInfo.Status = 0;
 
@@ -61,10 +64,11 @@ int main (void)
     void *context = zmq_ctx_new ();
     void *encoder = zmq_socket (context, ZMQ_REQ);
     int rc = zmq_connect (encoder, "ipc:///tmp/feed-laser.ipc");
+
     assert (rc == 0);
 
-
     printf("Sending Hello to assembler\n");
+
     zmq_send (encoder,&BufferInfo, sizeof(BufferInfo) , ZMQ_SNDMORE);
     zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
 	zmq_recv (encoder, BufferReply, 2, 0);
@@ -78,7 +82,7 @@ int main (void)
     int request_nbr = 0;
 
     while (!stop) {
-        char buffer [2];
+        char buffer [10];
 
         gettimeofday (&SystemTime, NULL);
 
@@ -103,17 +107,17 @@ int main (void)
         }
         else if (strcmp(buffer,"XX") == 0) {
             printf ("Received: %s, will end now.", buffer);
-            //stop = 1;
+            stop = 1;
         }
         else {
             printf ("Received: %s did not understand reply. Aborting...", buffer);
-            //stop = 1;
+            stop = 1;
         }
         request_nbr += 1;
         nanosleep((struct timespec[]){{0, 500000000}}, NULL);
     }
 
-
+    printf ("Shutting down.");
 
     zmq_close (encoder);
     zmq_ctx_destroy (context);
