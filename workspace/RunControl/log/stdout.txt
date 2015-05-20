@@ -1,0 +1,21 @@
+Sending Hello to assembler
+Received:OK
+Epoch Time[s]: 1432090133 : 783503 [us]
+Sending Data Package: 0
+Received: OK
+Epoch Time[s]: 1432090134 : 283965 [us]
+Sending Data Package: 1
+Received: OK
+Epoch Time[s]: 1432090134 : 784437 [us]
+Sending Data Package: 2
+Received: OK
+Epoch Time[s]: 1432090135 : 285427 [us]
+Sending Data Package: 3
+Received: OK
+Epoch Time[s]: 1432090135 : 786313 [us]
+Sending Data Package: 4
+Received: OK
+Epoch Time[s]: 1432090136 : 286688 [us]
+Sending Data Package: 5
+Received: OK
+Shutting down.
