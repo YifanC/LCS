@@ -1,0 +1,10 @@
+#!/bin/bash
+
+CURRENTPATH="$(pwd -P)"
+
+BASE=$CURRENTPATH/base
+DEVICES=$CURRENTPATH/devices
+
+export PYTHONPATH=$PYTHONPATH:$BASE:$DEVICES
+
+
