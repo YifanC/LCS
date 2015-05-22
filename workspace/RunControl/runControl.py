@@ -3,24 +3,27 @@ import time
 import signal
 
 
+def openLogfile(RunNr, service):
+    LogFilenmae = time.strftime("%Y-%m-%d-%H%M-Run-", time.localtime()) + str(RunNr) + str(".log")
+    LogFilePath = "./log/" + str(service)
 
-def StartEncoder(RunNr):
+    OutputLogfile = open(LogFilePath + LogFilenmae, "wb")
 
-def StopEncoder(RunNr):
+    return OutputLogfile
 
-def StartAssembler(RunNr):
+def startEncoder(RunNr):
+    LogfileEncoder = openLogfile(RunNumber, "encoder")
+    ProdEncoder = subprocess.Popen(['./write.o'], stdout=LogfileEncoder)
+    return ProdEncoder
 
-def StopAssembler()
+def stopEncoder():
+    subEncoder.send_signal(signal.SIGINT)
 
-RunNumber
-LogFilenmae = time.strftime("%Y-%m-%d-%H%M", time.localtime()) + str(RunNumber) + str(".log")
-OutputLogfile = open("log/stdout.txt", "wb")
 
-ProdEncoder = subprocess.Popen(['../write'], stdout=OutputLogfile)
-
+RunNumber = 000
+subEncoder = startEncoder(0)
 time.sleep(5)
 
-ProdEncoder.send_signal(signal.SIGINT)
-OutputLogfile.close()
+stopEncoder()
 
 
