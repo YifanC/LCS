@@ -23,3 +23,5 @@
 *.idea/
 *.xml
 workspace/RunControl/.idea/
+workspace/RunControl/log/*
+
