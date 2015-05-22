@@ -1,6 +1,6 @@
 __author__ = 'matthias'
 
-from base.base import *
+from base import *
 
 class Feedtrough(MotorControl):
     def __init__(self, name, axis):
@@ -28,8 +28,6 @@ class Feedtrough(MotorControl):
         msg = parameter + "=" + str(value)
         self.com_write(msg)
         SetValue = self.getParameter(parameter)
-        print "now"
-        time.sleep(4)
 
         string = "Set " + parameter + "=" + str(value)
 
@@ -44,4 +42,4 @@ class Feedtrough(MotorControl):
         msg = "PR " + parameter
         self.com_write(msg)
         reply = self.com_recv()
-        return reply
+        return reply[:-2]
