@@ -20,21 +20,20 @@ class Device(object):
         print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
 
     def printError(self, string):
-        print bcolors.WARNING + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+        print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
 
 
-class Motor(Device):
+class MotorControl(Device):
     def __init__(self, comport):
         self.com = serial.Serial()
         self.comBaudrate = 9600
         self.comport = comport
         self.InfoInstruction = None
         self.InfoMsgLength = None
-        self.StandartMsgLength = None
+        self.StandardMsgLength = None
         self.comEnd = None
 
-    def device_type(self):
-        pass
+        self.NumberOfAxes = 1
 
     def com_init(self):
         """ Tries to open com port specified in comport """
@@ -68,7 +67,7 @@ class Motor(Device):
 
             sys.exit(1)
 
-    def com_recv(self,msg_length):
+    def com_recv(self, msg_length=10):
         """ read message to comport """
         try:
             self.com.isOpen()

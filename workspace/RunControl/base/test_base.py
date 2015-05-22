@@ -1,8 +1,8 @@
 __author__ = 'matthias'
 
-from attenuator import *
+from base import *
 
-motor1 = Motor("/dev/pts/18")
+motor1 = MotorControl("/dev/pts/18")
 
 motor1.name = "motor1"
 motor1.comEnd = ""
@@ -15,10 +15,3 @@ test = motor1.com_recv(800)
 
 motor1.com_close()
 
-att = Attenuator()
-att.com_init()
-
-att.printComStatus()
-
-att.getInfo()
-att.com_close()
