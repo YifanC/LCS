@@ -16,8 +16,12 @@ class Device(object):
         self.com = com
         self.state = 0
 
-    def printMsg(self, string):
-        print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
+    def printMsg(self, string, nonewline=False):
+        if nonewline:
+            print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string,
+        else:
+            print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
+
 
     def printError(self, string):
         print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC

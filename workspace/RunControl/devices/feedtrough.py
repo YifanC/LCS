@@ -18,6 +18,40 @@ class Feedtrough(MotorControl):
 
         self.MICROSTEPS = 256
 
+        if self.name.find("linear") >= 0:
+            self.ACCELERATION = 50000
+            self.DECELLERATION = 50000
+            self.INITIALVELOCITY = 1000
+            self.ENDVELOCITY = 15000
+            self.HOLDCURRENT = 10
+            self.RUNCURRENT = 80
+
+            self.HOMINGVELOCITY = 8000
+            self.MAX_HOMING_OVERSHOOT = -18000
+
+        if self.name.find("rotary") >= 0:
+            self.ACCELERATION = 30000
+            self.DECELLERATION = 30000
+            self.INITIALVELOCITY = 1000
+            self.ENDVELOCITY = 15000
+            self.HOLDCURRENT = 5
+            self.RUNCURRENT = 80
+
+            self.HOMINGVELOCITY = 15000
+            self.MAX_HOMING_OVERSHOOT = -18000
+
+        else:
+            self.printError("Could not recognize axis type, please provide manual configuration")
+            self.ACCELERATION = None
+            self.DECELLERATION = None
+            self.INITIALVELOCITY = None
+            self.ENDVELOCITY = None
+            self.HOLDCURRENT = None
+            self.RUNCURRENT = None
+
+            self.HOMINGVELOCITY = None
+            self.MAX_HOMING_OVERSHOOT = None
+
     def com_write(self, msg):
         """ write message to, overwriting the base.com_write function adding the axis preamble """
         try:
@@ -27,7 +61,20 @@ class Feedtrough(MotorControl):
             self.printError("Could not write message \"" + msg + "\" to com port (" + self.com.portstr + ")")
 
     def initAxis(self):
-        pass
+        self.setParameter("A", self.ACCELERATION)
+        self.setParameter("D", self.DECELLERATION)
+        self.setParameter("VI", self.INITIALVELOCITY)
+        self.setParameter("VM", self.ENDVELOCITY)
+
+        self.setParameter("HC", self.HOLDCURRENT)
+        self.setParameter("RC", self.RUNCURRENT)
+
+        # disable unused switches
+        self.setParameter("S3", "0,0,0")
+        self.setParameter("S4", "0,0,0")
+
+        self.setLimitSwitches(0)
+
 
     def setParameter(self, parameter, value):
         msg = parameter + "=" + str(value)
@@ -107,3 +154,32 @@ class Feedtrough(MotorControl):
         if set != 0:
             self.printMsg("home switch was not set correctly")
             self.setHomeSwitch(attempts + 1)
+
+    def homeAxis(self):
+        # check if manual homing was performed
+        counts = int(self.getParameter("R1"))
+        if counts < 1:
+            self.printMsg("Manual homing was not performed, aporting homing procedure")
+            return -1
+
+        self.setParameter("VM", self.HOMINGVELOCITY)
+        self.setHomeSwitch(0)
+        self.printMsg("Homing")
+        self.sendCommand("HM", 1)
+
+        # monitor the movement and abort in the movement goes out too far from the known zero position
+        self.printMsg("Position:")
+        while self.isMoving():
+            pos = int(self.getPosition())
+            if pos < self.MAX_HOMING_OVERSHOOT:
+                self.stopMovement()
+                self.setParameter("R1", 0)
+                self.setLimitSwitches(0)
+                self.printError(" Position went to far over home switch, movement was stopped")
+                return -1
+            self.printMsg("\r" + str(pos), nonewline=True)
+            time.sleep(0.1)
+
+        self.setLimitSwitches(0)
+        self.setParameter("VM",self.ENDVELOCITY)
+        self.setParameter("R1", counts + 1)
