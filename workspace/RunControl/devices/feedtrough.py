@@ -8,7 +8,7 @@ class Feedtrough(MotorControl):
         self.state = 0
         self.comport = "/dev/ttyUSB0"
         self.comBaudrate = 9600
-        self.InfoInstruction = "PR AL"
+        self.InfoInstruction = None
         self.InfoMsgLength = 800
         self.StandartMsgLength = 10
         self.comEnd = "\n"
@@ -29,7 +29,7 @@ class Feedtrough(MotorControl):
             self.HOMINGVELOCITY = 8000
             self.MAX_HOMING_OVERSHOOT = -18000
 
-        if self.name.find("rotary") >= 0:
+        elif self.name.find("rotary") >= 0:
             self.ACCELERATION = 30000
             self.DECELLERATION = 30000
             self.INITIALVELOCITY = 1000
