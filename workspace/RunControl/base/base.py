@@ -34,6 +34,9 @@ class ComSerial(Device):
         self.comBaudrate = 9600
         self.comTimeout = 0.1
         self.comport = comport
+
+	self.comEcho = False
+
         self.InfoInstruction = None
         self.InfoMsgLength = None
         self.StandardMsgLength = None
@@ -64,15 +67,23 @@ class ComSerial(Device):
 
         self.printMsg("Com port (" + self.com.port + ") closed")
 
-    def com_write(self, msg):
+    def com_write(self, message):
         """ write message to comport """
-
+	msg = self.comPrefix + message
         self.com.isOpen()
-        self.com.write(self.comPrefix + msg + self.comEnd)
+        self.com.write(msg + self.comEnd)
+
+	if self.comEcho is True:
+		reply = self.com_recv(len(msg))
+		if reply == self.comPrefix + message:
+			return 0
+		else:
+			self.printError("Echo expected but was different / not received: " + reply )
+			return -1
 
 
     def com_recv(self, msg_length=10):
-        """ read message to comport """
+        """ read message from comport """
         try:
             self.com.isOpen()
             msg = self.com.read(msg_length)
@@ -101,7 +112,7 @@ class Motor(ComSerial):
                                "getPosition": None,
                                "moveAbsolute": None,
                                "moveRelative": None}
-
+	
         self.comDefaultReplyLength = None
         self.comInfoReplyLength = None
 
@@ -138,11 +149,10 @@ class Motor(ComSerial):
         self.com_write(msg)
 
         SetValue = self.getParameter(parameter)
-
         string = "Set " + parameter + "=" + str(value)
 
         if SetValue == str(value):
-            self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC)
+            self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
             return 0
         else:
             self.printError(string + " failed")
@@ -152,15 +162,19 @@ class Motor(ComSerial):
         msg = self.InstructionSet["stopMovement"]
         self.com_write(msg)
 
-    def moveRelative(self):
-        msg = self.InstructionSet["moveRelative"]
+    def moveRelative(self, value):
+        msg = self.InstructionSet["moveRelative"] + self.comSetCommand + str(value)
         self.com_write(msg)
 
-    def moveAbsolute(self):
-        msg = self.InstructionSet["moveAbsolute"]
+    def moveAbsolute(self, value):
+        msg = self.InstructionSet["moveAbsolute"] + self.comSetCommand + str(value)
         self.com_write(msg)
 
-
+    def getPosition(self):
+        msg = self.InstructionSet["getPosition"]
+        self.com_write(msg)
+        reply = self.com_recv(self.comDefaultReplyLength)
+	return reply
 
 class bcolors:
     HEADER = '\033[95m'

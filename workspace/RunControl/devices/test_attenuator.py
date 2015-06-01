@@ -1,14 +1,18 @@
 __author__ = 'matthias'
 
-from devices.attenuator import *
+from attenuator import *
 
 att = Attenuator()
 att.comTimeout = 2
-att.comport = "/dev/pts/10"
+att.comport = "/dev/ttyUSB9"
 att.com_init()
 #
 #  att.getParameter("acceleration")
-#att.getInfo(True)
+att.getInfo(True)
 
-att.setParameter("acceleration", 10000)
-att.com_close()
+while att.isMoving():
+	print att.getPosition()
+
+print att.getPosition()
+
+

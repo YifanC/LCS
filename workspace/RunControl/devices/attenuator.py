@@ -1,6 +1,6 @@
 __author__ = 'matthias'
 
-from base.base import *
+from base import *
 
 class Attenuator(Motor):
     def __init__(self):
@@ -8,9 +8,11 @@ class Attenuator(Motor):
         self.state = 0
         self.comport = None
         self.comBaudrate = 38400
+	self.comTimeout = 0.5
+	self.comEcho = True
         self.InfoInstruction = "p"
         self.InfoMsgLength = 100
-        self.StandartMsgLength = 10
+        self.StandardMsgLength = 10
         self.comEnd = "\r"
 
         self.InstructionSet = {"getInfo": "p",
@@ -22,18 +24,25 @@ class Attenuator(Motor):
                                "idleCurrent": "ws",
                                "breakMovement": "b",
                                "stopMovement": "st",
-                               "isMoving": None,
-                               "getPosition": None,
+                               "isMoving": "o",
+                               "getPosition": "o",
                                "moveAbsolute": "g",
-                               "moveRelative": "m"}
+                               "moveRelative": "m",
+			       "hardwareHome": "zp",
+			       "reset@Zero": "zr",
+				"setHome": "h"}
 
-        self.comDefaultReplyLength = 10
+        self.comDefaultReplyLength = 200
         self.comInfoReplyLength = 100
 
         self.comPrefix = ""
         self.comSetCommand = " "
         self.comGetCommand = ""
         self.comEnd = "\r"
+
+	"""" Calibration of Attenuator """
+
+
 
     def getParameter(self, parameter):
 
@@ -49,8 +58,47 @@ class Attenuator(Motor):
         endStrinValue = reply[startStringValue:].find(" ") + startStringValue
 
         parameterValue = reply[startStringValue:endStrinValue]
-
         return parameterValue
 
-    def home(self):
-        pass
+    def getPosition(self):
+	""" the reply look as follows: [1]:[2] where [1] is a number indicating if the motor is moving or not (0 - idle, 
+	1,2,3 - moving), and [2] ist the absolute position."""
+        msg = self.InstructionSet["getPosition"]
+        self.com_write(msg)
+        reply = self.com_recv(self.comDefaultReplyLength)
+	
+	semicolon_pos = reply.find(";")
+	return float(reply[(semicolon_pos + 1):-2])
+
+    def isMoving(self):
+	""" This function returns True if the motor is moving and False if it is not"""
+        msg = self.InstructionSet["getPosition"]
+        self.com_write(msg)
+        reply = self.com_recv(self.comDefaultReplyLength)
+	
+	if reply[:1] is "0":
+		return False
+	else:
+		return True
+
+    def setZero(self):
+	""" Set the current position as the new zero transmission position """
+	pass
+
+    def zero(self, really=0):
+	# TODO: when driving to zero position a strange reply is sent, because of that the following echo has an additional
+	# character. This will crash the program.
+	""" Go to the home switch (hardware switch) and reset position counter """
+	self.printMsg("Going to hardware home switch")
+	msg = self.InstructionSet["hardwareHome"]
+        self.com_write(msg)
+
+    def getTransmission(self):
+	pass
+
+    def setTransmission(self, value):
+	if 0 > value > 100:
+		self.printError("Transmission value out of bounds")
+		return -1
+	return 0
+
