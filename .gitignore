@@ -21,7 +21,6 @@
 *.png
 *.ipynb
 *.idea/
-*.xml
-workspace/RunControl/.idea/*
-workspace/RunControl/log/*
+/workspace/RunControl/.idea/*
+/workspace/RunControl/log/*
 
