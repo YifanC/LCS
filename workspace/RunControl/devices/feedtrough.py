@@ -2,7 +2,7 @@ __author__ = 'matthias'
 
 from base.base import *
 
-class Feedtrough(MotorControl):
+class Feedtrough(Motor):
     def __init__(self, name, axis):
         self.name = name
         self.state = 0
@@ -12,6 +12,10 @@ class Feedtrough(MotorControl):
         self.InfoMsgLength = 800
         self.StandartMsgLength = 10
         self.comEnd = "\n"
+
+        # TODO: Implement this class into new Motor class
+        self.InstructionSet = {"getInfo": "PR ALL"}
+        self.comInfoReplyLength = 800
 
         self.axis = axis
         self.homeSwitch = "S1"

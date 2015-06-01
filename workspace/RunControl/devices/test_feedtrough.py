@@ -7,8 +7,8 @@ from devices.feedtrough import *
 LinearMotor = Feedtrough("linear actuator", 1)
 RotaryMotor = Feedtrough("rotary actuator", 1)
 
-LinearMotor.comport = "/dev/pts/26"
-#LinearMotor.com_init()
+LinearMotor.comport = "/dev/pts/14"
+LinearMotor.com_init()
 print LinearMotor.name
 
 LinearMotor.getInfo(True)

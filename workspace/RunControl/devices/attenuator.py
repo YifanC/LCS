@@ -32,6 +32,7 @@ class Attenuator(Motor):
 
         self.comPrefix = ""
         self.comSetCommand = " "
+        self.comGetCommand = ""
         self.comEnd = "\r"
 
     def getParameter(self, parameter):
@@ -51,3 +52,5 @@ class Attenuator(Motor):
 
         return parameterValue
 
+    def home(self):
+        pass

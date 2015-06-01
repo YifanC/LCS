@@ -5,11 +5,11 @@ from base.base import *
 
 class Attenuator(Motor):
     def __init__(self):
-        self.name = "attenuator"
+        self.name = "aperture"
         self.state = 0
         self.comport = None
-        self.comBaudrate = 38400
-        self.InfoInstruction = "p"
+        self.comBaudrate = 9600
+        self.InfoInstruction = ""
         self.InfoMsgLength = 100
         self.StandartMsgLength = 10
         self.comEnd = "\r"
@@ -32,7 +32,8 @@ class Attenuator(Motor):
         self.comInfoReplyLength = 100
 
         self.comPrefix = "A1"
-        self.comSetCommand = ""
+        self.comSetCommand = "s"
+        self.comGetCommand = "t"
         self.comEnd = "\r"
 
     def turnOn(self):

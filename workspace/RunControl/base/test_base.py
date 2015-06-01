@@ -2,7 +2,7 @@ __author__ = 'matthias'
 
 from base import *
 
-motor1 = MotorControl("/dev/pts/18")
+motor1 = ComSerial("/dev/pts/18")
 
 motor1.name = "motor1"
 motor1.comEnd = ""

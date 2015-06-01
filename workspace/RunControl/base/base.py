@@ -28,10 +28,11 @@ class Device(object):
         print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
 
 
-class MotorControl(Device):
+class ComSerial(Device):
     def __init__(self, comport):
         self.com = serial.Serial()
         self.comBaudrate = 9600
+        self.comTimeout = 0.1
         self.comport = comport
         self.InfoInstruction = None
         self.InfoMsgLength = None
@@ -65,13 +66,10 @@ class MotorControl(Device):
 
     def com_write(self, msg):
         """ write message to comport """
-        try:
-            self.com.isOpen()
-            self.com.write(self.comPrefix + msg + self.comEnd)
-        except:
-            self.printError("Could not write message \"" + msg + "\" to com port (" + self.com.portstr + ")")
 
-            sys.exit(1)
+        self.com.isOpen()
+        self.com.write(self.comPrefix + msg + self.comEnd)
+
 
     def com_recv(self, msg_length=10):
         """ read message to comport """
@@ -86,19 +84,8 @@ class MotorControl(Device):
     def printComStatus(self):
         self.printMsg(str(self.com))
 
-    def getInfo(self, output=False):
-        """ If output is set an the answer from """
-        if self.InfoInstruction != None and self.InfoMsgLength != None:
-            self.com_write(self.InfoInstruction)
-            infomsg = self.com_recv(self.InfoMsgLength)
 
-            if output == True:
-                self.printMsg("Info:\n" + infomsg)
-        else:
-            self.printError("Info instruction or answer length is not defined")
-
-
-class Motor(MotorControl):
+class Motor(ComSerial):
     """" At tje moment only an idea of a nice classe """
     def __init__(self):
         self.InstructionSet = {"getInfo": None,
@@ -120,6 +107,7 @@ class Motor(MotorControl):
 
         self.comPrefix = None
         self.comSetCommand = None
+        self.comGetCommand = None
         self.comEnd = None
 
     def getInfo(self, output=False):
@@ -135,6 +123,15 @@ class Motor(MotorControl):
 
         else:
             self.printError("Info instruction or answer length is not defined")
+
+    def getParameter(self, parameter):
+        msg = self.comGetCommand + self.InstructionSet[parameter]
+        self.com_write(msg)
+        reply = self.com_recv(self.comDefaultReplyLength)
+        if reply == "":
+            self.printError("No reply received")
+
+        return reply
 
     def setParameter(self, parameter, value):
         msg = self.InstructionSet[parameter] + self.comSetCommand + str(value)
@@ -162,6 +159,7 @@ class Motor(MotorControl):
     def moveAbsolute(self):
         msg = self.InstructionSet["moveAbsolute"]
         self.com_write(msg)
+
 
 
 class bcolors:
