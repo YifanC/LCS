@@ -120,13 +120,12 @@ class Attenuator(Motor):
     def getTransmission(self):
         pos = self.getPosition() - self.offsetZeroTrans
         angle = pos / (self.stepsperdegree * self.microsteps)
-        transmission = (1. - cos(radians(angle)))**2
+        transmission = (1. - cos(radians(angle))**2)
 
         return transmission
 
     def setTransmission(self, value, monitor=True, display=True):
         value = float(value)
-        k = 43.333  # steps / degree resolution from manual
 
         if 0. >= value >= 1.:
             self.printError("Transmission value out of bounds")
