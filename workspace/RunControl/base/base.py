@@ -78,7 +78,7 @@ class ComSerial(Device):
 		if reply == self.comPrefix + message:
 			return 0
 		else:
-			self.printError("Echo expected but was different / not received: " + reply )
+			self.printError("Echo expected but was different or not received: " + reply )
 			return -1
 
 
