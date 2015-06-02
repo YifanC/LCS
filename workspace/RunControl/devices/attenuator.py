@@ -1,6 +1,6 @@
 __author__ = 'matthias'
 
-from base.base import *
+from base import *
 from math import cos, acos, sqrt, degrees, radians, floor
 
 
@@ -123,8 +123,10 @@ class Attenuator(Motor):
         steps = degrees(acos(sqrt(1. - value))) * self.stepsperdegree * self.microsteps
         move = floor(steps) + self.offsetZeroTrans
         self.moveAbsolute(move)
-
-        if (monitor is True) or (display is True):
+	print move
+        if (display is True):
+	    time.sleep(1)
+	    pos = self.getPosition()
             while self.isMoving():
                 pos = self.getPosition()
                 if display is True:
@@ -134,6 +136,6 @@ class Attenuator(Motor):
                 self.printMsg("Set transmission to: " + str(value*100) + "%")
                 return 0
             else:
-                self.printError("Could not set transmission")
+                #self.printError("Could not set transmission")
                 return -1
         return 0

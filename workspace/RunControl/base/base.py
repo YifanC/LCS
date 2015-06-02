@@ -10,6 +10,7 @@ class Device(object):
     dictState = {0: "Not Initialized",
                  1: "Ready",
                  2: "Error"}
+    color = True
 
     def __init__(self, name, com):
         self.name = name
@@ -24,7 +25,10 @@ class Device(object):
 
 
     def printError(self, string):
-        print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+	if color is True:
+            print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+	else:
+            print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
 
 
 class ComSerial(Device):
@@ -72,15 +76,6 @@ class ComSerial(Device):
         self.com.isOpen()
         self.com.write(msg + self.comEnd)
 
-<<<<<<< HEAD
-	if self.comEcho is True:
-		reply = self.com_recv(len(msg))
-		if reply == self.comPrefix + message:
-			return 0
-		else:
-			self.printError("Echo expected but was different or not received: " + reply )
-			return -1
-=======
         if self.comEcho is True:
             reply = self.com_recv(len(msg))
             if reply == self.comPrefix + message:
@@ -88,8 +83,6 @@ class ComSerial(Device):
             else:
                 self.printError("Echo expected but was different / not received: " + reply)
                 return -1
->>>>>>> 42ff7d714e6733d1a43455beb64637f8f1a284a0
-
 
     def com_recv(self, msg_length=10):
         """ read message from comport """
@@ -162,7 +155,8 @@ class Motor(ComSerial):
         string = "Set " + parameter + "=" + str(value)
 
         if SetValue == str(value):
-            self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
+            #self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
+	    self.printMsg(string + " -> OK", True)
             return 0
         else:
             self.printError(string + " failed")

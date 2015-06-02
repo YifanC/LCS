@@ -1,6 +1,6 @@
 __author__ = 'matthias'
 
-from devices.attenuator import *
+from attenuator import *
 
 att = Attenuator()
 att.comTimeout = 2
