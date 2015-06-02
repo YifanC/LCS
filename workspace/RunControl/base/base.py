@@ -7,7 +7,6 @@ import time
 
 
 class Device(object):
-
     dictState = {0: "Not Initialized",
                  1: "Ready",
                  2: "Error"}
@@ -35,7 +34,7 @@ class ComSerial(Device):
         self.comTimeout = 0.1
         self.comport = comport
 
-	self.comEcho = False
+        self.comEcho = False
 
         self.InfoInstruction = None
         self.InfoMsgLength = None
@@ -69,10 +68,11 @@ class ComSerial(Device):
 
     def com_write(self, message):
         """ write message to comport """
-	msg = self.comPrefix + message
+        msg = self.comPrefix + message
         self.com.isOpen()
         self.com.write(msg + self.comEnd)
 
+<<<<<<< HEAD
 	if self.comEcho is True:
 		reply = self.com_recv(len(msg))
 		if reply == self.comPrefix + message:
@@ -80,6 +80,15 @@ class ComSerial(Device):
 		else:
 			self.printError("Echo expected but was different or not received: " + reply )
 			return -1
+=======
+        if self.comEcho is True:
+            reply = self.com_recv(len(msg))
+            if reply == self.comPrefix + message:
+                return 0
+            else:
+                self.printError("Echo expected but was different / not received: " + reply)
+                return -1
+>>>>>>> 42ff7d714e6733d1a43455beb64637f8f1a284a0
 
 
     def com_recv(self, msg_length=10):
@@ -98,6 +107,7 @@ class ComSerial(Device):
 
 class Motor(ComSerial):
     """" At tje moment only an idea of a nice classe """
+
     def __init__(self):
         self.InstructionSet = {"getInfo": None,
                                "maxSpeed": None,
@@ -112,7 +122,7 @@ class Motor(ComSerial):
                                "getPosition": None,
                                "moveAbsolute": None,
                                "moveRelative": None}
-	
+
         self.comDefaultReplyLength = None
         self.comInfoReplyLength = None
 
@@ -163,10 +173,12 @@ class Motor(ComSerial):
         self.com_write(msg)
 
     def moveRelative(self, value):
+        value = int(value)
         msg = self.InstructionSet["moveRelative"] + self.comSetCommand + str(value)
         self.com_write(msg)
 
     def moveAbsolute(self, value):
+        value = int(value)
         msg = self.InstructionSet["moveAbsolute"] + self.comSetCommand + str(value)
         self.com_write(msg)
 
@@ -174,7 +186,8 @@ class Motor(ComSerial):
         msg = self.InstructionSet["getPosition"]
         self.com_write(msg)
         reply = self.com_recv(self.comDefaultReplyLength)
-	return reply
+        return reply
+
 
 class bcolors:
     HEADER = '\033[95m'

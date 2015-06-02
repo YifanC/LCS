@@ -1,6 +1,6 @@
 __author__ = 'matthias'
 
-from attenuator import *
+from devices.attenuator import *
 
 att = Attenuator()
 att.comTimeout = 2
@@ -11,7 +11,7 @@ att.com_init()
 att.getInfo(True)
 
 while att.isMoving():
-	print att.getPosition()
+    print att.getPosition()
 
 print att.getPosition()
 
