@@ -10,7 +10,7 @@ class Attenuator(Motor):
         self.state = 0
         self.comport = None
         self.comBaudrate = 38400
-        self.comTimeout = 0.5
+        self.comTimeout = 1
         self.comEcho = True
         self.InfoInstruction = "p"
         self.InfoMsgLength = 100
@@ -77,9 +77,8 @@ class Attenuator(Motor):
         msg = self.InstructionSet["getPosition"]
         self.com_write(msg)
         reply = self.com_recv(self.comDefaultReplyLength)
-
         semicolon_pos = reply.find(";")
-        return float(reply[(semicolon_pos + 1):-2])
+        return float(reply[(semicolon_pos + 1):])
 
     def isMoving(self):
         """ This function returns True if the motor is moving and False if it is not"""
@@ -92,17 +91,31 @@ class Attenuator(Motor):
         else:
             return True
 
-    def setZero(self):
-        """ Set the current position as the new zero transmission position """
-        pass
+    def setZero(self, value=None):
+        """ Set the current position (if no value is supplied) as the new zero transmission position """
 
-    def zero(self, really=0):
-        # TODO: when driving to zero position a strange reply is sent, because of that the following echo has an additional
-        # character. This will crash the program.
+        if self.isMoving():
+            self.printError("motor is moving, will not set zero position")
+            return -1
+	if value == None:
+        	pos = self.getPosition()
+        	self.printMsg("New zero transmission position offset is " + str(pos))
+        	self.offsetZeroTrans = pos
+	else:
+        	self.printMsg("New zero transmission position offset is " + str(value))
+        	self.offsetZeroTrans = value		
+
+    def home(self):
         """ Go to the home switch (hardware switch) and reset position counter """
         self.printMsg("Going to hardware home switch")
         msg = self.InstructionSet["hardwareHome"]
         self.com_write(msg)
+
+    def zero(self):
+        """ Go to the home switch (hardware switch) and reset position counter """
+        self.printMsg("Going to zero transmission position")
+        self.moveAbsolute(self.offsetZeroTrans)
+	
 
     def getTransmission(self):
         pos = self.getPosition() - self.offsetZeroTrans
@@ -111,7 +124,7 @@ class Attenuator(Motor):
 
         return transmission
 
-    def setTransmission(self, value, monitor=False, display=False):
+    def setTransmission(self, value, monitor=True, display=True):
         value = float(value)
         k = 43.333  # steps / degree resolution from manual
 
@@ -120,22 +133,15 @@ class Attenuator(Motor):
             return -1
 
         # numner of steps to be driven from the zero transmission position
-        steps = degrees(acos(sqrt(1. - value))) * self.stepsperdegree * self.microsteps
-        move = floor(steps) + self.offsetZeroTrans
-        self.moveAbsolute(move)
-	print move
-        if (display is True):
-	    time.sleep(1)
-	    pos = self.getPosition()
-            while self.isMoving():
-                pos = self.getPosition()
-                if display is True:
-                    self.printMsg("Position: " + str(pos))
+        steps = floor(degrees(acos(sqrt(1. - value))) * self.stepsperdegree * self.microsteps)
 
-            if pos == steps:
-                self.printMsg("Set transmission to: " + str(value*100) + "%")
-                return 0
-            else:
-                #self.printError("Could not set transmission")
-                return -1
+        position = steps + self.offsetZeroTrans
+        reachedposition = self.moveAbsolute(position, monitor, display)
+
+        if reachedposition == 0:
+	    self.printMsg("Set transmission to: " + str(value*100) + "%")
+            return 0
+	else:
+            self.printError("Could not set transmission")
+            return -1
         return 0

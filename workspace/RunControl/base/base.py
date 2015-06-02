@@ -25,7 +25,7 @@ class Device(object):
 
 
     def printError(self, string):
-	if color is True:
+	if self.color is True:
             print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
 	else:
             print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
@@ -171,16 +171,45 @@ class Motor(ComSerial):
         msg = self.InstructionSet["moveRelative"] + self.comSetCommand + str(value)
         self.com_write(msg)
 
-    def moveAbsolute(self, value):
+    def moveAbsolute(self, value, monitor=False, display=False, delta=10):
+	""" Moving motor to an absolute position, the movement can be monitored if an getPosition and a isMoving function
+	is supplied. """
         value = int(value)
         msg = self.InstructionSet["moveAbsolute"] + self.comSetCommand + str(value)
         self.com_write(msg)
+	
+	if (display is True) or (monitor is True):
+            position_reached = self.monitorPosition(value, display, delta)
+	    if position_reached == 0:
+		return 0
+	    else:
+		return -1
+	return 0
+    
 
     def getPosition(self):
         msg = self.InstructionSet["getPosition"]
         self.com_write(msg)
         reply = self.com_recv(self.comDefaultReplyLength)
         return reply
+
+    def monitorPosition(self,endPosition, display=True, delta = 10):
+	time.sleep(0.1)            
+	pos = self.getPosition()	
+	while self.isMoving():
+             if display is True:
+		self.printMsg("Position: " + str(pos))
+		pos = self.getPosition()
+		time.sleep(0.1)
+
+	pos = self.getPosition()
+	if display is True:
+		self.printMsg("Position: " + str(pos))
+	# check if position was reached
+	if (endPosition - delta) <= pos <= (endPosition + delta):
+		return 0
+	else:
+		return -1
 
 
 class bcolors:
