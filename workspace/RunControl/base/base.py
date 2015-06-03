@@ -236,7 +236,7 @@ class Motor(ComSerial):
 
 
     def getPosition(self):
-        msg = self.InstructionSet["getPosition"]
+        msg = self.comGetCommand + self.InstructionSet["getPosition"]
         self.com_write(msg)
         reply = self.com_recv(self.comDefaultReplyLength)
         return reply
