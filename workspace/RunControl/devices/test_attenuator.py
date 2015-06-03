@@ -9,16 +9,14 @@ att.comport = "/dev/ttyUSB9"
 #att.com_init()
 att.color = False
 
-print att.config.a
 
+att.config.microstep_resolution = 3.0
+
+att.setZero(123.)
 
 #
 # att.getParameter("acceleration")
-att.getInfo(True)
+#att.getInfo(True)
 
-while att.isMoving():
-    print att.getPosition()
-
-print att.getPosition()
 
 

@@ -18,8 +18,9 @@ class Attenuator(Motor):
         self.comEnd = "\r"
         self.color = True
 
+        # config file
         self.config_setfile()
-        self.config_load(self.configfilename)
+        self.config_load()
 
         self.InstructionSet = {"getInfo": "p",
                                "startSpeed": None,
@@ -100,9 +101,9 @@ class Attenuator(Motor):
     def setZero(self, value=None):
         """ Set the current position (if no value is supplied) as the new zero transmission position """
 
-        if self.isMoving():
-            self.printError("motor is moving, will not set zero position")
-            return -1
+        #if self.isMoving():
+        #    self.printError("motor is moving, will not set zero position")
+        #    return -1
         if value == None:
             pos = self.getPosition()
             self.printMsg("New zero transmission position offset is " + str(pos))
@@ -110,6 +111,9 @@ class Attenuator(Motor):
         else:
             self.printMsg("New zero transmission position offset is " + str(value))
             self.offsetZeroTrans = value
+
+        self.config.ZERO_TRANSMISSION_OFFSET = self.offsetZeroTrans
+        self.config_dump()
 
     def home(self):
         """ Go to the home switch (hardware switch) and reset position counter """

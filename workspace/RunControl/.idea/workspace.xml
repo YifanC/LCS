@@ -26,8 +26,8 @@
       <file leaf-file-name="base.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/base/base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="558" max-vertical-offset="4500">
-              <caret line="40" column="71" selection-start-line="40" selection-start-column="71" selection-end-line="40" selection-end-column="71" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="504" max-vertical-offset="4590">
+              <caret line="57" column="32" selection-start-line="57" selection-start-column="32" selection-end-line="57" selection-end-column="32" />
               <folding>
                 <element signature="e#25#38#0" expanded="true" />
               </folding>
@@ -35,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="attenuator.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="attenuator.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/devices/attenuator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.25852272" vertical-offset="1978" max-vertical-offset="2844">
-              <caret line="120" column="44" selection-start-line="120" selection-start-column="44" selection-end-line="120" selection-end-column="44" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="2916">
+              <caret line="114" column="44" selection-start-line="114" selection-start-column="44" selection-end-line="114" selection-end-column="44" />
               <folding>
                 <element signature="e#25#48#0" expanded="true" />
               </folding>
@@ -47,21 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_attenuator.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/devices/test_attenuator.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
-              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config_attenuator.json" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="config_attenuator.json" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/devices/config_attenuator.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="180">
-              <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="704">
+              <caret line="0" column="51" selection-start-line="0" selection-start-column="51" selection-end-line="0" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -126,10 +116,10 @@
         <option value="$PROJECT_DIR$/devices/test_feedtrough.py" />
         <option value="$PROJECT_DIR$/devices/test_laser.py" />
         <option value="$PROJECT_DIR$/devices/laser.py" />
-        <option value="$PROJECT_DIR$/base/base.py" />
+        <option value="$PROJECT_DIR$/devices/attenuator.py" />
         <option value="$PROJECT_DIR$/devices/test_attenuator.py" />
         <option value="$PROJECT_DIR$/devices/config_attenuator.json" />
-        <option value="$PROJECT_DIR$/devices/attenuator.py" />
+        <option value="$PROJECT_DIR$/base/base.py" />
       </list>
     </option>
   </component>
@@ -527,7 +517,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/devices/test_attenuator.py</url>
-          <line>16</line>
+          <line>18</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
@@ -889,39 +879,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/base/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="558" max-vertical-offset="4500">
-          <caret line="40" column="71" selection-start-line="40" selection-start-column="71" selection-end-line="40" selection-end-column="71" />
-          <folding>
-            <element signature="e#25#38#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/devices/test_attenuator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
-          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/devices/config_attenuator.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="180">
-          <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.35795453" vertical-offset="0" max-vertical-offset="704">
+          <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/devices/attenuator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25852272" vertical-offset="1978" max-vertical-offset="2844">
-          <caret line="120" column="44" selection-start-line="120" selection-start-column="44" selection-end-line="120" selection-end-column="44" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1512" max-vertical-offset="2916">
+          <caret line="114" column="44" selection-start-line="114" selection-start-column="44" selection-end-line="114" selection-end-column="44" />
           <folding>
             <element signature="e#25#48#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="504" max-vertical-offset="4590">
+          <caret line="57" column="32" selection-start-line="57" selection-start-column="32" selection-end-line="57" selection-end-column="32" />
+          <folding>
+            <element signature="e#25#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/devices/config_attenuator.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="108">
+          <caret line="0" column="51" selection-start-line="0" selection-start-column="51" selection-end-line="0" selection-end-column="51" />
+          <folding />
         </state>
       </provider>
     </entry>

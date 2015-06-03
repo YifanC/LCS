@@ -43,10 +43,15 @@ class Device(object):
             self.printMsg("Using config file: " + str(filename))
             self.configfilename = str(filename)
 
-
-    def config_load(self, filename):
-        with open(filename) as configfile:
+    def config_load(self):
+        with open(self.configfilename, 'r') as configfile:
             self.config = json.load(configfile,  object_hook=self.Config)
+            configfile.close()
+
+    def config_dump(self):
+        self.printMsg("Storing configuration")
+        with open(self.configfilename, 'w') as configfile:
+            self.config = json.dump(self.config.__dict__, configfile)
 
     class Config():
         def __init__(self, inpu):
