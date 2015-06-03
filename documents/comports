@@ -1,0 +1,16 @@
+Com ports:
+- uboonelaserone
+ mirror_box
+ mirror_feedthrough
+ aperture - ttyUSB9
+ attenuator
+ feedthrough_motors - ttyUSB0
+ laser
+ 
+- uboonelasertwo
+ mirror_box
+ mirror_feedthrough
+ aperture - ttyUSB7
+ attenuator  
+ feedthrough_motors - ttyUSB0
+ laser
