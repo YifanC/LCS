@@ -126,7 +126,7 @@ class ComSerial(Device):
 
 
 class Motor(ComSerial):
-    """" At tje moment only an idea of a nice classe """
+    """" At the moment only an idea of a nice classe """
 
     def __init__(self):
         self.InstructionSet = {"getInfo": None,
@@ -193,24 +193,35 @@ class Motor(ComSerial):
         msg = self.InstructionSet["stopMovement"]
         self.com_write(msg)
 
-    def moveRelative(self, value):
+    def moveRelative(self,value, monitor=False, display=False, delta=10):
+	if display is True:
+		monitor = True  
+
         value = int(value)
         msg = self.InstructionSet["moveRelative"] + self.comSetCommand + str(value)
-        self.com_write(msg)
+	
+	# get current position for monitoring	
+	if monitor is True:
+	    pos_start = self.getPosition()        
+	
+	self.com_write(msg)
+        if monitor is True:
+            return self.monitorPosition(value + pos_start , display, delta)
+        return 0
 
     def moveAbsolute(self, value, monitor=False, display=False, delta=10):
         """ Moving motor to an absolute position, the movement can be monitored if an getPosition and a isMoving function
         is supplied. """
-        value = int(value)
+	
+	if display is True:
+		monitor = True        
+
+	value = int(value)
         msg = self.InstructionSet["moveAbsolute"] + self.comSetCommand + str(value)
         self.com_write(msg)
 
-        if (display is True) or (monitor is True):
-            position_reached = self.monitorPosition(value, display, delta)
-            if position_reached == 0:
-                return 0
-            else:
-                return -1
+        if monitor is True:
+            return self.monitorPosition(value, display, delta)
         return 0
 
 

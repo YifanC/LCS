@@ -37,7 +37,7 @@ class Attenuator(Motor):
                                "moveAbsolute": "g",
                                "moveRelative": "m",
                                "hardwareHome": "zp",
-                               "reset@Zero": "zr",
+                               "reset@home": "zr",
                                "setHome": "h"}
 
         self.comDefaultReplyLength = 200
@@ -94,7 +94,7 @@ class Attenuator(Motor):
 
     def isMoving(self):
         """ This function returns True if the motor is moving and False if it is not"""
-        msg = self.InstructionSet["getPosition"]
+        msg = self.InstructionSet["isMoving"]
         self.com_write(msg)
         reply = self.com_recv(self.comDefaultReplyLength)
 
@@ -126,10 +126,15 @@ class Attenuator(Motor):
         msg = self.InstructionSet["hardwareHome"]
         self.com_write(msg)
 
-    def zero(self):
+    def zero(self, monitor=False, display=False):
         """ Go to zero transmission location """
         self.printMsg("Going to zero transmission position")
         self.moveAbsolute(self.offsetZeroTrans)
+
+	if monitor is True:
+		return self.monitorPosition(self.offsetZeroTrans, display)
+	else:
+		return 0
 
 
     def getTransmission(self):
