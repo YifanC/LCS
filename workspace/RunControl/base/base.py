@@ -194,6 +194,7 @@ class Motor(ComSerial):
         self.com_write(msg)
 
     def moveRelative(self,value, monitor=False, display=False, delta=10):
+	self.printMsg("Moving relative: " + str(value) + " steps")
 	if display is True:
 		monitor = True  
 
@@ -212,7 +213,7 @@ class Motor(ComSerial):
     def moveAbsolute(self, value, monitor=False, display=False, delta=10):
         """ Moving motor to an absolute position, the movement can be monitored if an getPosition and a isMoving function
         is supplied. """
-	
+	self.printMsg("Moving absolute to: " + str(value) + " steps")
 	if display is True:
 		monitor = True        
 

@@ -38,7 +38,7 @@ class Attenuator(Motor):
                                "moveRelative": "m",
                                "hardwareHome": "zp",
                                "reset@home": "zr",
-                               "setHome": "h"
+                               "setHome": "h",
 			       "onoff": "en"}
 
         self.comDefaultReplyLength = 200
@@ -60,9 +60,14 @@ class Attenuator(Motor):
      arbitrary offset to this position and has to be defined by hand (offsetZeroTrans variable). This can be done by using 
      the setZero() function when the zero transmission position is found by hand. The function also stores the value in a file
      so it is available for future use.
-     Normal Operation: 
-
-"""
+     Normal Operation: (config file is automatically loaded)
+	1. init com port
+	2. init controller
+	3. enable motor
+	4. home
+	4. set transmission
+	5. disable motor
+	6. close com port """
 
     def init(self):
         # load configuration
@@ -73,9 +78,11 @@ class Attenuator(Motor):
         self.setParameter("microsteps", self.microsteps)
 
     def enableMotor(self):
+        self.printMsg("Motor on")
 	return self.setParameter("onoff", 1)
 
     def disableMotor(self):
+        self.printMsg("Motor off")
 	return self.setParameter("onoff", 0)
 
     def getParameter(self, parameter):
@@ -85,8 +92,11 @@ class Attenuator(Motor):
         The function finds the desired parameter value of the device by looking for the parameter according to the
         Instruction set in this reply string. finding zs will probably not work because of the missing " " in the end """
         reply = self.getInfo()
-
-        instruction = self.InstructionSet[parameter] + "="
+	
+	if self.InstructionSet[parameter] == "en":
+	    instruction = self.InstructionSet[parameter] + ":"
+	else:
+	    instruction = self.InstructionSet[parameter] + "="
 
         startStringValue = reply.find(instruction) + len(instruction)
         endStrinValue = reply[startStringValue:].find(" ") + startStringValue
@@ -131,11 +141,16 @@ class Attenuator(Motor):
         self.config.ZERO_TRANSMISSION_OFFSET = self.offsetZeroTrans
         self.config_dump()
 
-    def home(self):
+    def home(self, monitor=False, display=False):
         """ Go to the home switch (hardware switch) and reset position counter """
         self.printMsg("Going to hardware home switch")
         msg = self.InstructionSet["hardwareHome"]
         self.com_write(msg)
+
+	if monitor is True:
+		return self.monitorPosition(self.offsetZeroTrans, display)
+	else:
+		return 0
 
     def zero(self, monitor=False, display=False):
         """ Go to zero transmission location """
