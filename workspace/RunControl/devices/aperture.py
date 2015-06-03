@@ -54,6 +54,7 @@ class Aperture(Motor):
 	return reply
 
     def msg_filter(self, msg):
+	""" Removes the repl_prefix and trailing '\n' and '\r's from the reply """
 	# TODO: Move this to base class, can be useful for every device!
 	prefix_length  = len(self.comReplyPrefix)
 	if msg[:prefix_length] == self.comReplyPrefix:
