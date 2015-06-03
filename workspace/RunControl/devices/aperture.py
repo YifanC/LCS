@@ -38,6 +38,7 @@ class Aperture(Motor):
         self.comPrefix = "A1"
         self.comSetCommand = "s"
         self.comGetCommand = "t"
+	self.comReplyPrefix = "1:"
         self.comEnd = "\r"
 
 
@@ -52,4 +53,11 @@ class Aperture(Motor):
         reply = self.com_recv(self.comDefaultReplyLength)
 	return reply
 
-
+    def msg_filter(self,msg):
+	# TODO: Move this to base class, can be useful for every device!
+	prefix_length  = len(self.comReplyPrefix)
+	if msg[:prefix_length] == self.comReplyPrefix:
+	    return msg[prefix_length:]
+	else:
+	    self.printError("Reply prefix (" + str(msg[:prefix_length]) + ") not valid, aborting")
+	    sys.exit(-1)
