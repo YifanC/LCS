@@ -29,8 +29,12 @@ class Aperture(Motor):
                                "stopMovement": None,
                                "isMoving": "ts",
                                "getPosition": "p",
+                               "limit1": "1",
+                               "limit2": "2", # limit2 == 1 --> fully open
+                               "moveAbsolute": None,
                                "moveAbsolute": None,
                                "moveRelative": None}
+
 
         self.comDefaultReplyLength = 15
         self.comInfoReplyLength = 100
@@ -40,7 +44,7 @@ class Aperture(Motor):
         self.comGetCommand = "t"
 	self.comReplyPrefix = "1:"
         self.comEnd = "\r"
-
+	
 
 
     def turnOn(self):
