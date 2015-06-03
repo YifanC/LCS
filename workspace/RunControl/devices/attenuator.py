@@ -1,6 +1,6 @@
 __author__ = 'matthias'
 
-from base import *
+from base.base import *
 from math import cos, acos, sqrt, degrees, radians, floor
 
 
@@ -16,6 +16,10 @@ class Attenuator(Motor):
         self.InfoMsgLength = 100
         self.StandardMsgLength = 10
         self.comEnd = "\r"
+        self.color = True
+
+        self.config_setfile()
+        self.config_load(self.configfilename)
 
         self.InstructionSet = {"getInfo": "p",
                                "startSpeed": None,
@@ -46,6 +50,8 @@ class Attenuator(Motor):
         self.microsteps = 2
         self.stepsperdegree = 43.333
         self.offsetZeroTrans = 0
+
+
 
     """" Calibration of Attenuator: When the attenuator is initialized the attenuator goes to its hardware home position
      defined by a switch. This is the reference point for every position. The minimum of laser transmission has an
@@ -97,13 +103,13 @@ class Attenuator(Motor):
         if self.isMoving():
             self.printError("motor is moving, will not set zero position")
             return -1
-	if value == None:
-        	pos = self.getPosition()
-        	self.printMsg("New zero transmission position offset is " + str(pos))
-        	self.offsetZeroTrans = pos
-	else:
-        	self.printMsg("New zero transmission position offset is " + str(value))
-        	self.offsetZeroTrans = value		
+        if value == None:
+            pos = self.getPosition()
+            self.printMsg("New zero transmission position offset is " + str(pos))
+            self.offsetZeroTrans = pos
+        else:
+            self.printMsg("New zero transmission position offset is " + str(value))
+            self.offsetZeroTrans = value
 
     def home(self):
         """ Go to the home switch (hardware switch) and reset position counter """
@@ -112,15 +118,15 @@ class Attenuator(Motor):
         self.com_write(msg)
 
     def zero(self):
-        """ Go to the home switch (hardware switch) and reset position counter """
+        """ Go to zero transmission location """
         self.printMsg("Going to zero transmission position")
         self.moveAbsolute(self.offsetZeroTrans)
-	
+
 
     def getTransmission(self):
         pos = self.getPosition() - self.offsetZeroTrans
         angle = pos / (self.stepsperdegree * self.microsteps)
-        transmission = (1. - cos(radians(angle))**2)
+        transmission = (1. - cos(radians(angle)) ** 2)
 
         return transmission
 
@@ -138,9 +144,9 @@ class Attenuator(Motor):
         reachedposition = self.moveAbsolute(position, monitor, display)
 
         if reachedposition == 0:
-	    self.printMsg("Set transmission to: " + str(value*100) + "%")
+            self.printMsg("Set transmission to: " + str(value * 100) + "%")
             return 0
-	else:
+        else:
             self.printError("Could not set transmission")
             return -1
         return 0

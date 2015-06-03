@@ -4,18 +4,23 @@ import serial
 from abc import ABCMeta, abstractmethod
 import sys
 import time
-
+import json
+import os
 
 class Device(object):
-    dictState = {0: "Not Initialized",
-                 1: "Ready",
-                 2: "Error"}
-    color = True
+
 
     def __init__(self, name, com):
         self.name = name
         self.com = com
         self.state = 0
+        self.State = {0: "Not Initialized",
+                      1: "Ready",
+                      2: "Error"}
+        # switch this to false if using bpython
+        self.color = True
+
+        self.config = None
 
     def printMsg(self, string, nonewline=False):
         if nonewline == True:
@@ -25,11 +30,27 @@ class Device(object):
 
 
     def printError(self, string):
-	if self.color is True:
+        if self.color is True:
             print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
-	else:
+        else:
             print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
 
+    def config_setfile(self, filename=-1):
+        if filename == -1:
+            self.printMsg("Using default config file")
+            self.configfilename = "./config_" + str(self.name) + ".json"
+        else:
+            self.printMsg("Using config file: " + str(filename))
+            self.configfilename = str(filename)
+
+
+    def config_load(self, filename):
+        with open(filename) as configfile:
+            self.config = json.load(configfile,  object_hook=self.Config)
+
+    class Config():
+        def __init__(self, inpu):
+            self.__dict__ = inpu
 
 class ComSerial(Device):
     def __init__(self, comport):
@@ -155,8 +176,8 @@ class Motor(ComSerial):
         string = "Set " + parameter + "=" + str(value)
 
         if SetValue == str(value):
-            #self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
-	    self.printMsg(string + " -> OK", True)
+            # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
+            self.printMsg(string + " -> OK", True)
             return 0
         else:
             self.printError(string + " failed")
@@ -172,20 +193,20 @@ class Motor(ComSerial):
         self.com_write(msg)
 
     def moveAbsolute(self, value, monitor=False, display=False, delta=10):
-	""" Moving motor to an absolute position, the movement can be monitored if an getPosition and a isMoving function
-	is supplied. """
+        """ Moving motor to an absolute position, the movement can be monitored if an getPosition and a isMoving function
+        is supplied. """
         value = int(value)
         msg = self.InstructionSet["moveAbsolute"] + self.comSetCommand + str(value)
         self.com_write(msg)
-	
-	if (display is True) or (monitor is True):
+
+        if (display is True) or (monitor is True):
             position_reached = self.monitorPosition(value, display, delta)
-	    if position_reached == 0:
-		return 0
-	    else:
-		return -1
-	return 0
-    
+            if position_reached == 0:
+                return 0
+            else:
+                return -1
+        return 0
+
 
     def getPosition(self):
         msg = self.InstructionSet["getPosition"]
@@ -193,23 +214,23 @@ class Motor(ComSerial):
         reply = self.com_recv(self.comDefaultReplyLength)
         return reply
 
-    def monitorPosition(self,endPosition, display=True, delta = 10):
-	time.sleep(0.1)            
-	pos = self.getPosition()	
-	while self.isMoving():
-             if display is True:
-		self.printMsg("Position: " + str(pos))
-		pos = self.getPosition()
-		time.sleep(0.1)
+    def monitorPosition(self, endPosition, display=True, delta=10):
+        time.sleep(0.1)
+        pos = self.getPosition()
+        while self.isMoving():
+            if display is True:
+                self.printMsg("Position: " + str(pos))
+                pos = self.getPosition()
+                time.sleep(0.1)
 
-	pos = self.getPosition()
-	if display is True:
-		self.printMsg("Position: " + str(pos))
-	# check if position was reached
-	if (endPosition - delta) <= pos <= (endPosition + delta):
-		return 0
-	else:
-		return -1
+        pos = self.getPosition()
+        if display is True:
+            self.printMsg("Position: " + str(pos))
+        # check if position was reached
+        if (endPosition - delta) <= pos <= (endPosition + delta):
+            return 0
+        else:
+            return -1
 
 
 class bcolors:
