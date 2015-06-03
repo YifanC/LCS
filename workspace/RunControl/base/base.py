@@ -125,8 +125,8 @@ class ComSerial(Device):
         return self.msg_filter(msg)
 
     def msg_filter(self, msg):
-	""" function which filters the output, should be defined in the device class if required. Useful for example if there
-	is axis information which is sent in a reply."""
+        """ function which filters the output, should be defined in the device class if required. Useful for example if there
+        is axis information which is sent in a reply."""
         return msg
 
 

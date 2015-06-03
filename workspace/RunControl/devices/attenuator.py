@@ -14,7 +14,6 @@ class Attenuator(Motor):
         self.comEcho = True
         self.InfoInstruction = "p"
 
-
         self.comEnd = "\r"
         self.color = True
 
@@ -75,17 +74,17 @@ class Attenuator(Motor):
 
         # write configuration
         self.setParameter("microsteps", self.microsteps)
-	
+
     def getName(self):
         self.com_write(self.InstructionSet["getName"])
-	reply = self.com_recv(self.comInfoReplyLength)
-	
-	if reply[:3] == "att":
-		self.printMsg("Device name: " + str(reply))
-		return 0	
-	else:
-		self.printError("Device name: " + str(reply) + " not recognised --> quitting")
-		sys.exit(-1)
+        reply = self.com_recv(self.comInfoReplyLength)
+
+        if reply[:3] == "att":
+            self.printMsg("Device name: " + str(reply))
+            return 0
+        else:
+            self.printError("Device name: " + str(reply) + " not recognised --> quitting")
+            sys.exit(-1)
 
     def enableMotor(self):
         self.printMsg("Motor on", True)
@@ -102,8 +101,7 @@ class Attenuator(Motor):
         Instruction set in this reply string. finding zs will probably not work because of the missing " " in the end """
         reply = self.getInfo()
 
-
-	special = set(("en", "zs", "zr"))
+        special = set(("en", "zs", "zr"))
         if self.InstructionSet[parameter] in special:
             instruction = self.InstructionSet[parameter] + ":"
         else:
@@ -140,7 +138,7 @@ class Attenuator(Motor):
 
         # if self.isMoving():
         # self.printError("motor is moving, will not set zero position")
-        #    return -1
+        # return -1
         if value == None:
             pos = self.getPosition()
             self.printMsg("New zero transmission position offset is " + str(pos))

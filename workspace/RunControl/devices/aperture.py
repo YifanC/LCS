@@ -41,7 +41,6 @@ class Aperture(Motor):
         self.comEnd = "\r"
 
 
-
     def turnOn(self):
         pass
 
@@ -50,6 +49,6 @@ class Aperture(Motor):
         msg = self.InstructionSet["isMoving"]
         self.com_write(msg)
         reply = self.com_recv(self.comDefaultReplyLength)
-	return reply
+        return reply
 
 
