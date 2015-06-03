@@ -45,17 +45,18 @@ class Device(object):
 
     def config_load(self):
         with open(self.configfilename, 'r') as configfile:
-            self.config = json.load(configfile,  object_hook=self.Config)
+            self.config = json.load(configfile,  object_hook=Config)
             configfile.close()
 
     def config_dump(self):
         self.printMsg("Storing configuration")
         with open(self.configfilename, 'w') as configfile:
             self.config = json.dump(self.config.__dict__, configfile)
+	    configfile.close()
 
-    class Config():
-        def __init__(self, inpu):
-            self.__dict__ = inpu
+class Config():
+    def __init__(self, inpu):
+        self.__dict__ = inpu
 
 class ComSerial(Device):
     def __init__(self, comport):
