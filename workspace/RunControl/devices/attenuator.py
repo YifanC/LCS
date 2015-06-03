@@ -38,7 +38,8 @@ class Attenuator(Motor):
                                "moveRelative": "m",
                                "hardwareHome": "zp",
                                "reset@home": "zr",
-                               "setHome": "h"}
+                               "setHome": "h"
+			       "onoff": "en"}
 
         self.comDefaultReplyLength = 200
         self.comInfoReplyLength = 100
@@ -56,7 +57,12 @@ class Attenuator(Motor):
 
     """" Calibration of Attenuator: When the attenuator is initialized the attenuator goes to its hardware home position
      defined by a switch. This is the reference point for every position. The minimum of laser transmission has an
-     arbitrary offset to this position and has to be defined by hand (self.offsetZeroTrans)."""
+     arbitrary offset to this position and has to be defined by hand (offsetZeroTrans variable). This can be done by using 
+     the setZero() function when the zero transmission position is found by hand. The function also stores the value in a file
+     so it is available for future use.
+     Normal Operation: 
+
+"""
 
     def init(self):
         # load configuration
@@ -66,6 +72,11 @@ class Attenuator(Motor):
         # write configuration
         self.setParameter("microsteps", self.microsteps)
 
+    def enableMotor(self):
+	return self.setParameter("onoff", 1)
+
+    def disableMotor(self):
+	return self.setParameter("onoff", 0)
 
     def getParameter(self, parameter):
 
