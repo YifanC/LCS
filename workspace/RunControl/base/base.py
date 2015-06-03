@@ -32,7 +32,7 @@ class Device(object):
         if self.color is True:
             print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
         else:
-            print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
+            print time.strftime('%H:%M ', time.localtime()) + self.name + " ERROR" +": " + string
 
     def config_setfile(self, filename=-1):
         if filename == -1:
