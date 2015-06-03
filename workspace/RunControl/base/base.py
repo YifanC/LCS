@@ -192,7 +192,7 @@ class Motor(ComSerial):
 
         if SetValue == str(value):
             # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
-            self.printMsg(string + " -> OK", True)
+            self.printMsg(string + " -> OK", False)
             return 0
         else:
             self.printError(string + " failed")
