@@ -1,1 +1,2 @@
-{"c": 3.0, "b": 2.0, "ZERO_TRANSMISSION_OFFSET": 444.0, "microstep_resolution": 3.0}
+{"microstep_resolution": 3.0, "c": 3.0, "b": 2.0, "ZERO_TRANSMISSION_OFFSET": 100.0, "MICROSTEP_RESOLUTION": 2}
+
