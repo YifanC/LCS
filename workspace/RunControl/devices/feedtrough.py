@@ -2,6 +2,7 @@ __author__ = 'matthias'
 
 from base.base import *
 
+
 class Feedtrough(Motor):
     def __init__(self, name, axis):
         self.name = name
@@ -151,7 +152,7 @@ class Feedtrough(Motor):
             self.printError("Setting the home switch failed 5 times -> exiting")
             sys.exit(-1)
 
-        self.printMsg("Set " + self.homeSwitch +" as home switch")
+        self.printMsg("Set " + self.homeSwitch + " as home switch")
         set = self.setParameter(self.homeSwitch, "1,1,0")  # set counterclockwise endswitch as home switch
         time.sleep(0.5)
         # check if S1 was set correctly
@@ -185,5 +186,5 @@ class Feedtrough(Motor):
             time.sleep(0.1)
 
         self.setLimitSwitches(0)
-        self.setParameter("VM",self.ENDVELOCITY)
+        self.setParameter("VM", self.ENDVELOCITY)
         self.setParameter("R1", counts + 1)

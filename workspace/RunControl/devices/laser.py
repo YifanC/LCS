@@ -2,6 +2,7 @@ __author__ = 'matthias'
 
 from base.base import *
 
+
 class Laser(ComSerial):
     def __init__(self):
         self.name = "laser"
@@ -11,7 +12,7 @@ class Laser(ComSerial):
         self.InfoInstruction = "SE"
         self.InfoMsgLength = 20
         self.StandartMsgLength = 10
-        self.comPrefix=""
+        self.comPrefix = ""
         self.comEnd = "\r"
 
         self.InstructionSet = {"getStatus": "SE",

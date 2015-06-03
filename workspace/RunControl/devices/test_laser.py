@@ -7,7 +7,7 @@ laser.comTimeout = 2
 laser.comport = "/dev/pts/10"
 laser.com_init()
 #
-#  att.getParameter("acceleration")
+# att.getParameter("acceleration")
 #att.getInfo(True)
 
 laser.getShots()

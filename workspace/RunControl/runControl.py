@@ -11,10 +11,12 @@ def openLogfile(RunNr, service):
 
     return OutputLogfile
 
+
 def startEncoder(RunNr):
     LogfileEncoder = openLogfile(RunNumber, "encoder")
     ProdEncoder = subprocess.Popen(['./write.o'], stdout=LogfileEncoder)
     return ProdEncoder
+
 
 def stopEncoder():
     subEncoder.send_signal(signal.SIGINT)

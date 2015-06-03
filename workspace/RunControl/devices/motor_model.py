@@ -9,6 +9,4 @@ com.write("guguguggg")
 msg = com.readline()
 com.write("10")
 
-
-
 print msg

@@ -3,6 +3,7 @@ __author__ = 'matthias'
 
 from base.base import *
 
+
 class Attenuator(Motor):
     def __init__(self):
         self.name = "aperture"
