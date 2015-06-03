@@ -10,11 +10,11 @@ class Attenuator(Motor):
         self.state = 0
         self.comport = None
         self.comBaudrate = 38400
-        self.comTimeout = 1
+        self.comTimeout = 0.5
         self.comEcho = True
         self.InfoInstruction = "p"
-        self.InfoMsgLength = 100
-        self.StandardMsgLength = 10
+
+
         self.comEnd = "\r"
         self.color = True
 
@@ -23,6 +23,7 @@ class Attenuator(Motor):
         self.config_load()
 
         self.InstructionSet = {"getInfo": "p",
+                               "getName": "n",
                                "startSpeed": None,
                                "endSpeed": "s",
                                "acceleration": "a",
@@ -41,8 +42,8 @@ class Attenuator(Motor):
                                "setHome": "h",
                                "onoff": "en"}
 
-        self.comDefaultReplyLength = 200
-        self.comInfoReplyLength = 100
+        self.comDefaultReplyLength = 100
+        self.comInfoReplyLength = 300
 
         self.comPrefix = ""
         self.comSetCommand = " "
@@ -74,13 +75,24 @@ class Attenuator(Motor):
 
         # write configuration
         self.setParameter("microsteps", self.microsteps)
+	
+    def getName(self):
+        self.com_write(self.InstructionSet["getName"])
+	reply = self.com_recv(self.comInfoReplyLength)
+	
+	if reply[:3] == "att":
+		self.printMsg("Device name: " + str(reply))
+		return 0	
+	else:
+		self.printError("Device name: " + str(reply) + " not recognised --> quitting")
+		sys.exit(-1)
 
     def enableMotor(self):
-        self.printMsg("Motor on")
+        self.printMsg("Motor on", True)
         return self.setParameter("onoff", 1)
 
     def disableMotor(self):
-        self.printMsg("Motor off")
+        self.printMsg("Motor off", True)
         return self.setParameter("onoff", 0)
 
     def getParameter(self, parameter):
@@ -90,7 +102,9 @@ class Attenuator(Motor):
         Instruction set in this reply string. finding zs will probably not work because of the missing " " in the end """
         reply = self.getInfo()
 
-        if self.InstructionSet[parameter] == "en":
+
+	special = set(("en", "zs", "zr"))
+        if self.InstructionSet[parameter] in special:
             instruction = self.InstructionSet[parameter] + ":"
         else:
             instruction = self.InstructionSet[parameter] + "="
