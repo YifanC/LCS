@@ -59,7 +59,12 @@ class Attenuator(Motor):
      arbitrary offset to this position and has to be defined by hand (self.offsetZeroTrans)."""
 
     def init(self):
-        self.microsteps = self.getParameter("microsteps")
+        # load configuration
+        self.microsteps = int(self.config.MICROSTEP_RESOLUTION)
+        self.offsetZeroTrans = self.config.ZERO_TRANSMISSION_OFFSET
+
+        # write configuration
+        self.setParameter("microsteps", self.microsteps)
 
 
     def getParameter(self, parameter):

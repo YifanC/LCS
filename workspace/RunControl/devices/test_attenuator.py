@@ -11,8 +11,8 @@ att.color = False
 
 
 att.config.microstep_resolution = 3.0
-
-att.setZero(123.)
+att.init()
+att.setZero(100.)
 
 #
 # att.getParameter("acceleration")

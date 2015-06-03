@@ -54,8 +54,9 @@ class Device(object):
             self.config = json.dump(self.config.__dict__, configfile)
 
     class Config():
-        def __init__(self, inpu):
-            self.__dict__ = inpu
+        """" Config class just to translate the json file into a dict """
+        def __init__(self, f):
+            self.__dict__ = f
 
 class ComSerial(Device):
     def __init__(self, comport):
