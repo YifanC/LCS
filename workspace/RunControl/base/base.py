@@ -7,6 +7,7 @@ import time
 import json
 import os
 
+
 class Device(object):
     def __init__(self, name, com):
         self.name = name
@@ -35,7 +36,7 @@ class Device(object):
 
     def config_setfile(self, filename=-1):
         if filename == -1:
-	    string = "config_" + str(self.name) + ".json"
+            string = "config_" + str(self.name) + ".json"
             self.printMsg("Using default config file (devices/" + string + ")")
             self.configfilename = string
         else:
@@ -44,19 +45,21 @@ class Device(object):
 
     def config_load(self):
         with open(self.configfilename, 'r') as configfile:
-            self.config = json.load(configfile,  object_hook=self.Config)
+            self.config = json.load(configfile, object_hook=self.Config)
             configfile.close()
 
     def config_dump(self):
         self.printMsg("Storing configuration")
         with open(self.configfilename, 'w') as configfile:
             json.dump(self.config.__dict__, configfile)
-	    configfile.close()
+            configfile.close()
 
     class Config():
         """" Config class just to translate the json file into a dict """
+
         def __init__(self, f):
             self.__dict__ = f
+
 
 class ComSerial(Device):
     def __init__(self, comport):
@@ -193,31 +196,31 @@ class Motor(ComSerial):
         msg = self.InstructionSet["stopMovement"]
         self.com_write(msg)
 
-    def moveRelative(self,value, monitor=False, display=False, delta=10):
-	self.printMsg("Moving relative: " + str(value) + " steps")
-	if display is True:
-		monitor = True  
+    def moveRelative(self, value, monitor=False, display=False, delta=10):
+        self.printMsg("Moving relative: " + str(value) + " steps")
+        if display is True:
+            monitor = True
 
         value = int(value)
         msg = self.InstructionSet["moveRelative"] + self.comSetCommand + str(value)
-	
-	# get current position for monitoring	
-	if monitor is True:
-	    pos_start = self.getPosition()        
-	
-	self.com_write(msg)
+
+        # get current position for monitoring
         if monitor is True:
-            return self.monitorPosition(value + pos_start , display, delta)
+            pos_start = self.getPosition()
+
+        self.com_write(msg)
+        if monitor is True:
+            return self.monitorPosition(value + pos_start, display, delta)
         return 0
 
     def moveAbsolute(self, value, monitor=False, display=False, delta=10):
         """ Moving motor to an absolute position, the movement can be monitored if an getPosition and a isMoving function
         is supplied. """
-	self.printMsg("Moving absolute to: " + str(value) + " steps")
-	if display is True:
-		monitor = True        
+        self.printMsg("Moving absolute to: " + str(value) + " steps")
+        if display is True:
+            monitor = True
 
-	value = int(value)
+        value = int(value)
         msg = self.InstructionSet["moveAbsolute"] + self.comSetCommand + str(value)
         self.com_write(msg)
 

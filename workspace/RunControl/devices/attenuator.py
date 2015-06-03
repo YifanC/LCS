@@ -39,7 +39,7 @@ class Attenuator(Motor):
                                "hardwareHome": "zp",
                                "reset@home": "zr",
                                "setHome": "h",
-			       "onoff": "en"}
+                               "onoff": "en"}
 
         self.comDefaultReplyLength = 200
         self.comInfoReplyLength = 100
@@ -53,21 +53,19 @@ class Attenuator(Motor):
         self.stepsperdegree = 43.333
         self.offsetZeroTrans = 0
 
-
-
     """" Calibration of Attenuator: When the attenuator is initialized the attenuator goes to its hardware home position
      defined by a switch. This is the reference point for every position. The minimum of laser transmission has an
      arbitrary offset to this position and has to be defined by hand (offsetZeroTrans variable). This can be done by using 
      the setZero() function when the zero transmission position is found by hand. The function also stores the value in a file
      so it is available for future use.
      Normal Operation: (config file is automatically loaded)
-	1. init com port
-	2. init controller
-	3. enable motor
-	4. home
-	4. set transmission
-	5. disable motor
-	6. close com port """
+     1. init com port
+     2. init controller
+     3. enable motor
+     4. home
+     5. set transmission
+     6. disable motor
+     7. close com port """
 
     def init(self):
         # load configuration
@@ -79,24 +77,23 @@ class Attenuator(Motor):
 
     def enableMotor(self):
         self.printMsg("Motor on")
-	return self.setParameter("onoff", 1)
+        return self.setParameter("onoff", 1)
 
     def disableMotor(self):
         self.printMsg("Motor off")
-	return self.setParameter("onoff", 0)
+        return self.setParameter("onoff", 0)
 
     def getParameter(self, parameter):
-
         """"the only way to get a parameter value os to ask for an information string from the attenuator. The string
         looks like this: USB: [1] a=[2] d=[3] s=[4] wm=[5] ws=[6] wt=[7] r=[8] en:[9] zr:[10] zs:[11]
         The function finds the desired parameter value of the device by looking for the parameter according to the
         Instruction set in this reply string. finding zs will probably not work because of the missing " " in the end """
         reply = self.getInfo()
-	
-	if self.InstructionSet[parameter] == "en":
-	    instruction = self.InstructionSet[parameter] + ":"
-	else:
-	    instruction = self.InstructionSet[parameter] + "="
+
+        if self.InstructionSet[parameter] == "en":
+            instruction = self.InstructionSet[parameter] + ":"
+        else:
+            instruction = self.InstructionSet[parameter] + "="
 
         startStringValue = reply.find(instruction) + len(instruction)
         endStrinValue = reply[startStringValue:].find(" ") + startStringValue
@@ -127,8 +124,8 @@ class Attenuator(Motor):
     def setZero(self, value=None):
         """ Set the current position (if no value is supplied) as the new zero transmission position """
 
-        #if self.isMoving():
-        #    self.printError("motor is moving, will not set zero position")
+        # if self.isMoving():
+        # self.printError("motor is moving, will not set zero position")
         #    return -1
         if value == None:
             pos = self.getPosition()
@@ -147,23 +144,13 @@ class Attenuator(Motor):
         msg = self.InstructionSet["hardwareHome"]
         self.com_write(msg)
 
-	if monitor is True:
-		return self.monitorPosition(self.offsetZeroTrans, display)
-	else:
-		return 0
-
-    def zero(self, monitor=False, display=False):
-        """ Go to zero transmission location """
-        self.printMsg("Going to zero transmission position")
-        self.moveAbsolute(self.offsetZeroTrans)
-
-	if monitor is True:
-		return self.monitorPosition(self.offsetZeroTrans, display)
-	else:
-		return 0
-
+        if monitor is True:
+            return self.monitorPosition(self.offsetZeroTrans, display)
+        else:
+            return 0
 
     def getTransmission(self):
+        """" Get the transmission coefficient based on the current position """
         pos = self.getPosition() - self.offsetZeroTrans
         angle = pos / (self.stepsperdegree * self.microsteps)
         transmission = (1. - cos(radians(angle)) ** 2)
@@ -171,6 +158,8 @@ class Attenuator(Motor):
         return transmission
 
     def setTransmission(self, value, monitor=True, display=True):
+        """" Go to the position according to the transmission for the required position"""
+
         value = float(value)
 
         if 0. >= value >= 1.:
@@ -189,4 +178,3 @@ class Attenuator(Motor):
         else:
             self.printError("Could not set transmission")
             return -1
-        return 0
