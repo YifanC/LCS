@@ -8,8 +8,6 @@ import json
 import os
 
 class Device(object):
-
-
     def __init__(self, name, com):
         self.name = name
         self.com = com
@@ -37,33 +35,28 @@ class Device(object):
 
     def config_setfile(self, filename=-1):
         if filename == -1:
-            self.printMsg("Using default config file")
-            self.configfilename = "./config_" + str(self.name) + ".json"
+	    string = "config_" + str(self.name) + ".json"
+            self.printMsg("Using default config file (devices/" + string + ")")
+            self.configfilename = string
         else:
             self.printMsg("Using config file: " + str(filename))
             self.configfilename = str(filename)
 
     def config_load(self):
         with open(self.configfilename, 'r') as configfile:
-            self.config = json.load(configfile,  object_hook=Config)
+            self.config = json.load(configfile,  object_hook=self.Config)
             configfile.close()
 
     def config_dump(self):
         self.printMsg("Storing configuration")
         with open(self.configfilename, 'w') as configfile:
-            self.config = json.dump(self.config.__dict__, configfile)
+            json.dump(self.config.__dict__, configfile)
 	    configfile.close()
 
-<<<<<<< HEAD
-class Config():
-    def __init__(self, inpu):
-        self.__dict__ = inpu
-=======
     class Config():
         """" Config class just to translate the json file into a dict """
         def __init__(self, f):
             self.__dict__ = f
->>>>>>> 85f0f2cc436cf7cc7b90432a0f46585a92cdd7e6
 
 class ComSerial(Device):
     def __init__(self, comport):

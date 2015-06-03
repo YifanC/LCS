@@ -12,7 +12,6 @@ att.com_init()
 
 
 att.config.microstep_resolution = 3.0
-<<<<<<< HEAD
 
 att.setZero(444.)
 att.setZero(423.)
