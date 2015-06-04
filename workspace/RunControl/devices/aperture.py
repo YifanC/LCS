@@ -10,7 +10,7 @@ class Aperture(Motor):
         self.state = 0
         self.comport = None
         self.comBaudrate = 9600
-        self.comTimeout = 1
+        self.comTimeout =0
         self.comEcho = False
         self.InfoInstruction = ""
         self.InfoMsgLength = 100
@@ -18,6 +18,7 @@ class Aperture(Motor):
         self.comEnd = "\r"
 
         self.InstructionSet = {"getInfo": None,
+                               "getName": "c",
                                "startSpeed": "l",
                                "endSpeed": "v",
                                "acceleration": "a",
@@ -35,7 +36,7 @@ class Aperture(Motor):
                                "moveAbsolute": None,
                                "moveRelative": None}
 
-        self.comDefaultReplyLength = 15
+        self.comDefaultReplyLength = 100
         self.comInfoReplyLength = 100
 
         self.comPrefix = "A1"
@@ -45,8 +46,12 @@ class Aperture(Motor):
         self.comEnd = "\r"
 
 
-    def turnOn(self):
+    def enableMotor(self):
         pass
+
+    def disableMotor(self):
+        pass
+
 
     def isMoving(self):
         """ This function returns True if the motor is moving and False if it is not"""
@@ -58,6 +63,7 @@ class Aperture(Motor):
     def msg_filter(self, msg):
         """ Removes the repl_prefix and trailing '\n' and '\r's from the reply """
         # TODO: Move this to base class, can be useful for every device!
+	print "MSG:" + str(msg)
         prefix_length = len(self.comReplyPrefix)
         if msg[:prefix_length] == self.comReplyPrefix:
             return msg[prefix_length:].rstrip()
