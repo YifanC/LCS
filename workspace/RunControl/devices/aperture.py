@@ -32,7 +32,6 @@ class Aperture(Motor):
                                "limit1": "1",
                                "limit2": "2",  # limit2 == 1 --> fully open
                                "moveAbsolute": None,
-                               "moveAbsolute": None,
                                "moveRelative": None}
 
         self.comDefaultReplyLength = 15

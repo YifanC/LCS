@@ -26,28 +26,18 @@
       <file leaf-file-name="base.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/base/base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3328" max-vertical-offset="4896">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3274" max-vertical-offset="4896">
               <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="attenuator.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/devices/attenuator.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.627841" vertical-offset="2860" max-vertical-offset="3564">
-              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="aperture.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="aperture.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/devices/aperture.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="592" max-vertical-offset="1296">
-              <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+            <state vertical-scroll-proportion="1.1761364" vertical-offset="0" max-vertical-offset="1278">
+              <caret line="46" column="21" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -104,8 +94,8 @@
         <option value="$PROJECT_DIR$/devices/config_attenuator.json" />
         <option value="$PROJECT_DIR$/devices/test_attenuator.py" />
         <option value="$PROJECT_DIR$/base/base.py" />
-        <option value="$PROJECT_DIR$/devices/aperture.py" />
         <option value="$PROJECT_DIR$/devices/attenuator.py" />
+        <option value="$PROJECT_DIR$/devices/aperture.py" />
       </list>
     </option>
   </component>
@@ -873,10 +863,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/devices/aperture.py">
+    <entry file="file://$PROJECT_DIR$/devices/attenuator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="592" max-vertical-offset="1296">
-          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.59090906" vertical-offset="2752" max-vertical-offset="3564">
+          <caret line="177" column="24" selection-start-line="177" selection-start-column="24" selection-end-line="177" selection-end-column="24" />
           <folding />
         </state>
       </provider>
@@ -889,10 +879,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/devices/attenuator.py">
+    <entry file="file://$PROJECT_DIR$/devices/aperture.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.627841" vertical-offset="2860" max-vertical-offset="3564">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+        <state vertical-scroll-proportion="1.1761364" vertical-offset="0" max-vertical-offset="1278">
+          <caret line="46" column="21" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
           <folding />
         </state>
       </provider>
