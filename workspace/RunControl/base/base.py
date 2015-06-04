@@ -106,7 +106,7 @@ class ComSerial(Device):
         self.com.write(msg + self.comEnd)
 
         if (self.comEcho is True) or (echo is True):
-	    return self.com_checkEcho(msg)
+	    return self.com_recv()
 
     def com_recv(self, msg_length=10):
         """ read message from comport """
@@ -228,6 +228,7 @@ class Motor(ComSerial):
         if attempts > 0:
             msg = self.InstructionSet[parameter] + self.comSetCommand + str(value)
 
+<<<<<<< HEAD
             worked = self.com_write(msg, echo=echo)
             if check is True:
                 if echo is True:  # we are just looking if the transmission was sent back
@@ -249,9 +250,28 @@ class Motor(ComSerial):
                     else:
                         self.printError(string + " failed --> trying again")
                         self.setParameter(parameter, value, check=check, echo=echo, attempts=(attempts-1))
+=======
+            reply = self.com_write(msg, echo=echo)
+            string = "Set " + parameter + "=" + str(value)
+            
+	    if check is True:
+		if checkParameter(parameter, value) is True:
+		    # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
+            	    self.printMsg(string + " -> OK", False)
+		    return 0
+		else: # retry
+		    self.printError(string + " failed --> trying again")
+		    self.setParameter(parameter, value, check=check, echo=echo, attempts=attempts-1)
+            else:
+		return 0
+>>>>>>> 0df9cfbe177028dc4993f06d760279012a4078ff
         else:
             self.printError(string + " faild too many time --> quitting")
 	    return -1
+
+    def checkParameter(self, parameter, value, ):
+	pass
+
 
     def stopMovement(self):
         msg = self.InstructionSet["stopMovement"]
