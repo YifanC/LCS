@@ -39,7 +39,8 @@ class Attenuator(Motor):
                                "hardwareHome": "zp",
                                "reset@home": "zr",
                                "setHome": "h",
-                               "onoff": "en"}
+                               "onoff": "en",
+                               "DEBUG": "xx"}
 
         self.comDefaultReplyLength = 100
         self.comInfoReplyLength = 300

@@ -218,19 +218,21 @@ class Motor(ComSerial):
     def setParameter(self, parameter, value, check=True, echo=False, attempts=1):
         """ Function sends the defined string + value to the device.
             Arguments:  check:      If true the value is read back from the device and checked against the set value
-                        echo:       The set command expects an echo from the device, confirming the transmission
+                        echo:       The set command expects an echo from the device, confirming the transmission, this
+			            is not confirming that tha value was set.
                         attempts:   Number of tries for setting the parameter before giving up """
+        
+	string = "Set " + parameter + "=" + str(value)
         if attempts > 0:
             msg = self.InstructionSet[parameter] + self.comSetCommand + str(value)
 
             worked = self.com_write(msg, echo=echo)
-            string = "Set " + parameter + "=" + str(value)
             if check is True:
                 if echo is True:  # we are just looking if the transmission was sent back
                     string = "Set " + parameter + "=" + str(value)
                     if worked == 0:
                         # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
-                        self.printMsg(string + " -> OK", False)
+                        self.printMsg(string + " -> msg received", False)
                         return 0
                     else:
                         self.printError(string + " failed --> trying again")
@@ -246,8 +248,8 @@ class Motor(ComSerial):
                         self.printError(string + " failed --> trying again")
                         self.setParameter(parameter, value, check=check, echo=echo, attempts=(attempts-1))
         else:
-            self.printMsg(string + " faild too many time --> quitting")
-            sys.exit(-1)
+            self.printError(string + " faild too many time --> quitting")
+	    return -1
 
     def stopMovement(self):
         msg = self.InstructionSet["stopMovement"]
