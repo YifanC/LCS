@@ -7,7 +7,7 @@ import time
 import json
 import os
 
-DEBUG = False
+DEBUG = True
 
 class Device(object):
     def __init__(self, name, com):
@@ -89,6 +89,11 @@ class ComSerial(Device):
         try:
             port = self.comport
             self.com = serial.Serial(port, self.comBaudrate, 8, 'N', 1, timeout=0.1)
+	    
+	    # get rid of all the shit from a possible crash before
+	    self.com.flushInput()
+	    self.com.flushInput()
+	    time.sleep(1)
         except:
             self.printError("opening fcom port (" + self.comport + ") failed --> quitting")
             sys.exit(1)
@@ -162,6 +167,7 @@ class Motor(ComSerial):
         self.comInfoReplyLength = None
 
         self.comPrefix = None
+	self.comSetPrefix = None
         self.comSetCommand = None
         self.comGetCommand = None
         self.comEnd = None
@@ -230,7 +236,7 @@ class Motor(ComSerial):
         
 	string = "Set " + parameter + "=" + str(value)
         if attempts > 0:
-            msg = self.InstructionSet[parameter] + self.comSetCommand + str(value)
+            msg = self.comSetPrefix + self.InstructionSet[parameter] + self.comSetCommand + str(value)
             reply = self.com_write(msg, echo=echo)
             
 	    if check is True:
@@ -245,10 +251,11 @@ class Motor(ComSerial):
 		return 0
         else:
             self.printError(string + " faild too many time --> quitting")
-	    return -1
 
     def checkParameter(self, parameter, value, ):
-	pass
+	self.printError("No checkParameter function implemented! --> exiting")
+	sys.stdout.flush()
+	sys.exit(-1)
 
 
     def stopMovement(self):
