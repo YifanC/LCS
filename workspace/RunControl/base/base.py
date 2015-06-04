@@ -106,12 +106,7 @@ class ComSerial(Device):
         self.com.write(msg + self.comEnd)
 
         if (self.comEcho is True) or (echo is True):
-            reply = self.com_recv(len(msg))
-            if reply == self.comPrefix + message:
-                return 0
-            else:
-                self.printError("Echo expected but was different / not received: " + reply)
-                return -1
+	    return self.com_checkEcho(msg)
 
     def com_recv(self, msg_length=10):
         """ read message from comport """
@@ -128,6 +123,13 @@ class ComSerial(Device):
         is axis information which is sent in a reply."""
         return msg
 
+    def com_checkEcho(self, msg):
+	reply = self.com_recv(len(msg))
+	if reply == msg:
+	    return 0
+        else:
+            self.printError("Echo expected but was different / not received: " + str(reply))
+            return -1
 
     def printComStatus(self):
         self.printMsg(str(self.com))
