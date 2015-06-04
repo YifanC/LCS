@@ -27,12 +27,11 @@ class Device(object):
         else:
             print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
 
-
     def printError(self, string):
         if self.color is True:
             print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
         else:
-            print time.strftime('%H:%M ', time.localtime()) + self.name + " ERROR" +": " + string
+            print time.strftime('%H:%M ', time.localtime()) + self.name + " ERROR" + ": " + string
 
     def config_setfile(self, filename=-1):
         if filename == -1:
@@ -100,13 +99,13 @@ class ComSerial(Device):
 
         self.printMsg("Com port (" + self.com.port + ") closed")
 
-    def com_write(self, message):
+    def com_write(self, message, echo=False):
         """ write message to comport """
         msg = self.comPrefix + message
         self.com.isOpen()
         self.com.write(msg + self.comEnd)
 
-        if self.comEcho is True:
+        if (self.comEcho is True) or (echo is True):
             reply = self.com_recv(len(msg))
             if reply == self.comPrefix + message:
                 return 0
@@ -162,11 +161,11 @@ class Motor(ComSerial):
         self.comEnd = None
 
     def getName(self, display=True):
-	name = self.getParameter("getName")
+        name = self.getParameter("getName")
         if display == True:
             self.printMsg("Name: " + name)
-	
-	return name
+
+        return name
 
 
     def getInfo(self, display=False):
@@ -192,20 +191,63 @@ class Motor(ComSerial):
 
         return reply
 
-    def setParameter(self, parameter, value):
-        msg = self.InstructionSet[parameter] + self.comSetCommand + str(value)
+    def getPosition(self):
+        msg = self.comGetCommand + self.InstructionSet["getPosition"]
         self.com_write(msg)
+        reply = self.com_recv(self.comDefaultReplyLength)
+        return reply
 
-        SetValue = self.getParameter(parameter)
-        string = "Set " + parameter + "=" + str(value)
+    def monitorPosition(self, endPosition, display=True, delta=10):
+        time.sleep(0.1)
+        pos = self.getPosition()
+        while self.isMoving():
+            if display is True:
+                self.printMsg("Position: " + str(pos))
+                pos = self.getPosition()
+                time.sleep(0.1)
 
-        if SetValue == str(value):
-            # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
-            self.printMsg(string + " -> OK", False)
+        pos = self.getPosition()
+        if display is True:
+            self.printMsg("Position: " + str(pos))
+        # check if position was reached
+        if (endPosition - delta) <= pos <= (endPosition + delta):
             return 0
         else:
-            self.printError(string + " failed")
             return -1
+
+    def setParameter(self, parameter, value, check=True, echo=False, attempts=1):
+        """ Function sends the defined string + value to the device.
+            Arguments:  check:      If true the value is read back from the device and checked against the set value
+                        echo:       The set command expects an echo from the device, confirming the transmission
+                        attempts:   Number of tries for setting the parameter before giving up """
+        if attempts > 0:
+            msg = self.InstructionSet[parameter] + self.comSetCommand + str(value)
+
+            worked = self.com_write(msg, echo=echo)
+            string = "Set " + parameter + "=" + str(value)
+            if check is True:
+                if echo is True:  # we are just looking if the transmission was sent back
+                    string = "Set " + parameter + "=" + str(value)
+                    if worked == 0:
+                        # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
+                        self.printMsg(string + " -> OK", False)
+                        return 0
+                    else:
+                        self.printError(string + " failed --> trying again")
+                        self.setParameter(parameter, value, check=check, echo=echo, attemps=(attempts-1))
+
+                else:  # we are reading back the value seperatly
+                    SetValue = self.getParameter(parameter)
+                    if SetValue == str(value):
+                        # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
+                        self.printMsg(string + " -> OK", False)
+                        return 0
+                    else:
+                        self.printError(string + " failed --> trying again")
+                        self.setParameter(parameter, value, check=check, echo=echo, attemps=(attempts-1))
+        else:
+            self.printMsg(string + " faild too many time --> quitting")
+            sys.exit(-1)
 
     def stopMovement(self):
         msg = self.InstructionSet["stopMovement"]
@@ -242,31 +284,6 @@ class Motor(ComSerial):
         if monitor is True:
             return self.monitorPosition(value, display, delta)
         return 0
-
-
-    def getPosition(self):
-        msg = self.comGetCommand + self.InstructionSet["getPosition"]
-        self.com_write(msg)
-        reply = self.com_recv(self.comDefaultReplyLength)
-        return reply
-
-    def monitorPosition(self, endPosition, display=True, delta=10):
-        time.sleep(0.1)
-        pos = self.getPosition()
-        while self.isMoving():
-            if display is True:
-                self.printMsg("Position: " + str(pos))
-                pos = self.getPosition()
-                time.sleep(0.1)
-
-        pos = self.getPosition()
-        if display is True:
-            self.printMsg("Position: " + str(pos))
-        # check if position was reached
-        if (endPosition - delta) <= pos <= (endPosition + delta):
-            return 0
-        else:
-            return -1
 
 
 class bcolors:
