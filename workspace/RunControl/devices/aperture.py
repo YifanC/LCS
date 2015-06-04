@@ -10,7 +10,7 @@ class Aperture(Motor):
         self.state = 0
         self.comport = None
         self.comBaudrate = 9600
-        self.comTimeout =0
+        self.comTimeout = 0
         self.comEcho = False
         self.InfoInstruction = ""
         self.InfoMsgLength = 100
@@ -19,6 +19,8 @@ class Aperture(Motor):
 
         self.InstructionSet = {"getInfo": None,
                                "getName": "c",
+                               "enableMotor": "mn",
+                               "disableMotor": "mf",
                                "startSpeed": "l",
                                "endSpeed": "v",
                                "acceleration": "a",
@@ -28,12 +30,13 @@ class Aperture(Motor):
                                "idleCurrent": None,
                                "breakMovement": "ms",
                                "stopMovement": None,
-                               "isMoving": "ts",
+                               "isMoving": "s",
                                "getPosition": "p",
                                "limit1": "1",
                                "limit2": "2",  # limit2 == 1 --> fully open
-                               "moveAbsolute": None,
-                               "moveRelative": None}
+                               "moveAbsolute": None,  # no absolute movement implemented in hardware
+                               "moveRelative": "x",  # positive direction closes / negative opens
+                               "setDirection": "h"}
 
         self.comDefaultReplyLength = 100
         self.comInfoReplyLength = 100
@@ -44,13 +47,29 @@ class Aperture(Motor):
         self.comReplyPrefix = "1:"
         self.comEnd = "\r"
 
+    def init(self):
+        self.checkName()
+
+    def checkName(self):
+        """ Checks the name return by the device, if it is inconsistent with the expected name it stop the execute
+        of the script """
+        name = self.getName()
+        if name[:11] == "8SMC3-RS232":
+            self.printMsg("Aperture recognized")
+            return 0
+        else:
+            self.printMsg("Aperture not recovgnized, is this the right port number? -> quitting")
+            sys.exit(-1)
 
     def enableMotor(self):
-        pass
+        self.printMsg("Motor on")
+        msg = self.InstructionSet["enableMotor"]
+        return self.com_write(msg, echo=True)
 
     def disableMotor(self):
-        pass
-
+        self.printMsg("Motor off")
+        msg = self.InstructionSet["disableMotor"]
+        return self.com_write(msg, echo=True)
 
     def isMoving(self):
         """ This function returns True if the motor is moving and False if it is not"""
@@ -62,7 +81,6 @@ class Aperture(Motor):
     def msg_filter(self, msg):
         """ Removes the repl_prefix and trailing '\n' and '\r's from the reply """
         # TODO: Move this to base class, can be useful for every device!
-	print "MSG:" + str(msg)
         prefix_length = len(self.comReplyPrefix)
         if msg[:prefix_length] == self.comReplyPrefix:
             return msg[prefix_length:].rstrip()
