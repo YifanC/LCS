@@ -76,7 +76,7 @@ class Attenuator(Motor):
         self.setParameter("microsteps", self.microsteps)
 
     def getName(self):
-	"""" get the name of the devcie if it is not consistens wit att... abort """
+        """" get the name of the devcie if it is not consistens wit att... abort """
         self.com_write(self.InstructionSet["getName"])
         reply = self.com_recv(self.comInfoReplyLength)
 

@@ -30,11 +30,10 @@ class Aperture(Motor):
                                "isMoving": "ts",
                                "getPosition": "p",
                                "limit1": "1",
-                               "limit2": "2", # limit2 == 1 --> fully open
+                               "limit2": "2",  # limit2 == 1 --> fully open
                                "moveAbsolute": None,
                                "moveAbsolute": None,
                                "moveRelative": None}
-
 
         self.comDefaultReplyLength = 15
         self.comInfoReplyLength = 100
@@ -42,9 +41,9 @@ class Aperture(Motor):
         self.comPrefix = "A1"
         self.comSetCommand = "s"
         self.comGetCommand = "t"
-	self.comReplyPrefix = "1:"
+        self.comReplyPrefix = "1:"
         self.comEnd = "\r"
-	
+
 
     def turnOn(self):
         pass
@@ -57,11 +56,11 @@ class Aperture(Motor):
         return reply
 
     def msg_filter(self, msg):
-	""" Removes the repl_prefix and trailing '\n' and '\r's from the reply """
-	# TODO: Move this to base class, can be useful for every device!
-	prefix_length  = len(self.comReplyPrefix)
-	if msg[:prefix_length] == self.comReplyPrefix:
-	    return msg[prefix_length:].rstrip()
-	else:
-	    self.printError("Reply prefix (" + str(msg[:prefix_length]) + ") not valid, aborting")
-	    sys.exit(-1)
+        """ Removes the repl_prefix and trailing '\n' and '\r's from the reply """
+        # TODO: Move this to base class, can be useful for every device!
+        prefix_length = len(self.comReplyPrefix)
+        if msg[:prefix_length] == self.comReplyPrefix:
+            return msg[prefix_length:].rstrip()
+        else:
+            self.printError("Reply prefix (" + str(msg[:prefix_length]) + ") not valid, aborting")
+            sys.exit(-1)
