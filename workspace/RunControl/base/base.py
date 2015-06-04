@@ -234,7 +234,7 @@ class Motor(ComSerial):
                         return 0
                     else:
                         self.printError(string + " failed --> trying again")
-                        self.setParameter(parameter, value, check=check, echo=echo, attemps=(attempts-1))
+                        self.setParameter(parameter, value, check=check, echo=echo, attempts=(attempts-1))
 
                 else:  # we are reading back the value seperatly
                     SetValue = self.getParameter(parameter)
@@ -244,7 +244,7 @@ class Motor(ComSerial):
                         return 0
                     else:
                         self.printError(string + " failed --> trying again")
-                        self.setParameter(parameter, value, check=check, echo=echo, attemps=(attempts-1))
+                        self.setParameter(parameter, value, check=check, echo=echo, attempts=(attempts-1))
         else:
             self.printMsg(string + " faild too many time --> quitting")
             sys.exit(-1)

@@ -26,38 +26,38 @@
       <file leaf-file-name="base.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/base/base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3274" max-vertical-offset="4896">
-              <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3742" max-vertical-offset="5364">
+              <caret line="222" column="24" selection-start-line="222" selection-start-column="24" selection-end-line="222" selection-end-column="24" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="aperture.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="aperture.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/devices/aperture.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.1761364" vertical-offset="0" max-vertical-offset="1278">
-              <caret line="46" column="21" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="142" max-vertical-offset="1710">
+              <caret line="37" column="48" selection-start-line="37" selection-start-column="48" selection-end-line="37" selection-end-column="48" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="config_attenuator.json" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="test_aperture.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/devices/test_aperture.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="414">
+              <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config_attenuator.json" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/devices/config_attenuator.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="108">
-              <caret line="0" column="62" selection-start-line="0" selection-start-column="62" selection-end-line="0" selection-end-column="62" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_laser.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/devices/test_laser.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
-              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="704">
+              <caret line="0" column="26" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="62" />
               <folding />
             </state>
           </provider>
@@ -93,9 +93,10 @@
         <option value="$PROJECT_DIR$/devices/laser.py" />
         <option value="$PROJECT_DIR$/devices/config_attenuator.json" />
         <option value="$PROJECT_DIR$/devices/test_attenuator.py" />
-        <option value="$PROJECT_DIR$/base/base.py" />
         <option value="$PROJECT_DIR$/devices/attenuator.py" />
         <option value="$PROJECT_DIR$/devices/aperture.py" />
+        <option value="$PROJECT_DIR$/devices/test_aperture.py" />
+        <option value="$PROJECT_DIR$/base/base.py" />
       </list>
     </option>
   </component>
@@ -216,7 +217,7 @@
       <recent name="$PROJECT_DIR$/devices" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test_attenuator">
+  <component name="RunManager" selected="Python.test_aperture">
     <configuration default="false" name="test_attenuator" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -257,24 +258,6 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="motor_model" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/devices" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="RunControl" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/devices/motor_model.py" />
-      <option name="PARAMETERS" value="" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
     <configuration default="false" name="motor_model2" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -310,6 +293,24 @@
       <RunnerSettings RunnerId="PyDebugRunner" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PyDebugRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="test_aperture" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/devices" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="RunControl" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/devices/test_aperture.py" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
@@ -437,17 +438,17 @@
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.test_attenuator" />
       <item index="1" class="java.lang.String" itemvalue="Python.test_feedtrough" />
-      <item index="2" class="java.lang.String" itemvalue="Python.motor_model" />
-      <item index="3" class="java.lang.String" itemvalue="Python.motor_model2" />
-      <item index="4" class="java.lang.String" itemvalue="Python.test_laser" />
+      <item index="2" class="java.lang.String" itemvalue="Python.motor_model2" />
+      <item index="3" class="java.lang.String" itemvalue="Python.test_laser" />
+      <item index="4" class="java.lang.String" itemvalue="Python.test_aperture" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.test_attenuator" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test_laser" />
-        <item index="2" class="java.lang.String" itemvalue="Python.test_feedtrough" />
-        <item index="3" class="java.lang.String" itemvalue="Python.motor_model2" />
-        <item index="4" class="java.lang.String" itemvalue="Python.motor_model" />
+        <item index="0" class="java.lang.String" itemvalue="Python.test_aperture" />
+        <item index="1" class="java.lang.String" itemvalue="Python.test_attenuator" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test_laser" />
+        <item index="3" class="java.lang.String" itemvalue="Python.test_feedtrough" />
+        <item index="4" class="java.lang.String" itemvalue="Python.motor_model2" />
       </list>
     </recent_temporary>
   </component>
@@ -823,14 +824,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/devices/test_aperture.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="704">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/devices/test_attenuator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.1278409" vertical-offset="0" max-vertical-offset="704">
@@ -855,34 +848,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/devices/config_attenuator.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="108">
-          <caret line="0" column="62" selection-start-line="0" selection-start-column="62" selection-end-line="0" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/devices/attenuator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.59090906" vertical-offset="2752" max-vertical-offset="3564">
-          <caret line="177" column="24" selection-start-line="177" selection-start-column="24" selection-end-line="177" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3328" max-vertical-offset="4896">
-          <caret line="235" column="0" selection-start-line="235" selection-start-column="0" selection-end-line="235" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.59090906" vertical-offset="1186" max-vertical-offset="3564">
+          <caret line="90" column="39" selection-start-line="90" selection-start-column="8" selection-end-line="90" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/devices/aperture.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.1761364" vertical-offset="0" max-vertical-offset="1278">
-          <caret line="46" column="21" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="142" max-vertical-offset="1710">
+          <caret line="37" column="48" selection-start-line="37" selection-start-column="48" selection-end-line="37" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/devices/test_aperture.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="414">
+          <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/base/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3742" max-vertical-offset="5364">
+          <caret line="222" column="24" selection-start-line="222" selection-start-column="24" selection-end-line="222" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/devices/config_attenuator.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="704">
+          <caret line="0" column="26" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="62" />
           <folding />
         </state>
       </provider>
