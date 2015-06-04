@@ -139,6 +139,7 @@ class Motor(ComSerial):
 
     def __init__(self):
         self.InstructionSet = {"getInfo": None,
+                               "getName": None,
                                "maxSpeed": None,
                                "startSpeed": None,
                                "acceleration": None,
@@ -160,13 +161,21 @@ class Motor(ComSerial):
         self.comGetCommand = None
         self.comEnd = None
 
-    def getInfo(self, output=False):
+    def getName(self, display=True):
+	name = self.getParameter("getName")
+        if display == True:
+            self.printMsg("Name: " + name)
+	
+	return name
+
+
+    def getInfo(self, display=False):
 
         if self.InstructionSet['getInfo'] != None and self.comInfoReplyLength != None:
 
             self.com_write(self.InstructionSet["getInfo"])
             reply = self.com_recv(self.comInfoReplyLength)
-            if output == True:
+            if display == True:
                 self.printMsg("Info: " + reply)
 
             return reply
