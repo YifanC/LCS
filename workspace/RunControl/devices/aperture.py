@@ -42,7 +42,8 @@ class Aperture(Motor):
         self.comInfoReplyLength = 100
 
         self.comPrefix = "A1"
-        self.comSetCommand = "s"
+        self.comSetPrefix = "s"
+        self.comSetCommand = ""
         self.comGetCommand = "t"
         self.comReplyPrefix = "1:"
         self.comEnd = "\r"
@@ -81,10 +82,14 @@ class Aperture(Motor):
     def msg_filter(self, msg):
         """ Removes the repl_prefix and trailing '\n' and '\r's from the reply """
         # TODO: Move this to base class, can be useful for every device!
-	print msg
         prefix_length = len(self.comReplyPrefix)
         if msg[:prefix_length] == self.comReplyPrefix:
             return msg[prefix_length:].rstrip()
         else:
             self.printError("Reply prefix (" + str(msg[:prefix_length]) + ") not valid, aborting")
             #sys.exit(-1)
+
+    def checkParameter(self, parameter, value, echo):
+	print "Echo: " + str(echo)
+	return 0
+

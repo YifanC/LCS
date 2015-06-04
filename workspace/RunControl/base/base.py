@@ -240,7 +240,7 @@ class Motor(ComSerial):
             reply = self.com_write(msg, echo=echo)
             
 	    if check is True:
-		if self.checkParameter(parameter, value) == 0:
+		if self.checkParameter(parameter, value, reply) == 0:
 		    # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
             	    self.printMsg(string + " -> OK", False)
 		    return 0
