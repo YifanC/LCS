@@ -48,6 +48,7 @@ class Attenuator(Motor):
         self.comPrefix = ""
         self.comSetCommand = " "
         self.comGetCommand = ""
+	self.comReplyPrefix = ""
         self.comEnd = "\r"
 
         self.microsteps = 2
@@ -196,8 +197,6 @@ class Attenuator(Motor):
     def checkParameter(self, parameter, value):
 	SetValue = self.getParameter(parameter)
         if SetValue == str(value):
-	    # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
-            self.printMsg(string + " -> OK", False)
             return 0
         else:
 	    return -1

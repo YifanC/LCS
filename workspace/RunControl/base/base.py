@@ -7,6 +7,7 @@ import time
 import json
 import os
 
+DEBUG = False
 
 class Device(object):
     def __init__(self, name, com):
@@ -31,7 +32,13 @@ class Device(object):
         if self.color is True:
             print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
         else:
-            print time.strftime('%H:%M ', time.localtime()) + self.name + " ERROR" + ": " + string
+            print time.strftime('%H:%M ', time.localtime()) + self.name + " ERROR: " + string
+    
+    def printDebug(self, string):
+        if self.color is True:
+            print bcolors.WARNING + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+        else:
+            print time.strftime('%H:%M ', time.localtime()) + "DEBUG "  + self.name + " " + string
 
     def config_setfile(self, filename=-1):
         if filename == -1:
@@ -104,15 +111,20 @@ class ComSerial(Device):
         msg = self.comPrefix + message
         self.com.isOpen()
         self.com.write(msg + self.comEnd)
+	if DEBUG is True:
+		self.printDebug("String sent: " + msg + self.comEnd)
 
         if (self.comEcho is True) or (echo is True):
-	    return self.com_recv()
+	    reply = self.com_recv(len(self.comReplyPrefix + message))
+	    return reply
 
-    def com_recv(self, msg_length=10):
+    def com_recv(self, msg_length=100):
         """ read message from comport """
         try:
             self.com.isOpen()
             msg = self.com.read(msg_length)
+	    if DEBUG is True:	        
+		self.printDebug("Answer: " + msg)
         except:
             self.printError("Could not read to com port")
             sys.exit(1)
@@ -122,14 +134,6 @@ class ComSerial(Device):
         """ function which filters the output, should be defined in the device class if required. Useful for example if there
         is axis information which is sent in a reply."""
         return msg
-
-    def com_checkEcho(self, msg):
-	reply = self.com_recv(len(msg))
-	if reply == msg:
-	    return 0
-        else:
-            self.printError("Echo expected but was different / not received: " + str(reply))
-            return -1
 
     def printComStatus(self):
         self.printMsg(str(self.com))
@@ -227,35 +231,10 @@ class Motor(ComSerial):
 	string = "Set " + parameter + "=" + str(value)
         if attempts > 0:
             msg = self.InstructionSet[parameter] + self.comSetCommand + str(value)
-
-<<<<<<< HEAD
-            worked = self.com_write(msg, echo=echo)
-            if check is True:
-                if echo is True:  # we are just looking if the transmission was sent back
-                    string = "Set " + parameter + "=" + str(value)
-                    if worked == 0:
-                        # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
-                        self.printMsg(string + " -> msg received", False)
-                        return 0
-                    else:
-                        self.printError(string + " failed --> trying again")
-                        self.setParameter(parameter, value, check=check, echo=echo, attempts=(attempts-1))
-
-                else:  # we are reading back the value seperatly
-                    SetValue = self.getParameter(parameter)
-                    if SetValue == str(value):
-                        # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
-                        self.printMsg(string + " -> OK", False)
-                        return 0
-                    else:
-                        self.printError(string + " failed --> trying again")
-                        self.setParameter(parameter, value, check=check, echo=echo, attempts=(attempts-1))
-=======
             reply = self.com_write(msg, echo=echo)
-            string = "Set " + parameter + "=" + str(value)
             
 	    if check is True:
-		if checkParameter(parameter, value) is True:
+		if self.checkParameter(parameter, value) == 0:
 		    # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
             	    self.printMsg(string + " -> OK", False)
 		    return 0
@@ -264,7 +243,6 @@ class Motor(ComSerial):
 		    self.setParameter(parameter, value, check=check, echo=echo, attempts=attempts-1)
             else:
 		return 0
->>>>>>> 0df9cfbe177028dc4993f06d760279012a4078ff
         else:
             self.printError(string + " faild too many time --> quitting")
 	    return -1
