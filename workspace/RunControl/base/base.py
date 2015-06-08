@@ -122,7 +122,6 @@ class ComSerial(base):
 
         if (self.comEcho is True) or (echo is True):
             reply = self.com_recv(len(self.comReplyPrefix + message + self.comReplyEnd))
-	    print "reply: " + str(reply)
             return reply
 
     def com_recv(self, msg_length=100):
@@ -179,9 +178,9 @@ class Motor(ComSerial):
     def getName(self, display=True):
         name = self.getParameter("getName")
         if display == True:
-            self.printMsg("Name: " + name)
+            self.printMsg("Name: " + str(name))
 
-        return name
+        return str(name)
 
 
     def getInfo(self, display=False):
@@ -211,7 +210,7 @@ class Motor(ComSerial):
         msg = self.comGetCommand + self.InstructionSet["getPosition"]
         self.com_write(msg)
         reply = self.com_recv(self.comDefaultReplyLength)
-        return reply
+        return self.convertPosition(reply)
 
     def monitorPosition(self, endPosition, display=True, delta=10):
         time.sleep(0.1)
@@ -260,6 +259,9 @@ class Motor(ComSerial):
         self.printError("No checkParameter function implemented! --> exiting")
         sys.stdout.flush()
         sys.exit(-1)
+
+    def convertPosition(self, value):
+	return value
 
 
     def stopMovement(self):

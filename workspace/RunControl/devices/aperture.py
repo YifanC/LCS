@@ -1,7 +1,7 @@
 __author__ = 'matthias'
 
 from base.base import *
-
+from math import copysign
 
 class Aperture(Motor):
     def __init__(self):
@@ -9,7 +9,7 @@ class Aperture(Motor):
         self.state = 0
         self.comport = None
         self.comBaudrate = 9600
-        self.comTimeout = 0
+        self.comTimeout = 0.5
         self.comEcho = False
         self.InfoInstruction = ""
         self.InfoMsgLength = 100
@@ -34,8 +34,9 @@ class Aperture(Motor):
                                "limit1": "1",
                                "limit2": "2",  # limit2 == 1 --> fully open
                                "moveAbsolute": None,  # no absolute movement implemented in hardware
-                               "moveRelative": "x",  # positive direction closes / negative opens
-                               "setDirection": "h"}
+                               "moveRelative": "x",
+                               "startMovement": "go", 
+                               "setDirection": "h"}  # positive direction closes / negative opens
 
         self.comDefaultReplyLength = 100
         self.comInfoReplyLength = 100
@@ -81,6 +82,36 @@ class Aperture(Motor):
 	else:
 		return False
 
+    def moveRelative(self, value, monitor=False, display=False, delta=10):
+        self.printMsg("Moving relative: " + str(value) + " steps")
+        if display is True:
+            monitor = True
+        value = int(value)
+	# need to determine the sign and then set the direction (negative = open (0), positive = close (1))
+	if value >= 0:
+	    self.setParameter("setDirection", 1)
+	elif value < 0:
+	    self.setParameter("setDirection", 0)
+	else:
+	    self.printError("Could not determine sign of direction")
+	
+	# we have to put together an hex string of the form "0F1010"
+	hexstr_value = '{0:06x}'.format(abs(value))
+
+	# write the steps to the controller (no movement yet)
+	self.setParameter("moveRelative", hexstr_value, echo=True)
+
+
+        # get current position for monitoring
+        if monitor is True:
+            pos_start = self.getPosition()
+
+        if monitor is True:
+            return self.monitorPosition(value + pos_start, display, delta)
+        return 0
+
+
+
     def msg_filter(self, msg):
         """ Removes the repl_prefix and trailing '\n' and '\r's from the reply """
         # TODO: Move this to base class, can be useful for every device!
@@ -94,4 +125,7 @@ class Aperture(Motor):
     def checkParameter(self, parameter, value, echo):
         print "Echo: " + str(echo)
         return 0
+
+    def convertPosition(self, value):
+	return int(value,16)
 
