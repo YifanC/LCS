@@ -121,7 +121,8 @@ class ComSerial(base):
             self.printDebug("String sent: " + msg + self.comEnd)
 
         if (self.comEcho is True) or (echo is True):
-            reply = self.com_recv(len(self.comReplyPrefix + message))
+            reply = self.com_recv(len(self.comReplyPrefix + message + self.comReplyEnd))
+	    print "reply: " + str(reply)
             return reply
 
     def com_recv(self, msg_length=100):
@@ -167,11 +168,13 @@ class Motor(ComSerial):
         self.comDefaultReplyLength = None
         self.comInfoReplyLength = None
 
-        self.comPrefix = None
-        self.comSetPrefix = None
-        self.comSetCommand = None
-        self.comGetCommand = None
-        self.comEnd = None
+        self.comPrefix = None		# this string is put in front of any message transmitted 
+        self.comSetPrefix = None	# this string is sent in front of a setParameter(para, value) call 
+        self.comSetCommand = None	# this string is sent in between of a setParameter(para, value) call
+        self.comGetCommand = None	# this string is sent in font of the getParameter(para) call
+        self.comReplyPrefix = None	# is used to determine the reply length when the device sends back an echo
+	self.comReplyEnd = None		# is used to determine the reply length when the device sends back an echo
+        self.comEnd = None		# is added to any message sent to the device
 
     def getName(self, display=True):
         name = self.getParameter("getName")

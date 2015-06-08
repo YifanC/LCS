@@ -45,6 +45,7 @@ class Aperture(Motor):
         self.comSetCommand = ""
         self.comGetCommand = "t"
         self.comReplyPrefix = "1:"
+	self.comReplyEnd = "\r\n"
         self.comEnd = "\r"
 
     def init(self):
@@ -73,10 +74,12 @@ class Aperture(Motor):
 
     def isMoving(self):
         """ This function returns True if the motor is moving and False if it is not"""
-        msg = self.InstructionSet["isMoving"]
-        self.com_write(msg)
-        reply = self.com_recv(self.comDefaultReplyLength)
-        return reply
+        reply = self.getParameter("isMoving")
+        
+	if int(reply[:2]) > 0:
+		return True
+	else:
+		return False
 
     def msg_filter(self, msg):
         """ Removes the repl_prefix and trailing '\n' and '\r's from the reply """
