@@ -9,7 +9,8 @@ import os
 
 DEBUG = True
 
-class Device(object):
+
+class base(object):
     def __init__(self, name, com):
         self.name = name
         self.com = com
@@ -33,12 +34,12 @@ class Device(object):
             print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
         else:
             print time.strftime('%H:%M ', time.localtime()) + self.name + " ERROR: " + string
-    
+
     def printDebug(self, string):
         if self.color is True:
             print bcolors.WARNING + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
         else:
-            print time.strftime('%H:%M ', time.localtime()) + "DEBUG "  + self.name + " " + string
+            print time.strftime('%H:%M ', time.localtime()) + "DEBUG " + self.name + " " + string
 
     def config_setfile(self, filename=-1):
         if filename == -1:
@@ -67,7 +68,7 @@ class Device(object):
             self.__dict__ = f
 
 
-class ComSerial(Device):
+class ComSerial(base):
     def __init__(self, comport):
         self.com = serial.Serial()
         self.comBaudrate = 9600
@@ -89,11 +90,11 @@ class ComSerial(Device):
         try:
             port = self.comport
             self.com = serial.Serial(port, self.comBaudrate, 8, 'N', 1, timeout=0.1)
-	    
-	    # get rid of all the shit from a possible crash before
-	    self.com.flushInput()
-	    self.com.flushInput()
-	    time.sleep(1)
+
+            # get rid of all the shit from a possible crash before
+            self.com.flushInput()
+            self.com.flushInput()
+            time.sleep(1)
         except:
             self.printError("opening fcom port (" + self.comport + ") failed --> quitting")
             sys.exit(1)
@@ -116,20 +117,20 @@ class ComSerial(Device):
         msg = self.comPrefix + message
         self.com.isOpen()
         self.com.write(msg + self.comEnd)
-	if DEBUG is True:
-		self.printDebug("String sent: " + msg + self.comEnd)
+        if DEBUG is True:
+            self.printDebug("String sent: " + msg + self.comEnd)
 
         if (self.comEcho is True) or (echo is True):
-	    reply = self.com_recv(len(self.comReplyPrefix + message))
-	    return reply
+            reply = self.com_recv(len(self.comReplyPrefix + message))
+            return reply
 
     def com_recv(self, msg_length=100):
         """ read message from comport """
         try:
             self.com.isOpen()
             msg = self.com.read(msg_length)
-	    if DEBUG is True:	        
-		self.printDebug("Answer: " + msg)
+            if DEBUG is True:
+                self.printDebug("Answer: " + msg)
         except:
             self.printError("Could not read to com port")
             sys.exit(1)
@@ -167,7 +168,7 @@ class Motor(ComSerial):
         self.comInfoReplyLength = None
 
         self.comPrefix = None
-	self.comSetPrefix = None
+        self.comSetPrefix = None
         self.comSetCommand = None
         self.comGetCommand = None
         self.comEnd = None
@@ -231,31 +232,31 @@ class Motor(ComSerial):
         """ Function sends the defined string + value to the device.
             Arguments:  check:      If true the value is read back from the device and checked against the set value
                         echo:       The set command expects an echo from the device, confirming the transmission, this
-			            is not confirming that tha value was set.
+                                    is not confirming that tha value was set.
                         attempts:   Number of tries for setting the parameter before giving up """
-        
-	string = "Set " + parameter + "=" + str(value)
+
+        string = "Set " + parameter + "=" + str(value)
         if attempts > 0:
             msg = self.comSetPrefix + self.InstructionSet[parameter] + self.comSetCommand + str(value)
             reply = self.com_write(msg, echo=echo)
-            
-	    if check is True:
-		if self.checkParameter(parameter, value, reply) == 0:
-		    # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
-            	    self.printMsg(string + " -> OK", False)
-		    return 0
-		else: # retry
-		    self.printError(string + " failed --> trying again")
-		    self.setParameter(parameter, value, check=check, echo=echo, attempts=attempts-1)
+
+            if check is True:
+                if self.checkParameter(parameter, value, reply) == 0:
+                    # self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC, True)
+                    self.printMsg(string + " -> OK", False)
+                    return 0
+                else:  # retry
+                    self.printError(string + " failed --> trying again")
+                    self.setParameter(parameter, value, check=check, echo=echo, attempts=attempts - 1)
             else:
-		return 0
+                return 0
         else:
             self.printError(string + " faild too many time --> quitting")
 
-    def checkParameter(self, parameter, value, ):
-	self.printError("No checkParameter function implemented! --> exiting")
-	sys.stdout.flush()
-	sys.exit(-1)
+    def checkParameter(self, parameter, value, echo):
+        self.printError("No checkParameter function implemented! --> exiting")
+        sys.stdout.flush()
+        sys.exit(-1)
 
 
     def stopMovement(self):

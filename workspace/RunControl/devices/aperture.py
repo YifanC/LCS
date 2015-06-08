@@ -1,5 +1,4 @@
 __author__ = 'matthias'
-__author__ = 'matthias'
 
 from base.base import *
 
@@ -87,9 +86,9 @@ class Aperture(Motor):
             return msg[prefix_length:].rstrip()
         else:
             self.printError("Reply prefix (" + str(msg[:prefix_length]) + ") not valid, aborting")
-            #sys.exit(-1)
+            # sys.exit(-1)
 
     def checkParameter(self, parameter, value, echo):
-	print "Echo: " + str(echo)
-	return 0
+        print "Echo: " + str(echo)
+        return 0
 
