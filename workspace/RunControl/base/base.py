@@ -83,6 +83,8 @@ class ComSerial(Device):
         self.comPrefix = ""
         self.comEnd = None
         self.NumberOfAxes = 1
+	self.com.flushInput()
+	time.sleep(1)
 
     def com_init(self):
         """ Tries to open com port specified in comport """
@@ -286,7 +288,6 @@ class Motor(ComSerial):
         if monitor is True:
             return self.monitorPosition(value, display, delta)
         return 0
-
 
 class bcolors:
     HEADER = '\033[95m'
