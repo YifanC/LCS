@@ -10,7 +10,7 @@ class Aperture(Motor):
         self.state = 0
         self.comport = None
         self.comBaudrate = 9600
-        self.comTimeout = 0.5
+        self.comTimeout = 1
         self.comEcho = False
         self.InfoInstruction = ""
         self.InfoMsgLength = 100
@@ -38,6 +38,7 @@ class Aperture(Motor):
                                "moveRelative": "x",
                                "startMovement": "go",
                                "setDirection": "h"}  # positive direction closes / negative opens
+	# from 
 
         self.comDefaultReplyLength = 100
         self.comInfoReplyLength = 100
@@ -90,18 +91,20 @@ class Aperture(Motor):
         value = int(value)
         # need to determine the sign and then set the direction (negative = open (0), positive = close (1))
         if value >= 0:
-            self.setParameter("setDirection", 1)
+            self.setParameter("setDirection", 1, echo=True)
         elif value < 0:
-            self.setParameter("setDirection", 0)
+            self.setParameter("setDirection", 0, echo=True)
         else:
             self.printError("Could not determine sign of direction")
 
-        # we have to put together an hex string of the form "0F1010"
-        hexstr_value = '{0:06x}'.format(abs(value))
+        # we have to put together an uppercase hex string of the form "0F1010"
+        hexstr_value = '{0:06x}'.format(abs(value)).upper()
 
         # write the steps to the controller (no movement yet)
         self.setParameter("moveRelative", hexstr_value, echo=True)
-
+	
+	msg = self.InstructionSet["startMovement"]
+	self.com_write(msg, echo=True)
 
         # get current position for monitoring
         if monitor is True:
@@ -111,6 +114,11 @@ class Aperture(Motor):
             return self.monitorPosition(value + pos_start, display, delta)
         return 0
 
+    def home(self):
+	msg = "mr1"
+	self.com_write(msg, echo=True)
+	return self.monitorPosition(0, display=True)
+	
 
     def msg_filter(self, msg):
         """ Removes the repl_prefix and trailing '\n' and '\r's from the reply """

@@ -117,6 +117,7 @@ class ComSerial(base):
         msg = self.comPrefix + message
         self.com.isOpen()
         self.com.write(msg + self.comEnd)
+
         if DEBUG is True:
             self.printDebug("String sent: " + msg + self.comEnd)
 
