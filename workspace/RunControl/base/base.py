@@ -169,13 +169,13 @@ class Motor(ComSerial):
         self.comDefaultReplyLength = None
         self.comInfoReplyLength = None
 
-        self.comPrefix = None		# this string is put in front of any message transmitted 
-        self.comSetPrefix = None	# this string is sent in front of a setParameter(para, value) call 
-        self.comSetCommand = None	# this string is sent in between of a setParameter(para, value) call
-        self.comGetCommand = None	# this string is sent in font of the getParameter(para) call
-        self.comReplyPrefix = None	# is used to determine the reply length when the device sends back an echo
-	self.comReplyEnd = None		# is used to determine the reply length when the device sends back an echo
-        self.comEnd = None		# is added to any message sent to the device
+        self.comPrefix = None  # this string is put in front of any message transmitted
+        self.comSetPrefix = None  # this string is sent in front of a setParameter(para, value) call
+        self.comSetCommand = None  # this string is sent in between of a setParameter(para, value) call
+        self.comGetCommand = None  # this string is sent in font of the getParameter(para) call
+        self.comReplyPrefix = None  # is used to determine the reply length when the device sends back an echo
+        self.comReplyEnd = None  # is used to determine the reply length when the device sends back an echo
+        self.comEnd = None  # is added to any message sent to the device
 
     def getName(self, display=True):
         name = self.getParameter("getName")
@@ -258,12 +258,16 @@ class Motor(ComSerial):
             self.printError(string + " faild too many time --> quitting")
 
     def checkParameter(self, parameter, value, echo):
+        """ This function has to be defined by the device class to specify how a setParameter() call will check that the
+        parameter was configured properly. """
         self.printError("No checkParameter function implemented! --> exiting")
         sys.stdout.flush()
         sys.exit(-1)
 
     def convertPosition(self, value):
-	return value
+        """  If the read values from the getPosition command is not sent back in a standard format, this function can be
+         defined to convert the values into a readable format for latter use."""
+        return value
 
 
     def stopMovement(self):
