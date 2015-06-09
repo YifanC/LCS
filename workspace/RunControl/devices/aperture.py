@@ -38,7 +38,7 @@ class Aperture(Motor):
                                "moveRelative": "x",
                                "startMovement": "go",
                                "setDirection": "h"}  # positive direction closes / negative opens
-	# from 
+        # from
 
         self.comDefaultReplyLength = 100
         self.comInfoReplyLength = 100
@@ -102,9 +102,9 @@ class Aperture(Motor):
 
         # write the steps to the controller (no movement yet)
         self.setParameter("moveRelative", hexstr_value, echo=True)
-	
-	msg = self.InstructionSet["startMovement"]
-	self.com_write(msg, echo=True)
+
+        msg = self.InstructionSet["startMovement"]
+        self.com_write(msg, echo=True)
 
         # get current position for monitoring
         if monitor is True:
@@ -114,11 +114,23 @@ class Aperture(Motor):
             return self.monitorPosition(value + pos_start, display, delta)
         return 0
 
-    def home(self):
-	msg = "mr1"
-	self.com_write(msg, echo=True)
-	return self.monitorPosition(0, display=True)
-	
+    def home(self, where=0):
+        """ Homes attenuator to either end switch: if 0 is the fully closed position and 1 is the fully open position"""
+        direction = {1: "open", 0: "closed"}
+        if where == 0:
+            msg = "mr1"
+            limit_switch = "limit1"
+        elif where == 1:
+            msg = "mr0"
+            limit_switch = "limit2"
+        else:
+            self.printError("Homing parameter out of bounds")
+
+        self.com_write(msg, echo=True)
+        self.printMsg("going to fully " + direction(where) + " position")
+        while int(self.getPosition(limit_switch)) == 0:
+            pos = self.getPosition()
+            self.printMsg("pos: " + str(pos))
 
     def msg_filter(self, msg):
         """ Removes the repl_prefix and trailing '\n' and '\r's from the reply """
