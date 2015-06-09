@@ -194,7 +194,7 @@ class Attenuator(Motor):
             self.printError("Could not set transmission")
             return -1
 
-    def checkParameter(self, parameter, value):
+    def checkParameter(self, parameter, value, echo):
 	SetValue = self.getParameter(parameter)
         if SetValue == str(value):
             return 0
