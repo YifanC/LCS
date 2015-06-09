@@ -17,6 +17,10 @@ class Aperture(Motor):
         self.StandartMsgLength = 15
         self.comEnd = "\r"
 
+        # config file
+        self.config_setfile()
+        self.config_load()
+
         self.InstructionSet = {"getInfo": None,
                                "getName": "c",
                                "enableMotor": "mn",
@@ -51,8 +55,35 @@ class Aperture(Motor):
         self.comReplyEnd = "\r\n"
         self.comEnd = "\r"
 
+        """ Operation of aperture:
+             1. init com port
+             2. turn motor on (enableMotor)
+             3. home axis to either limit switch (default: fully closed)
+             4. open the aperture to the desired value (moveRelative)
+             5. turn motor off (disableMotor)
+             6. close com port
+
+             steps 3. and 4. are performed in the init function, where the opening position is loaded from the
+             config_aperture.json file
+        """
+        """ Comments:
+             - Limit switches: There are two limit switches at the fully open and fully closed positions
+             - Homing: The two limit switches can be used for homing
+             - Position range: The position from either home position to the other limit position is about 2200 (with
+               microsteps regime '01')
+             - Position reading (getPosition) is unreliable, can't be used as a reference. Best for now is to always
+               home first and then move from there to a defined position in the opposite direction (no turing around)
+        """
+
+
     def init(self):
+        default_position = self.config.APERTURE_POSITION
+
         self.checkName()
+        self.home(where=0)
+        self.moveRelative(default_position, display=True)
+
+
 
     def checkName(self):
         """ Checks the name return by the device, if it is inconsistent with the expected name it stop the execute
@@ -62,7 +93,7 @@ class Aperture(Motor):
             self.printMsg("Aperture recognized")
             return 0
         else:
-            self.printMsg("Aperture not recovgnized, is this the right port number? -> quitting")
+            self.printMsg("Aperture not recognized, is this the right port number? -> quitting")
             sys.exit(-1)
 
     def enableMotor(self):
@@ -125,12 +156,39 @@ class Aperture(Motor):
             limit_switch = "limit2"
         else:
             self.printError("Homing parameter out of bounds")
+            return -1
 
+        # if a limit switch is active the homing will not be performed, we need to move such that the switch will
+        # deactivate
+        switch = self.checkLimits()
+        if switch > 0:
+            if switch == 1:
+                self.moveRelative(-100, monitor=True)
+            elif switch == 2:
+                self.moveRelative(100, monitor=True)
+
+        # now we issue the homing command
         self.com_write(msg, echo=True)
         self.printMsg("going to fully " + direction(where) + " position")
         while int(self.getPosition(limit_switch)) == 0:
             pos = self.getPosition()
             self.printMsg("pos: " + str(pos))
+
+        return 0
+
+    def checkLimits(self):
+        """ checks if any limit switches are active, if no return is 0, otherwise it returns which one of the switches is
+        active (1 or 2) as an int """
+        limit1 = int(self.getParameter("limit1"))
+        limit2 = int(self.getParameter("limit2"))
+        limits = [limit1, limit2]
+
+        # check if any on the switches is active
+        if 1 in limits:
+            return 1 + limits.index(1)
+
+        return 0
+
 
     def msg_filter(self, msg):
         """ Removes the repl_prefix and trailing '\n' and '\r's from the reply """
