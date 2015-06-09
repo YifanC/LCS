@@ -3,6 +3,7 @@ __author__ = 'matthias'
 from base.base import *
 from math import copysign
 
+
 class Aperture(Motor):
     def __init__(self):
         self.name = "aperture"
@@ -35,7 +36,7 @@ class Aperture(Motor):
                                "limit2": "2",  # limit2 == 1 --> fully open
                                "moveAbsolute": None,  # no absolute movement implemented in hardware
                                "moveRelative": "x",
-                               "startMovement": "go", 
+                               "startMovement": "go",
                                "setDirection": "h"}  # positive direction closes / negative opens
 
         self.comDefaultReplyLength = 100
@@ -46,7 +47,7 @@ class Aperture(Motor):
         self.comSetCommand = ""
         self.comGetCommand = "t"
         self.comReplyPrefix = "1:"
-	self.comReplyEnd = "\r\n"
+        self.comReplyEnd = "\r\n"
         self.comEnd = "\r"
 
     def init(self):
@@ -76,30 +77,30 @@ class Aperture(Motor):
     def isMoving(self):
         """ This function returns True if the motor is moving and False if it is not"""
         reply = self.getParameter("isMoving")
-        
-	if int(reply[:2]) > 0:
-		return True
-	else:
-		return False
+
+        if int(reply[:2]) > 0:
+            return True
+        else:
+            return False
 
     def moveRelative(self, value, monitor=False, display=False, delta=10):
         self.printMsg("Moving relative: " + str(value) + " steps")
         if display is True:
             monitor = True
         value = int(value)
-	# need to determine the sign and then set the direction (negative = open (0), positive = close (1))
-	if value >= 0:
-	    self.setParameter("setDirection", 1)
-	elif value < 0:
-	    self.setParameter("setDirection", 0)
-	else:
-	    self.printError("Could not determine sign of direction")
-	
-	# we have to put together an hex string of the form "0F1010"
-	hexstr_value = '{0:06x}'.format(abs(value))
+        # need to determine the sign and then set the direction (negative = open (0), positive = close (1))
+        if value >= 0:
+            self.setParameter("setDirection", 1)
+        elif value < 0:
+            self.setParameter("setDirection", 0)
+        else:
+            self.printError("Could not determine sign of direction")
 
-	# write the steps to the controller (no movement yet)
-	self.setParameter("moveRelative", hexstr_value, echo=True)
+        # we have to put together an hex string of the form "0F1010"
+        hexstr_value = '{0:06x}'.format(abs(value))
+
+        # write the steps to the controller (no movement yet)
+        self.setParameter("moveRelative", hexstr_value, echo=True)
 
 
         # get current position for monitoring
@@ -109,7 +110,6 @@ class Aperture(Motor):
         if monitor is True:
             return self.monitorPosition(value + pos_start, display, delta)
         return 0
-
 
 
     def msg_filter(self, msg):
@@ -127,5 +127,5 @@ class Aperture(Motor):
         return 0
 
     def convertPosition(self, value):
-	return int(value,16)
+        return int(value, 16)
 
