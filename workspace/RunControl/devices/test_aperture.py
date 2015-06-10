@@ -6,7 +6,6 @@ ap = Aperture()
 ap.color = False       # just for the use with bpython
 ap.comEcho = False
 
-ap.init()
 ap.comport = "/dev/ttyUSB7"
 ap.com_init()
 ap.checkName()
@@ -15,10 +14,8 @@ ap.enableMotor()    # there is an echo comming back
 # check if attenuator still works!
 
 # test to do: (in this order)
-# ap.checkLimits()
-# ap.home()
-# ap.init()
+ap.init()
+ap.home()
 
 
-print "total " + str(i)
 #ap.disableMotor()
