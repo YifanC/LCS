@@ -145,13 +145,13 @@ class Aperture(Motor):
             return self.monitorPosition(value + pos_start, display, delta)
         return 0
 
-    def home(self, where=0):
-        """ Homes attenuator to either end switch: if 0 is the fully closed position and 1 is the fully open position"""
-        direction = {1: "open", 0: "closed"}
-        if where == 0:
+    def home(self, where=1):
+        """ Homes attenuator to either end switch: if 1 is the fully closed position and 2 is the fully open position"""
+        direction = {1: "open", 2: "closed"}
+        if where == 1:
             msg = "mr1"
             limit_switch = "limit1"
-        elif where == 1:
+        elif where == 2:
             msg = "mr0"
             limit_switch = "limit2"
         else:
@@ -169,10 +169,15 @@ class Aperture(Motor):
 
         # now we issue the homing command
         self.com_write(msg, echo=True)
-        self.printMsg("going to fully " + direction(where) + " position")
-        while int(self.getPosition(limit_switch)) == 0:
-            pos = self.getPosition()
-            self.printMsg("pos: " + str(pos))
+        self.printMsg("going to fully " + direction[where] + " position")
+
+	limits = 0
+        while limits == 0:
+	    limits = int(self.checkLimits())
+            #pos = self.getPosition()
+            #self.printMsg("pos: " + str(pos))
+	
+	self.printMsg("reached fully " + direction[limits] + " position")
 
         return 0
 
@@ -201,7 +206,6 @@ class Aperture(Motor):
             # sys.exit(-1)
 
     def checkParameter(self, parameter, value, echo):
-        print "Echo: " + str(echo)
         return 0
 
     def convertPosition(self, value):

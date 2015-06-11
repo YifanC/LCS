@@ -96,10 +96,10 @@ class ComSerial(base):
             self.com.flushInput()
             time.sleep(1)
         except:
-            self.printError("opening fcom port (" + self.comport + ") failed --> quitting")
+            self.printError("opening fcom port (" + str(self.comport) + ") failed --> quitting")
             sys.exit(1)
 
-        self.printMsg("Com port (" + self.com.portstr + ") opened")
+        self.printMsg("Com port (" + str(self.com.portstr) + ") opened")
 
     def com_close(self):
         """ closes com port """
