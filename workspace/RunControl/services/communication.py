@@ -5,20 +5,35 @@ from base.base import *
 
 class communication(base):
     def __init__(self):
-        pass
+        self.name = name
+        self.ID = {"Assembler": 0,
+                   "RunControl": 1,
+                   "Encoder": 2}
+        self.id = -99
+        self.state = 0
+
 
 class server(communication):
     def __init__(self):
-        pass
+        ctx = zmq.Context()
+        self.socket = ctx.socket(zmq.REP)
+        self.socket.bind("ipc:///tmp/feed-laser.ipc")
+        self.socket.setsockopt(zmq.LINGER, 0)
+        self.poller = zmq.Poller()
+        self.poller.register(self.socket, zmq.POLLIN)
+
 
     def startServer(self):
+        # start up serve
         pass
 
     def stopServer(self):
         pass
 
-    def establishCom(self):
-        pass
+    def recv_hello(self):
+        reply = self.socket.recv()
+        self.socket.send("OK")
+        return reply
 
     def recv_data(self):
         pass
@@ -26,24 +41,35 @@ class server(communication):
     def send_ack(self):
         pass
 
+
 class client(communication):
     def __init__(self):
-        pass
+        ctx = zmq.Context()
+        self.socket = ctx.socket(zmq.REQ)
+        self.socket.bind("ipc:///tmp/feed-laser.ipc")
+        self.socket.setsockopt(zmq.LINGER, 0)
+        self.poller = zmq.Poller()
+        self.poller.register(self.socket, zmq.POLLIN)
 
     def startClient(self):
+        # start up server
         pass
 
     def stopClient(self):
         pass
 
     def send_hello(self):
-        pass
+        print self.socket.se
+        self.socket.send("Hello World")
+        reply = self.socket.recv()
+        print reply
 
     def send_data(self):
         pass
 
     def recv_ack(self):
         pass
+
 
 class RCCommunication(object):
     # dict for the definitions

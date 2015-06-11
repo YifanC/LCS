@@ -3,7 +3,6 @@ import sys
 import datetime as DT
 
 
-
 debug = 1
 
 # start server
@@ -18,7 +17,7 @@ com.ID = 2
 data = LaserData()
 print data.dump()
 
-if com.ID == ID_Encoder:
+if com.ID == 1:
 	print "sending encoder data"
 	data.pos_rot = 11.0
 	data.pos_lin = 12.0
@@ -28,7 +27,7 @@ if com.ID == ID_Encoder:
 
 com.ID = 1
 
-if com.ID == ID_RunControl:
+if com.ID == 2:
 	print "sending run control data"
 	data.laserid = 99
 	data.pos_att = 5.43210
