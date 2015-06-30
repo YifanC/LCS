@@ -54,9 +54,9 @@ class Consumer(communication):
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.REP)
 
-        # TODO: Define these variables in the right way!
-        self.ID_RUNCONTROL = 1
-        self.ID_ENCODER = 2
+
+        self.encoder_alive = False
+        self.runcontrol_alive = False
 
 
     def start(self, channel=""):
@@ -72,8 +72,7 @@ class Consumer(communication):
 
     def recv_hello(self):
         hello_data = LaserData()
-        if DEBUG:
-            self.printMsg("Waiting for Hello")
+        self.printMsg("Waiting for Hello")
         [reply_id, reply_state]= self.recv(hello_data)
 
         if DEBUG:
@@ -83,23 +82,23 @@ class Consumer(communication):
             return reply_id
 
         else:
-            self.printError("No hello message received")
-            print reply_state
-            return 0
+            self.printMsg("Msg was not hello")
+            return -1
 
     def recv_hellos(self):
         """ We require that one encoder and one run control is alive """
+
+        # TODO: Implement poller here, so we do not wait forever for hello msg
         reply_id = self.recv_hello()
-        if self.context.
+
         if reply_id == communication.ID_ENCODER:
-            encoder_alive = True
+            self.encoder_alive = True
         elif reply_id == communication.ID_RUNCONTROL:
-            runcontrol_alive = True
+            self.runcontrol_alive = True
         else:
-            self.printError("ID could not be recognized (" + str(reply_id) + ")")
+            self.printError("Did not collect hello from everyone yet(" + str(reply_id) + ")")
 
-
-        if (encoder_alive is True) and (runcontrol_alive is True):
+        if (self.encoder_alive is True) and (self.runcontrol_alive is True):
             return True
         else:
             return False
