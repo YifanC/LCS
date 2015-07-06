@@ -63,7 +63,7 @@ int main (void)
     //  Socket to talk to clients
     void *context = zmq_ctx_new ();
     void *encoder = zmq_socket (context, ZMQ_REQ);
-    int rc = zmq_connect (encoder, "ipc:///tmp/feed-laser.ipc");
+    int rc = zmq_connect (encoder, "ipc:///tmp/laser-out.ipc");
 
     assert (rc == 0);
 
