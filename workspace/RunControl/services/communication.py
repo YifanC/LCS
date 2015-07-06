@@ -1,11 +1,9 @@
 import zmq
-import sys
 import struct
 from base.base import *
 from services.data import LaserData
 
-class communication(base):
-
+class Communication(base):
     ID = {0: "Assembler",
           1: "RunControl",
           2: "Encoder"}
@@ -14,16 +12,16 @@ class communication(base):
 
     def __init__(self, name):
         self.name = name
-
         self.id = -99
         self.state = 0
 
     def printMessage(self, id, state):
-        self.printMsg("zmq message header: id: " + str(id) + " (" + communication.ID[id] + ")" + " state: " + str(state))
+        self.printMsg("zmq message header: id: " + str(id) + " (" + Communication.ID[id] + ")" + " state: " + str(state))
 
-class broker(base):
+class broker(Communication):
     def __init__(self):
         # Prepare our context and sockets
+        name = "broker"
         context = zmq.Context()
         frontend = context.socket(zmq.ROUTER)
         backend = context.socket(zmq.DEALER)
@@ -40,7 +38,7 @@ class broker(base):
             socks = dict(poller.poll())
 
             if socks.get(frontend) == zmq.POLLIN:
-                message = frontend.recv_multipart()
+                hmessage = frontend.recv_multipart()
                 backend.send_multipart(message)
 
             if socks.get(backend) == zmq.POLLIN:
@@ -48,15 +46,19 @@ class broker(base):
                 frontend.send_multipart(message)
 # ------------------------------ CONSUMER ------------------------------------
 
-class Consumer(communication):
+class Consumer(Communication):
     def __init__(self, name):
+        super(Communication, self).__init__(name=name)
+
+        self.id = -99
         self.name = name
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.REP)
 
-
+        self.timeout = 60 # time we wait for hello message
         self.encoder_alive = False
         self.runcontrol_alive = False
+
 
 
     def start(self, channel=""):
@@ -70,40 +72,44 @@ class Consumer(communication):
     def stopServer(self):
         pass
 
+    # TODO: Change poller to timer. This is always resetting when a new message is recieved from anywhere
     def recv_hello(self):
         hello_data = LaserData()
-        self.printMsg("Waiting for Hello")
-        [reply_id, reply_state]= self.recv(hello_data)
 
-        if DEBUG:
-            self.printMessage(reply_id, reply_state)
+        poller = zmq.Poller()
+        poller.register(self.socket, zmq.POLLIN)
 
-        if reply_state == -1:
-            return reply_id
+        if poller.poll(self.timeout * 1000):
+            self.printMsg("Waiting for Hello")
+            [reply_id, reply_state] = self.recv(hello_data)
 
+            if DEBUG:
+                self.printMessage(reply_id, reply_state)
+
+            if reply_state == -1:
+                return reply_id
+
+            else:
+                self.printMsg("Msg was not hello")
+                return -1
         else:
-            self.printMsg("Msg was not hello")
-            return -1
+            self.printError("ran out of time for hello messages")
+            sys.exit(-1)
 
     def recv_hellos(self):
         """ We require that one encoder and one run control is alive """
-
-        # TODO: Implement poller here, so we do not wait forever for hello msg
+        self.printMsg("waiting for hello")
         reply_id = self.recv_hello()
 
-        if reply_id == communication.ID_ENCODER:
+        if reply_id == Communication.ID_ENCODER:
             self.encoder_alive = True
-        elif reply_id == communication.ID_RUNCONTROL:
+        elif reply_id == Communication.ID_RUNCONTROL:
             self.runcontrol_alive = True
         else:
-            self.printError("Did not collect hello from everyone yet(" + str(reply_id) + ")")
+            self.printError("Did not collect hello from everyone yet. (" + str(reply_id) + ")")
 
         if (self.encoder_alive is True) and (self.runcontrol_alive is True):
             return True
-        else:
-            return False
-
-
 
     def recv(self, data):
         info_string, data_string = self.socket.recv_multipart()
@@ -111,17 +117,14 @@ class Consumer(communication):
         [ID, STATE] = self.unpack_info(info_string)
 
         if ID == self.ID_ENCODER:  # data from run control
-            if DEBUG:
-                self.printDebug("Received data from encoder")
+            self.printMsg("Received data from encoder")
             self.unpack_encoder(data_string, data)
 
             # Something here is very strange: Serialization seems to be different from c and python. Floats and ints
             # work, but everythin else ends up crookend: So in some time we will have a problem here!
             data.trigger_time_sec += 1431636031
-
         elif ID == self.ID_RUNCONTROL:  # data from encoder
-            if DEBUG:
-                self.printDebug("Received data from run control")
+            self.printMsg("Received data from run control")
             self.unpack_runcontrol(data_string, data)
         else:
             self.printError("Exiting: Message from unidentified client received (ID was " + str(ID) + ")")
@@ -147,15 +150,16 @@ class Consumer(communication):
 
 # ------------------------------ PRODUCER ------------------------------------
 
-class Producer(communication):
+class Producer(Communication):
+
     def __init__(self, name):
+        super(Communication, self).__init__(name=name)
         self.name = name
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.REQ)
         self.color = True
 
-
-        #  Do 10 requests, waiting each time for a response
+        self.id = -99
 
     def start(self):
         self.socket.connect("ipc:///tmp/laser-in.ipc")

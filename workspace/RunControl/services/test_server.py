@@ -7,12 +7,14 @@ data = LaserData()
 assembler = Consumer("assembler")
 assembler.start()
 assembler.color = False
+#assembler.open_logfile()
 
+print "------------ Wait for Hello ------------"
 ready = False
-while ready is False:
-    ready = assembler.recv_hello()
+assembler.timeout = 5
+while not ready:
+    ready = assembler.recv_hellos()
 
-
+print "--------------- Start DAQ --------------"
 while True:
     assembler.recv(data)
-    # print data
