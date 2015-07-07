@@ -7,6 +7,7 @@ from math import cos, acos, sqrt, degrees, radians, floor
 class Attenuator(Motor):
     def __init__(self):
         self.name = "attenuator"
+	super(Attenuator, self).__init__(name=self.name)
         self.state = 0
         self.comport = None
         self.comBaudrate = 38400

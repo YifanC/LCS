@@ -196,7 +196,8 @@ class ComSerial(base):
 class Motor(ComSerial):
     """" At the moment only an idea of a nice classe """
 
-    def __init__(self):
+    def __init__(self, name=''):
+        super(ComSerial, self).__init__(name=name)	
         self.InstructionSet = {"getInfo": None,
                                "getName": None,
                                "maxSpeed": None,
