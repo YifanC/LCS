@@ -38,7 +38,7 @@ class broker(Communication):
             socks = dict(poller.poll())
 
             if socks.get(frontend) == zmq.POLLIN:
-                hmessage = frontend.recv_multipart()
+                message = frontend.recv_multipart()
                 backend.send_multipart(message)
 
             if socks.get(backend) == zmq.POLLIN:
@@ -55,7 +55,7 @@ class Consumer(Communication):
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.REP)
 
-        self.timeout = 60 # time we wait for hello message
+        self.timeout = 600 # time we wait for hello message
         self.encoder_alive = False
         self.runcontrol_alive = False
 
@@ -79,7 +79,7 @@ class Consumer(Communication):
         poller = zmq.Poller()
         poller.register(self.socket, zmq.POLLIN)
 
-        if poller.poll(self.timeout * 1000):
+        if poller.poll(100000):
             self.printMsg("Waiting for Hello")
             [reply_id, reply_state] = self.recv(hello_data)
 
