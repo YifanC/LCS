@@ -42,11 +42,11 @@ int main (void)
 
     struct EncoderInfo EncoderInfo;
 
-   signal(SIGINT, CtrlHandler);
-   signal(SIGTERM, CtrlHandler);
+    signal(SIGINT, CtrlHandler);
+    signal(SIGTERM, CtrlHandler);
 
     EncoderInfo.ID = 2;
-    EncoderInfo.Status = 0;
+    EncoderInfo.Status = -1;
 
     my_laser_event.SystemTime_sec = -1;
     my_laser_event.SystemTime_usec = -1;
@@ -63,7 +63,7 @@ int main (void)
     //  Socket to talk to clients
     void *context = zmq_ctx_new ();
     void *encoder = zmq_socket (context, ZMQ_REQ);
-    int rc = zmq_connect (encoder, "ipc:///tmp/laser-out.ipc");
+    int rc = zmq_connect (encoder, "ipc:///tmp/laser-in.ipc");
 
     assert (rc == 0);
 
@@ -75,7 +75,7 @@ int main (void)
 
     nanosleep((struct timespec[]){{2, 0}}, NULL);
 
-
+    EncoderInfo.Status = 0;
     printf ("Received:%s\n", BufferReply);
 
 

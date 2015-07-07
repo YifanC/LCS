@@ -1,4 +1,5 @@
 import struct  # for packing integers
+import time
 
 class LaserData(object):
 
@@ -66,6 +67,10 @@ class LaserData(object):
                 self.pos_tomg_1_axis2,
                 self.pos_tomg_2_axis1,
                 self.pos_tomg_2_axis2]
+
+    def dump_time(self):
+        pass
+
 
     def writeBinary(self, fileID):
         '''write the data to a binary file'''

@@ -12,7 +12,7 @@ Producer.connect("ipc://kvmsg_selftest.ipc")
 Producer.setsockopt(zmq.LINGER, 0)
 
 com = RCCommunication()
-com.ID = 2
+com.ID = 1
 
 data = LaserData()
 print data.dump()
@@ -24,6 +24,7 @@ if com.ID == 1:
 	data.count_trigger = 100000.00
 	com.sendEncoderData(Producer,data)
 	com.recvAck(Producer)
+	print "bla"
 
 com.ID = 1
 

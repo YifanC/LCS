@@ -5,41 +5,59 @@ from abc import ABCMeta, abstractmethod
 import sys
 import time
 import json
-import os
+
+import logging
 
 DEBUG = True
 
 
 class base(object):
-    def __init__(self, name, com):
+    def __init__(self, name=""): #TODO: Implement to put name in all classes
         self.name = name
-        self.com = com
         self.state = 0
-        self.State = {0: "Not Initialized",
+        self.StateDict = {0: "Not Initialized",
                       1: "Ready",
                       2: "Error"}
         # switch this to false if using bpython
         self.color = True
-
         self.config = None
+        # TODO: Make this available everywhere
+
+        self.log = self.config_logging(RunNr=123)
+        self.log.info("started logger")
+
 
     def printMsg(self, string, nonewline=False):
+        msg = time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
         if nonewline == True:
-            print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string,
+            print msg,
         else:
-            print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
+            print msg
+
+        self.log.info(string)
 
     def printError(self, string):
+
+        msg = time.strftime('%H:%M ', time.localtime()) + self.name + " ERROR: " + string
+        msg_colored = bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+
         if self.color is True:
-            print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+            print msg_colored
         else:
-            print time.strftime('%H:%M ', time.localtime()) + self.name + " ERROR: " + string
+            print msg
+
+        self.log.error(string)
 
     def printDebug(self, string):
+        msg = time.strftime('%H:%M ', time.localtime()) + "DEBUG " + self.name + " " + string
+        msg_colored = bcolors.WARNING + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+
         if self.color is True:
-            print bcolors.WARNING + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+            print msg_colored
         else:
-            print time.strftime('%H:%M ', time.localtime()) + "DEBUG " + self.name + " " + string
+            print msg
+
+        self.log.debug(string)
 
     def config_setfile(self, filename=-1):
         if filename == -1:
@@ -61,6 +79,33 @@ class base(object):
             json.dump(self.config.__dict__, configfile)
             configfile.close()
 
+
+    def config_logging(self, RunNr, LogFilename=""):
+        if LogFilename == "":
+            LogFilename = time.strftime("%Y-%m-%d-%H%M-Run-", time.localtime()) + str(RunNr) + str(".log")
+            LogFilePath = "log/" + str(self.name) + "/"
+
+        else:
+            LogFilePath = ""
+
+        # TODO: Make the logfiles merge into eachother, so only one logfile is generated
+        fh = logging.FileHandler(LogFilePath + LogFilename, "wb")
+        f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        fh.setFormatter(f)
+
+        log = logging.getLogger(self.name)
+        log.setLevel(logging.INFO)
+        log.addHandler(fh)
+        # printing out to console
+        #console = logging.StreamHandler()
+        #console.setLevel(logging.INFO)
+        #logging.getLogger(self.name).addHandler(console)
+
+        return log
+
+    def close_logfile(self):
+        pass
+
     class Config():
         """" Config class just to translate the json file into a dict """
 
@@ -68,8 +113,10 @@ class base(object):
             self.__dict__ = f
 
 
+
 class ComSerial(base):
     def __init__(self, comport):
+        super.__init__()
         self.com = serial.Serial()
         self.comBaudrate = 9600
         self.comTimeout = 0.1

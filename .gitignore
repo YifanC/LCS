@@ -23,5 +23,5 @@
 *.idea/
 .idea/
 /workspace/RunControl/.idea/*
-/workspace/RunControl/log/*
+/workspace/RunControl/services/log/*
 
