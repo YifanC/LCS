@@ -80,7 +80,7 @@ class Aperture(Motor):
         default_position = self.config.APERTURE_POSITION
 
         self.checkName()
-        self.home(where=0)
+        self.home(where=1)
         self.moveRelative(default_position, display=True)
 
 
@@ -145,14 +145,14 @@ class Aperture(Motor):
             return self.monitorPosition(value + pos_start, display, delta)
         return 0
 
-    def home(self, where=1):
+    def home(self, where=2):
         """ Homes attenuator to either end switch: if 1 is the fully closed position and 2 is the fully open position"""
         direction = {1: "open", 2: "closed"}
         if where == 1:
-            msg = "mr1"
+            msg = "mr0"
             limit_switch = "limit1"
         elif where == 2:
-            msg = "mr0"
+            msg = "mr1"
             limit_switch = "limit2"
         else:
             self.printError("Homing parameter out of bounds")
@@ -166,7 +166,7 @@ class Aperture(Motor):
                 self.moveRelative(-100, monitor=True)
             elif switch == 2:
                 self.moveRelative(100, monitor=True)
-
+	time.sleep(1)
         # now we issue the homing command
         self.com_write(msg, echo=True)
         self.printMsg("going to fully " + direction[where] + " position")
