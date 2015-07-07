@@ -1,0 +1,18 @@
+2015-07-07 17:58:39,511 - aperture - INFO - started logger
+2015-07-07 17:58:39,511 - aperture - INFO - Using default config file (devices/config_aperture.json)
+2015-07-07 17:58:40,513 - aperture - INFO - Com port (/dev/ttyUSB7) opened
+2015-07-07 17:58:40,660 - aperture - INFO - Name: 8SMC3-RS232  Dec 28 2009 14:22:39
+2015-07-07 17:58:40,661 - aperture - INFO - Aperture recognized
+2015-07-07 17:58:40,661 - aperture - INFO - Motor on
+2015-07-07 17:58:40,820 - aperture - INFO - Name: 8SMC3-RS232  Dec 28 2009 14:22:39
+2015-07-07 17:58:40,821 - aperture - INFO - Aperture recognized
+2015-07-07 17:58:41,048 - aperture - INFO - Moving relative: -100 steps
+2015-07-07 17:58:41,163 - aperture - INFO - Set setDirection=0 -> OK
+2015-07-07 17:58:41,282 - aperture - INFO - Set moveRelative=000064 -> OK
+2015-07-07 17:58:42,986 - aperture - INFO - going to fully open position
+2015-07-07 17:58:46,393 - aperture - INFO - reached fully closed position
+2015-07-07 17:58:46,394 - aperture - INFO - Moving relative: 100 steps
+2015-07-07 17:58:46,509 - aperture - INFO - Set setDirection=1 -> OK
+2015-07-07 17:58:46,629 - aperture - INFO - Set moveRelative=000064 -> OK
+2015-07-07 17:58:47,220 - aperture - INFO - Position: 100
+2015-07-07 17:58:47,221 - aperture - INFO - Motor off
