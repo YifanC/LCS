@@ -18,3 +18,4 @@ while not ready:
 print "--------------- Start DAQ --------------"
 while True:
     assembler.recv(data)
+    print "trigger " + str(data.count_trigger)
