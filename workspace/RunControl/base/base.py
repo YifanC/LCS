@@ -233,7 +233,7 @@ class Motor(ComSerial):
 
     def setParameter(self, parameter, value, check=True, echo=False, attempts=1):
         """ Function sends the defined string + value to the device.
-            Arguments:  check:      If true the value is read back from the device and checked against the set value
+            Arguments:  check:      If true calls the function checkParameter which should be defined by the device class
                         echo:       The set command expects an echo from the device, confirming the transmission, this
                                     is not confirming that tha value was set.
                         attempts:   Number of tries for setting the parameter before giving up """
