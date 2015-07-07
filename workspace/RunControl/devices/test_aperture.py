@@ -6,6 +6,7 @@ ap = Aperture()
 ap.color = False       # just for the use with bpython
 ap.comEcho = False
 
+# set com port
 ap.comport = "/dev/ttyUSB7"
 ap.com_init()
 ap.checkName()
@@ -15,7 +16,7 @@ ap.enableMotor()    # there is an echo comming back
 
 # test to do: (in this order)
 ap.init()
-ap.home()
 
 
-#ap.disableMotor()
+
+ap.disableMotor()
