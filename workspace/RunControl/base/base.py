@@ -10,9 +10,8 @@ import logging
 
 DEBUG = True
 
-
 class base(object):
-    def __init__(self, name=""): #TODO: Implement to put name in all classes
+    def __init__(self, name="", RunNr=0): #TODO: Implement to put name in all classes
         self.name = name
         self.state = 0
         self.StateDict = {0: "Not Initialized",
@@ -21,9 +20,10 @@ class base(object):
         # switch this to false if using bpython
         self.color = True
         self.config = None
-        # TODO: Make this available everywhere
+        self.RunNr = RunNr  # TODO: Implement passing of run number from the instance
 
-        self.log = self.config_logging(RunNr=123)
+        # TODO: Make this available everywhere
+        self.log = self.config_logging(RunNr=self.RunNr)
         self.log.info("started logger")
 
 
@@ -94,7 +94,7 @@ class base(object):
         fh.setFormatter(f)
 
         log = logging.getLogger(self.name)
-        log.setLevel(logging.INFO)
+        log.setLevel(logging.DEBUG)
         log.addHandler(fh)
         # printing out to console
         #console = logging.StreamHandler()
@@ -115,12 +115,12 @@ class base(object):
 
 
 class ComSerial(base):
-    def __init__(self, comport):
-        super.__init__()
+    def __init__(self, name=""): #, comport):
+        super(ComSerial, self).__init__(name=name)
         self.com = serial.Serial()
         self.comBaudrate = 9600
         self.comTimeout = 0.1
-        self.comport = comport
+        self.comport =""# comport
 
         self.comEcho = False
 
@@ -197,7 +197,7 @@ class Motor(ComSerial):
     """" At the moment only an idea of a nice classe """
 
     def __init__(self, name=''):
-        super(ComSerial, self).__init__(name=name)	
+        super(Motor, self).__init__(name=name)
         self.InstructionSet = {"getInfo": None,
                                "getName": None,
                                "maxSpeed": None,

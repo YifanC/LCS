@@ -4,8 +4,8 @@ import serial
 from devices.feedtrough import *
 
 
-LinearMotor = Feedtrough("linear actuator", 1)
-RotaryMotor = Feedtrough("rotary actuator", 1)
+LinearMotor = Feedtrough("linear_actuator", 1)
+RotaryMotor = Feedtrough("rotary_actuator", 1)
 
 LinearMotor.comport = "/dev/pts/14"
 LinearMotor.com_init()

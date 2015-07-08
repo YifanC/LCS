@@ -6,6 +6,7 @@ from base.base import *
 class Laser(ComSerial):
     def __init__(self):
         self.name = "laser"
+        super(Laser, self).__init__(name=self.name)
         self.state = 0
         self.comport = "/dev/ttyUSB0"
         self.comBaudrate = 9600

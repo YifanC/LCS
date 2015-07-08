@@ -7,7 +7,7 @@ from math import copysign
 class Aperture(Motor):
     def __init__(self):
         self.name = "aperture"
-	super(Aperture, self).__init__(name=self.name)
+        super(Aperture, self).__init__(name=self.name)
         self.state = 0
         self.comport = None
         self.comBaudrate = 9600

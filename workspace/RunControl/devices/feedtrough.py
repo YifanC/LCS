@@ -6,6 +6,7 @@ from base.base import *
 class Feedtrough(Motor):
     def __init__(self, name, axis):
         self.name = name
+        super(Feedtrough, self).__init__(name=self.name)
         self.state = 0
         self.comport = "/dev/ttyUSB0"
         self.comBaudrate = 9600
