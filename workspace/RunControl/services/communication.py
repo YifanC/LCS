@@ -3,6 +3,9 @@ import struct
 from base.base import *
 from services.data import LaserData
 
+# TODO: Split classes into files
+# TODO: Implement shut down of zmq messaging
+
 class Communication(base):
     ID = {0: "Assembler",
           1: "RunControl",
@@ -163,7 +166,6 @@ class Producer(Communication):
 
     def start(self):
         self.socket.connect("ipc:///tmp/laser-in.ipc")
-
     def stopClient(self):
         pass
 
