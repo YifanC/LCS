@@ -11,7 +11,7 @@ import logging
 DEBUG = True
 
 class base(object):
-    def __init__(self, name="", RunNr=0): #TODO: Implement to put name in all classes
+    def __init__(self, name="", RunNr=0,logit=True): #TODO: Implement to put name in all classes
         self.name = name
         self.state = 0
         self.StateDict = {0: "Not Initialized",
@@ -23,7 +23,7 @@ class base(object):
         self.RunNr = RunNr  # TODO: Implement passing of run number from the instance
 
         # TODO: Make this available everywhere
-        self.log = self.config_logging(RunNr=self.RunNr)
+        self.log = self.config_logging(self.RunNr,logit)
         self.log.info("started logger")
 
 
@@ -80,7 +80,7 @@ class base(object):
             configfile.close()
 
 
-    def config_logging(self, RunNr, LogFilename=""):
+    def config_logging(self, RunNr, logit, LogFilename="",):
         if LogFilename == "":
             LogFilename = time.strftime("%Y-%m-%d-%H%M-Run-", time.localtime()) + str(RunNr) + str(".log")
             LogFilePath = "log/" + str(self.name) + "/"
@@ -89,13 +89,18 @@ class base(object):
             LogFilePath = ""
 
         # TODO: Make the logfiles merge into eachother, so only one logfile is generated
-        fh = logging.FileHandler(LogFilePath + LogFilename, "wb")
-        f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        fh.setFormatter(f)
+
 
         log = logging.getLogger(self.name)
-        log.setLevel(logging.DEBUG)
-        log.addHandler(fh)
+
+        if logit is True:
+            fh = logging.FileHandler(LogFilePath + LogFilename, "wb")
+            f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            fh.setFormatter(f)
+            log.setLevel(logging.DEBUG)
+            log.addHandler(fh)
+        else:
+            log.addHandler(logging.NullHandler())
         # printing out to console
         #console = logging.StreamHandler()
         #console.setLevel(logging.INFO)
