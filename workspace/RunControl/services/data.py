@@ -87,6 +87,11 @@ class LaserData(object):
     def dump_time(self):
         pass
 
+    def writeTxt(self):
+        with open("testfile.txt", "a") as f:
+            for item in self.dump():
+                f.write("%s " % item)
+            f.write("\n")
 
     def writeBinary(self, fileID):
         ''' write the data to a binary file '''
