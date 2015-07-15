@@ -7,6 +7,7 @@ import time
 import json
 
 import logging
+import os
 
 DEBUG = True
 
@@ -21,6 +22,11 @@ class base(object):
         self.color = True
         self.config = None
         self.RunNr = RunNr  # TODO: Implement passing of run number from the instance
+
+        self.path_logfiles = os.getenv("LCS_LOGFILES")
+        if self.path_logfiles is None:
+            self.printError("Could not find path to log file -> aborting")
+            sys.exit(1)
 
         # TODO: Make this available everywhere
         self.log = self.config_logging(self.RunNr,logit)
@@ -83,7 +89,7 @@ class base(object):
     def config_logging(self, RunNr, logit, LogFilename="",):
         if LogFilename == "":
             LogFilename = time.strftime("%Y-%m-%d-%H%M-Run-", time.localtime()) + str(RunNr) + str(".log")
-            LogFilePath = "log/" + str(self.name) + "/"
+            LogFilePath = str(self.path_logfiles) + "/" + str(self.name) + "/"
 
         else:
             LogFilePath = ""
