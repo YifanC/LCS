@@ -12,7 +12,14 @@ class Controls(base):
     def __init__(self):
         self.name = "controls"
         super(Controls, self).__init__(name=self.name, logit=False)
-        #self.test_process = subprocess.Popen()
+
+        self.path_base = os.getenv("LCS_BASE")
+        self.path_services = os.getenv("LCS_SERVICES")
+        self.path_devices = os.getenv("LCS_BASE")
+
+        if self.path_base is None:
+            self.printError("Could not find path to base files -> aborting")
+            sys.exit(1)
 
     def test(self, string):
         print string
@@ -29,13 +36,15 @@ class Controls(base):
         pass
 
     def assembler_start(self):
-        pass
+        self.printMsg("Starting Assembler")
+        self.proc_assembler = self.process_start(self.path_services + "/" + "test_server.py", py=True)
 
     def assembler_alive(self):
-        pass
+        return self.process_alive(self.proc_assembler)
 
     def assembler_stop(self):
-        pass
+        self.printMsg("Stopping Assembler")
+        self.process_stop(self.proc_assembler)
 
     def broker_start(self):
 
@@ -49,14 +58,16 @@ class Controls(base):
 
     def process_start(self, filename, args="", py=False, c=False):
         if py is True:
-            prefix = "python "
+            prefix = "python"
+            command =  [prefix, filename, args]
         elif c is True:
             prefix = "./"
+            command =  [prefix + command, args]
         else:
             self.printError("do not know how to execute!")
             return False
-        command=  prefix + filename + " " + args
 
+        # For debugging process = subprocess.Popen(command)
         process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
         return process
 
