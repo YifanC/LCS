@@ -10,11 +10,23 @@ class LaserData(object):
     # dict for the definitions
     ID = {ID_RunControl: "Run Control Data:", ID_Encoder: "Encoder Data:"}
 
-    def __init__(self, laserid=-1, status=-1., trigger_time_sec=-999999., trigger_time_usec=-999999., pos_rot=-8888., pos_lin=-9999., pos_att=-8888.,
-                 pos_iris=-9999.,
-                 time=0, count_trigger=-1., count_run=-1., count_laser=-1.,
-                 pos_tomg_1_axis1=-66666., pos_tomg_1_axis2=-77777., pos_tomg_2_axis1=-88888.,
-                 pos_tomg_2_axis2=-99999.):
+    def __init__(self,
+                 laserid=-int(1),
+                 status=float(-1),
+                 trigger_time_sec=float(-999999.),
+                 trigger_time_usec=float(-999999.),
+                 pos_rot=float(-8888.),
+                 pos_lin=float(-9999.),
+                 pos_att=float(-8888.),
+                 pos_iris=float(-9999.),
+                 count_trigger=float(-1.),
+                 count_run=float(-1.),
+                 count_laser=float(-1.),
+                 pos_tomg_1_axis1=float(-66666.),
+                 pos_tomg_1_axis2=float(-77777.),
+                 pos_tomg_2_axis1=float(-88888.),
+                 pos_tomg_2_axis2=float(-99999.)):
+
         self.laserid = laserid  # which laser system: 1 or 2
         self.status = status
         self.pos_rot = pos_rot  # Position Rotary Heidenhain Encoder
@@ -62,7 +74,8 @@ class LaserData(object):
                 self.pos_lin,
                 self.pos_att,
                 self.pos_iris,
-                self.trigger_time_sec, # add time in usec here when its defined!
+                self.trigger_time_sec,
+                self.trigger_time_usec,
                 self.count_trigger,
                 self.count_run,
                 self.count_laser,
