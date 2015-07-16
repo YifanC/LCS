@@ -34,7 +34,7 @@ class base(object):
 
 
     def printMsg(self, string, nonewline=False):
-        msg = time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
+        msg = time.strftime('%H:%M:%S ', time.localtime()) + self.name + ": " + string
         if nonewline == True:
             print msg,
         else:
@@ -44,7 +44,7 @@ class base(object):
 
     def printError(self, string):
 
-        msg = time.strftime('%H:%M ', time.localtime()) + self.name + " ERROR: " + string
+        msg = time.strftime('%H:%M:%S ', time.localtime()) + self.name + " ERROR: " + string
         msg_colored = bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
 
         if self.color is True:
@@ -55,7 +55,7 @@ class base(object):
         self.log.error(string)
 
     def printDebug(self, string):
-        msg = time.strftime('%H:%M ', time.localtime()) + "DEBUG " + self.name + " " + string
+        msg = time.strftime('%H:%M:%S ', time.localtime()) + "DEBUG " + self.name + " " + string
         msg_colored = bcolors.WARNING + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
 
         if self.color is True:
