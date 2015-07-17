@@ -18,6 +18,17 @@ class Communication(base):
         self.id = -99
         self.state = 0
 
+        self.context =zmq.Context()
+
+    def start(self, channel):
+        """ bind the socket to some communication channel, default will use an ipc socket """
+        self.socket.connect(channel)
+
+    def stop(self):
+        self.printMsg("Shutting down communication")
+        self.socket.close()
+        self.context.term()
+
     def printMessage(self, id, state):
         self.printMsg("zmq message header: id: " + str(id) + " (" + Communication.ID[id] + ")" + " state: " + str(state))
 
@@ -52,10 +63,10 @@ class broker(Communication):
 class Consumer(Communication):
     def __init__(self, name):
         super(Communication, self).__init__(name=name)
-
+        super(Consumer, self).__init__(name=name)
         self.id = -99
         self.name = name
-        self.context = zmq.Context()
+        #self.context = zmq.Context()
         self.socket = self.context.socket(zmq.REP)
 
         self.timeout = 600 # time we wait for hello message
@@ -71,9 +82,6 @@ class Consumer(Communication):
             self.socket.connect("ipc:///tmp/laser-out.ipc")
         else:
             self.socket.connect(channel)
-
-    def stopServer(self):
-        pass
 
     # TODO: Change poller to timer. This is always resetting when a new message is recieved from anywhere
     def recv_hello(self):
@@ -157,8 +165,9 @@ class Producer(Communication):
 
     def __init__(self, name):
         super(Communication, self).__init__(name=name)
+        super(Producer, self).__init__(name=name)
         self.name = name
-        self.context = zmq.Context()
+        #self.context = zmq.Context()
         self.socket = self.context.socket(zmq.REQ)
         self.color = True
 
@@ -166,8 +175,6 @@ class Producer(Communication):
 
     def start(self):
         self.socket.connect("ipc:///tmp/laser-in.ipc")
-    def stopClient(self):
-        pass
 
     def send_hello(self):
         """ Send hello message to consumer. The idea is:
@@ -199,6 +206,7 @@ class Producer(Communication):
         return [info_string, data_string]
 
     def send_data(self, data):
+        self.printMsg("Sending Data")
         if self.name == "encoder":
             self.socket.send_multipart(self.pack_encoder(data))
 
