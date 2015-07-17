@@ -1,8 +1,19 @@
 __author__ = 'matthias'
 from communication import *
 from data import *
+import signal
+import sys
 
-#encoder = Producer("encoder")
+def sigint_handler(signal, frame):
+    print "stopping assembler"
+    print 'signal: ' + str(signal)
+    rc.stop()
+    sys.exit(1)
+    raise SystemExit(1)
+
+signal.signal(signal.SIGINT, sigint_handler)
+
+
 rc = Producer("runcontrol")
 
 laser = LaserData()

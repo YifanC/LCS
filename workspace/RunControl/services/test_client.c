@@ -73,7 +73,7 @@ int main (void)
     zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
 	zmq_recv (encoder, BufferReply, 2, 0);
 
-    nanosleep((struct timespec[]){{2, 0}}, NULL);
+    //nanosleep((struct timespec[]){{1, 0}}, NULL);
 
     EncoderInfo.Status = 0;
     printf ("Received:%s\n", BufferReply);
@@ -114,7 +114,7 @@ int main (void)
             stop = 1;
         }
         request_nbr += 1;
-        nanosleep((struct timespec[]){{0, 500000000}}, NULL);
+        sleep(1);
     }
 
     printf ("Shutting down.");
