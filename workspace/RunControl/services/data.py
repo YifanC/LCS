@@ -45,6 +45,7 @@ class LaserData(object):
         self.pos_tomg_2_axis2 = pos_tomg_2_axis2  # Motorized Mirror Zaber T-OMG at flange, axis 2
 
         self.path_data = os.getenv("LCS_DATA")
+        self.path_binary = os.getenv("LCS_BINARY")
 
 
     def __str__(self):
@@ -98,11 +99,13 @@ class LaserData(object):
             f.write("\n")
         f.close()
 
-    def writeBinary(self, fileID):
+    def writeBinary(self, filename):
         ''' write the data to a binary file '''
         LaserdataList = self.dump()
         packed_data = struct.pack('i' + 'f' * (len(LaserdataList) - 1),
                                   *LaserdataList)  # first an int then floats follow
-        f = open(fileID, 'wt')
+        file = self.path_binary + "laser.bin"
+        print file
+        f = open(file, 'wt')
         f.write(packed_data)
         f.close()
