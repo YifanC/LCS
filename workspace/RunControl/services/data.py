@@ -1,5 +1,6 @@
 import struct  # for packing integers
 import time
+import os
 
 class LaserData(object):
 
@@ -42,6 +43,9 @@ class LaserData(object):
         self.pos_tomg_1_axis2 = pos_tomg_1_axis2  # Motorized Mirror Zaber T-OMG at box, axis 2
         self.pos_tomg_2_axis1 = pos_tomg_2_axis1  # Motorized Mirror Zaber T-OMG at flange, axis 1
         self.pos_tomg_2_axis2 = pos_tomg_2_axis2  # Motorized Mirror Zaber T-OMG at flange, axis 2
+
+        self.path_data = os.getenv("LCS_DATA")
+
 
     def __str__(self):
         '''display the data in a readable format'''
@@ -88,10 +92,11 @@ class LaserData(object):
         pass
 
     def writeTxt(self):
-        with open("testfile.txt", "a") as f:
+        with open(self.path_data + "/" +"testfile.txt", "a") as f:
             for item in self.dump():
                 f.write("%s " % item)
             f.write("\n")
+        f.close()
 
     def writeBinary(self, fileID):
         ''' write the data to a binary file '''
