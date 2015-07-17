@@ -62,6 +62,7 @@ class Controls(base):
         self.process_stop(self.proc_broker)
 
     def process_start(self, filename, args="", py=False, c=False):
+        # TODO: Handle error messages of c process
         if py is True:
             prefix = "python"
             command =  [prefix, filename, args]
