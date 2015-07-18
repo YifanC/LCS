@@ -14,13 +14,13 @@ signal.signal(signal.SIGINT, sigint_handler)
 data = LaserData()
 
 assembler = Consumer("assembler")
-#assembler.start()
+assembler.start()
 assembler.color = False
 #assembler.open_logfile()
 
 print "------------ Wait for Hello ------------"
 ready = False
-assembler.timeout = 10
+assembler.timeout = 5
 while not ready:
     ready = assembler.recv_hellos()
 
