@@ -45,7 +45,7 @@ class LaserData(object):
         self.pos_tomg_2_axis2 = pos_tomg_2_axis2  # Motorized Mirror Zaber T-OMG at flange, axis 2
 
         self.path_data = os.getenv("LCS_DATA")
-        self.path_binary = os.getenv("LCS_BINARY")
+        self.path_binary = os.getenv("LCS_BINARYFILE")
 
 
     def __str__(self):
