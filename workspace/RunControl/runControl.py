@@ -1,31 +1,37 @@
-import subprocess as subprocess
-import time
-import signal
+
+from base.controls import *
+from services.communication import Producer
+from services.data import LaserData
+
+rc = Controls()
+data = LaserData()
+rc.com = Producer("runcontrol")
+
+rc.broker_start()
+rc.assembler_start()
+time.sleep(2)
+rc.encoder_start()
 
 
-def openLogfile(RunNr, service):
-    LogFilenmae = time.strftime("%Y-%m-%d-%H%M-Run-", time.localtime()) + str(RunNr) + str(".log")
-    LogFilePath = "./log/" + str(service)
+rc.com.id = 1
+rc.com.state = -1
+rc.com.start()
+rc.com.send_hello()
+rc.com.state = 0
+rc.com.send_data(data)
 
-    OutputLogfile = open(LogFilePath + LogFilenmae, "wb")
+time.sleep(10)
+rc.assembler_alive()
+rc.broker_alive()
+rc.encoder_alive()
 
-    return OutputLogfile
+time.sleep(1)
+rc.assembler_stop()
+rc.broker_stop()
+rc.encoder_stop()
 
+time.sleep(1)
 
-def startEncoder(RunNr):
-    LogfileEncoder = openLogfile(RunNumber, "encoder")
-    ProdEncoder = subprocess.Popen(['./write.o'], stdout=LogfileEncoder)
-    return ProdEncoder
-
-
-def stopEncoder():
-    subEncoder.send_signal(signal.SIGINT)
-
-
-RunNumber = 000
-subEncoder = startEncoder(0)
-time.sleep(5)
-
-stopEncoder()
-
-
+rc.assembler_alive()
+rc.broker_alive()
+rc.encoder_alive()
