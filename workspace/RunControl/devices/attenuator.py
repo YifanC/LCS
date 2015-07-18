@@ -196,8 +196,8 @@ class Attenuator(Motor):
             return -1
 
     def checkParameter(self, parameter, value, echo):
-	SetValue = self.getParameter(parameter)
+        SetValue = self.getParameter(parameter)
         if SetValue == str(value):
             return 0
         else:
-	    return -1
+            return -1
