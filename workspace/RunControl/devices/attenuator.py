@@ -49,7 +49,7 @@ class Attenuator(Motor):
         self.comPrefix = ""
         self.comSetCommand = " "
         self.comGetCommand = ""
-	self.comReplyPrefix = ""
+        self.comReplyPrefix = ""
         self.comEnd = "\r"
 
         self.microsteps = 2
