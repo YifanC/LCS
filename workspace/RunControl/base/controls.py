@@ -9,9 +9,9 @@ import os
 
 class Controls(base):
 
-    def __init__(self):
+    def __init__(self, RunNumber):
         self.name = "controls"
-        super(Controls, self).__init__(name=self.name, logit=False)
+        super(Controls, self).__init__(name=self.name, logit=True)
 
         self.path_base = os.getenv("LCS_BASE")
         self.path_services = os.getenv("LCS_SERVICES")

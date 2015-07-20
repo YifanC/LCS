@@ -12,7 +12,7 @@ import os
 DEBUG = True
 
 class base(object):
-    def __init__(self, name="", RunNr=0,logit=True): #TODO: Implement to put name in all classes
+    def __init__(self, name="", RunNumber=0, logit=True): #TODO: Implement to put name in all classes
         self.name = name
         self.state = 0
         self.StateDict = {0: "Not Initialized",
@@ -21,7 +21,7 @@ class base(object):
         # switch this to false if using bpython
         self.color = True
         self.config = None
-        self.RunNr = RunNr  # TODO: Implement passing of run number from the instance
+        self.RunNumber = RunNumber  # TODO: Implement passing of run number from the instance
 
         self.path_logfiles = os.getenv("LCS_LOGFILES")
         if self.path_logfiles is None:
@@ -29,7 +29,7 @@ class base(object):
             sys.exit(1)
 
         # TODO: Make this available everywhere
-        self.log = self.config_logging(self.RunNr,logit)
+        self.log = self.config_logging(self.RunNumber, logit)
         self.log.info("started logger")
 
 
