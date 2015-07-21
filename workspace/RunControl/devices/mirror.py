@@ -27,7 +27,7 @@ class Mirror(Motor):
                                "getStatus": 54,
                                "readRegister": 35,
                                "setRegister": 35,
-                               "storePosition":16,
+                               "storePosition": 16,
                                "getPosition": 60,
                                "moveAbsolute": 20,  # no absolute movement implemented in hardware
                                "moveRelative": 21}  # positive direction closes / negative opens
@@ -62,13 +62,16 @@ class Mirror(Motor):
         r = [0, 0, 0, 0, 0, 0]
         for i in range(6):
             r[i] = ord(reply[i])
-
-        self.printDebug(r)
-        return r
+        replyData = (256.0**3.0*reply[5]) + (256.0**2.0*reply[4]) + (256.0*reply[3]) + (reply[2])
+        if reply[5] > 127:
+            replyData -= 256.0**4
+        self.printDebug("reply: " + str(r))
+        self.printDebug("data: " + str(replyData))
+        return replyData
 
     def getStatus(self):
         reply = self.com_send(self.InstructionSet["getStatus"])
-	return reply[2]
+        return reply
 
 
     def storePosition(self, adr=0):
@@ -105,7 +108,7 @@ class Mirror(Motor):
             return -1
         instruction = [register_adr, 0, 0, 0]
         reply = self.com_send(self.InstructionSet["readRegister"], instruction)
-        return reply[2]
+        return reply
 
     def writeRegister(self, register_adr, value):
         if 0 > register_adr > 127:
@@ -125,14 +128,32 @@ class Mirror(Motor):
         return 0
 
     def moveAbsolute(self, value, monitor=False, display=False, delta=10):
-        self.com_send(20, [value,0,0,0])
+        self.printDebug("moving absolute in ms:" + str(value))
+        pos_list = self.translate_pos(value)
+        self.com_send(self.InstructionSet["moveAbsolute"], pos_list)
 
     def moveRelative(self, value, monitor=False, display=False, delta=10):
-        self.com_send(21, [value,0,0,0])
+        self.printDebug("moving relative in ms:" + str(value))
+        pos_list = self.translate_pos(value)
+        self.com_send(self.InstructionSet["moveRelative"], pos_list)
 
     def getPosition(self):
         reply = self.com_send(self.InstructionSet["getPosition"])
-        self.printDebug(reply)
+        self.printDebug("position: " + str(reply))
+
+    def translate_pos(self, Cmd_Data):
+        if Cmd_Data < 0:
+            Cmd_Data = 256 ** 4 + Cmd_Data
+
+        Cmd_Byte_6 = Cmd_Data / 256**3
+        Cmd_Data   = Cmd_Data - 256**3 * Cmd_Byte_6
+        Cmd_Byte_5 = Cmd_Data / 256**2
+        Cmd_Data   = Cmd_Data - 256**2 * Cmd_Byte_5
+        Cmd_Byte_4 = Cmd_Data / 256
+        Cmd_Data   = Cmd_Data - 256 * Cmd_Byte_4
+        Cmd_Byte_3 = Cmd_Data
+
+        return [Cmd_Byte_3, Cmd_Byte_4, Cmd_Byte_5, Cmd_Byte_6]
 
     def isMoving(self):
         pass
