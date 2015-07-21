@@ -46,7 +46,7 @@ class Mirror(Motor):
 
         msg = struct.pack("<" + 6*"B", self.axis, command, instruction[0], instruction[1], instruction[2], instruction[3])
         reply = self.com_write(msg, echo=True)
-        self.translate_reply(reply)
+        reply = self.translate_reply(reply)
         self.printMsg(reply)
 
         return reply
@@ -80,7 +80,8 @@ class Mirror(Motor):
             return -1
         instruction = [register_adr, 0, 0, 0]
         reply = self.com_send(self.InstructionSet["readRegister"], instruction)
-        return reply
+        self.printMsg(reply[2])
+	return reply[2]
 
     def writeRegister(self, register_adr, value):
         if 0 > register_adr > 127:
@@ -91,11 +92,11 @@ class Mirror(Motor):
             self.printError("value has wrong format")
             return -1
 
-        if 255 > value > 0:
+        if 255 < value < 0:
             self.printError("value is out of bounds")
             return -1
 
-        instruction = [register_adr | 128, value[0], 0, 0]
+        instruction = [register_adr | 128, value, 0, 0]
         self.com_send(self.InstructionSet["readRegister"], instruction)
         return 0
 

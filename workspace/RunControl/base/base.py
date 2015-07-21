@@ -174,8 +174,8 @@ class ComSerial(base):
 
     def com_write(self, message, echo=False):
         """ write message to comport """
-        msg = self.msg_filter(message)
-        self.com.isOpen()
+        msg = self.comPrefix + message + self.comEnd 
+	self.com.isOpen()
         self.com.write(msg)
 
         if DEBUG is True:
