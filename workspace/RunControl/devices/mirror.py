@@ -8,7 +8,7 @@ from math import copysign
 class Mirror(Motor):
     def __init__(self, name):
         self.name = name
-        super(Mirror, self).__init__(name=self.name, logit=False)
+        super(Mirror, self).__init__(name=self.name)
         self.state = 0
         self.comport = "/dev/ttyUSB6"
         self.comBaudrate = 9600
@@ -39,12 +39,13 @@ class Mirror(Motor):
 
         msg = struct.pack("<BBl", self.axis, command, data)
         reply = self.com_write(msg, echo=True)
-        self.printMsg(reply)
+        self.translate_reply(reply)
+	self.printMsg(reply)
 
     def translate_reply(self, reply):
         r = [0,0,0,0,0,0]
         for i in range (6):
-            r[i] = ord(reply)
+            r[i] = ord(reply[i])
 
         self.printMsg(r)
         return r
