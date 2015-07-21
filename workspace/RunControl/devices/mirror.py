@@ -24,7 +24,7 @@ class Mirror(Motor):
         self.InstructionSet = {"getName": 50,
                                "stopMovement": 23,
                                "home": 1,
-                               "status": 54,
+                               "getStatus": 54,
                                "readRegister": 35,
                                "setRegister": 35,
                                "storePosition":16,
@@ -38,7 +38,7 @@ class Mirror(Motor):
         self.dict_axis = {"horizontal": 1,
                           "vertical": 2}
 
-        self.axis = 1
+        self.axis = 2
 
     def com_send(self, command, instruction=0):
         if instruction == 0:
@@ -65,6 +65,11 @@ class Mirror(Motor):
 
         self.printDebug(r)
         return r
+
+    def getStatus(self):
+        reply = self.com_send(self.InstructionSet["getStatus"])
+	return reply[2]
+
 
     def storePosition(self, adr=0):
         """ Store the current position, only possible when homing was performed beforehand """
@@ -120,10 +125,10 @@ class Mirror(Motor):
         return 0
 
     def moveAbsolute(self, value, monitor=False, display=False, delta=10):
-        pass
+        self.com_send(20, [value,0,0,0])
 
     def moveRelative(self, value, monitor=False, display=False, delta=10):
-        pass
+        self.com_send(21, [value,0,0,0])
 
     def getPosition(self):
         reply = self.com_send(self.InstructionSet["getPosition"])
