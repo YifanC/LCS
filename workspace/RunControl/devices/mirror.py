@@ -19,7 +19,7 @@ class Mirror(Motor):
         self.StandartMsgLength = 15
         # config file
         # self.config_setfile()
-        #self.config_load()
+        # self.config_load()
 
         self.InstructionSet = {"getName": 50,
                                "stopMovement": 23,
@@ -27,9 +27,12 @@ class Mirror(Motor):
                                "status": 54,
                                "readRegister": 35,
                                "setRegister": 35,
+                               "storePosition":16,
                                "getPosition": 60,
                                "moveAbsolute": 20,  # no absolute movement implemented in hardware
                                "moveRelative": 21}  # positive direction closes / negative opens
+
+        """ The motor has backlash error, so approach position always from the same direction."""
 
         # Just a guess! TODO: Get the axis right
         self.dict_axis = {"horizontal": 1,
@@ -44,9 +47,13 @@ class Mirror(Motor):
             if len(instruction) != 4:
                 self.printError("data frame has wrong size")
 
-        msg = struct.pack("<" + 6*"B", self.axis, command, instruction[0], instruction[1], instruction[2], instruction[3])
+        msg = struct.pack("<" + 6 * "B", self.axis, command, instruction[0], instruction[1], instruction[2],
+                          instruction[3])
         reply = self.com_write(msg, echo=True)
         reply = self.translate_reply(reply)
+        if reply[1] == 255:
+            self.printError("device responded with error")
+            self.printError(" error: " + str(reply))
         self.printMsg(reply)
 
         return reply
@@ -59,13 +66,24 @@ class Mirror(Motor):
         self.printDebug(r)
         return r
 
+    def storePosition(self, adr=0):
+        """ Store the current position, only possible when homing was performed beforehand """
+        instruction = [adr, 0, 0, 0]
+        self.com_send(self.InstructionSet["storePosition"], instruction)
+
+    def home(self):
+        self.printMsg("homing")
+        reply = self.com_send(1)
+        self.printDebug(reply)
+        return 1
+
     def setParameter(self, parameter):
         pass
 
     def getParameter(self, parameter, value):
         pass
 
-    def setSerial(self,serial):
+    def setSerial(self, serial):
         address = 0
         self.writeRegister(address, serial)
         return 0
@@ -80,8 +98,7 @@ class Mirror(Motor):
             return -1
         instruction = [register_adr, 0, 0, 0]
         reply = self.com_send(self.InstructionSet["readRegister"], instruction)
-        self.printMsg(reply[2])
-	return reply[2]
+        return reply[2]
 
     def writeRegister(self, register_adr, value):
         if 0 > register_adr > 127:
