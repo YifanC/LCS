@@ -73,8 +73,10 @@ class Mirror(Motor):
 
     def home(self):
         self.printMsg("homing")
+        self.com.timeout = 10
         reply = self.com_send(1)
         self.printDebug(reply)
+        self.com.timeout = 1
         return 1
 
     def setParameter(self, parameter):
@@ -124,7 +126,8 @@ class Mirror(Motor):
         pass
 
     def getPosition(self):
-        pass
+        reply = self.com_send(self.InstructionSet["getPosition"])
+        self.printDebug(reply)
 
     def isMoving(self):
         pass
