@@ -172,9 +172,9 @@ class ComSerial(base):
 
     def com_write(self, message, echo=False):
         """ write message to comport """
-        msg = self.comPrefix + message
+        msg = self.msg_filter(message)
         self.com.isOpen()
-        self.com.write(msg + self.comEnd)
+        self.com.write(msg)
 
         if DEBUG is True:
             self.printDebug("String sent: " + msg + self.comEnd)
@@ -193,12 +193,16 @@ class ComSerial(base):
         except:
             self.printError("Could not read to com port")
             sys.exit(1)
-        return self.msg_filter(msg)
+        return self.reply_filter(msg)
 
-    def msg_filter(self, msg):
-        """ function which filters the output, should be defined in the device class if required. Useful for example if there
+    def reply_filter(self, msg):
+        """ function which filters the reply, should be defined in the device class if required. Useful for example if there
         is axis information which is sent in a reply."""
         return msg
+
+    def msg_filter(self, msg):
+        """ Should be over written if  """
+        return self.comPrefix + msg + self.comEnd
 
     def printComStatus(self):
         self.printMsg(str(self.com))
@@ -231,8 +235,8 @@ class Motor(ComSerial):
         self.comSetPrefix = None  # this string is sent in front of a setParameter(para, value) call
         self.comSetCommand = None  # this string is sent in between of a setParameter(para, value) call
         self.comGetCommand = None  # this string is sent in font of the getParameter(para) call
-        self.comReplyPrefix = None  # is used to determine the reply length when the device sends back an echo
-        self.comReplyEnd = None  # is used to determine the reply length when the device sends back an echo
+        self.comReplyPrefix = 0  # is used to determine the reply length when the device sends back an echo
+        self.comReplyEnd = 0  # is used to determine the reply length when the device sends back an echo
         self.comEnd = None  # is added to any message sent to the device
 
     def getName(self, display=True):
