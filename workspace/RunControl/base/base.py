@@ -34,6 +34,7 @@ class base(object):
 
 
     def printMsg(self, string, nonewline=False):
+	string = str(string)
         msg = time.strftime('%H:%M:%S ', time.localtime()) + self.name + ": " + string
         if nonewline == True:
             print msg,
@@ -43,7 +44,7 @@ class base(object):
         self.log.info(string)
 
     def printError(self, string):
-
+	string = str(string)
         msg = time.strftime('%H:%M:%S ', time.localtime()) + self.name + " ERROR: " + string
         msg_colored = bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
 
@@ -55,6 +56,7 @@ class base(object):
         self.log.error(string)
 
     def printDebug(self, string):
+	string = str(string)
         msg = time.strftime('%H:%M:%S ', time.localtime()) + "DEBUG " + self.name + " " + string
         msg_colored = bcolors.WARNING + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
 
@@ -231,13 +233,13 @@ class Motor(ComSerial):
         self.comDefaultReplyLength = None
         self.comInfoReplyLength = None
 
-        self.comPrefix = None  # this string is put in front of any message transmitted
-        self.comSetPrefix = None  # this string is sent in front of a setParameter(para, value) call
+        self.comPrefix = ""  # this string is put in front of any message transmitted
+        self.comSetPrefix = ""  # this string is sent in front of a setParameter(para, value) call
         self.comSetCommand = None  # this string is sent in between of a setParameter(para, value) call
         self.comGetCommand = None  # this string is sent in font of the getParameter(para) call
         self.comReplyPrefix = ""  # is used to determine the reply length when the device sends back an echo
         self.comReplyEnd = ""  # is used to determine the reply length when the device sends back an echo
-        self.comEnd = None  # is added to any message sent to the device
+        self.comEnd = ""  # is added to any message sent to the device
 
     def getName(self, display=True):
         name = self.getParameter("getName")
