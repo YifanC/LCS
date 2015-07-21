@@ -235,8 +235,8 @@ class Motor(ComSerial):
         self.comSetPrefix = None  # this string is sent in front of a setParameter(para, value) call
         self.comSetCommand = None  # this string is sent in between of a setParameter(para, value) call
         self.comGetCommand = None  # this string is sent in font of the getParameter(para) call
-        self.comReplyPrefix = 0  # is used to determine the reply length when the device sends back an echo
-        self.comReplyEnd = 0  # is used to determine the reply length when the device sends back an echo
+        self.comReplyPrefix = ""  # is used to determine the reply length when the device sends back an echo
+        self.comReplyEnd = ""  # is used to determine the reply length when the device sends back an echo
         self.comEnd = None  # is added to any message sent to the device
 
     def getName(self, display=True):

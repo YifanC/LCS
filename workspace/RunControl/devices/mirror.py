@@ -33,7 +33,7 @@ class Mirror(Motor):
         self.dict_axis = {"horizontal": 1,
                           "vertical": 2}
 
-        self.axis = self.dict[self.name]
+        self.axis = 1
 
     def communicate(self, command, data=0):
 
@@ -41,6 +41,13 @@ class Mirror(Motor):
         reply = self.com_write(msg, echo=True)
         self.printMsg(reply)
 
+    def translate_reply(self, reply):
+        r = [0,0,0,0,0,0]
+        for i in range (6):
+            r[i] = ord(reply)
+
+        self.printMsg(r)
+        return r
 
     def setParameter(self, parameter):
         pass
