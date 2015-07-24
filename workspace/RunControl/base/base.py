@@ -11,13 +11,14 @@ import os
 
 DEBUG = True
 
+
 class base(object):
-    def __init__(self, name="", RunNumber=0, logit=True): #TODO: Implement to put name in all classes
+    def __init__(self, name="", RunNumber=0, logit=True):  # TODO: Implement to put name in all classes
         self.name = name
         self.state = 0
         self.StateDict = {0: "Not Initialized",
-                      1: "Ready",
-                      2: "Error"}
+                          1: "Ready",
+                          2: "Error"}
         # switch this to false if using bpython
         self.color = True
         self.config = None
@@ -34,7 +35,7 @@ class base(object):
 
 
     def printMsg(self, string, nonewline=False):
-	string = str(string)
+        string = str(string)
         msg = time.strftime('%H:%M:%S ', time.localtime()) + self.name + ": " + string
         if nonewline == True:
             print msg,
@@ -44,9 +45,10 @@ class base(object):
         self.log.info(string)
 
     def printError(self, string):
-	string = str(string)
+        string = str(string)
         msg = time.strftime('%H:%M:%S ', time.localtime()) + self.name + " ERROR: " + string
-        msg_colored = bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+        msg_colored = bcolors.FAIL + time.strftime('%H:%M ',
+                                                   time.localtime()) + self.name + ": " + string + bcolors.ENDC
 
         if self.color is True:
             print msg_colored
@@ -56,9 +58,10 @@ class base(object):
         self.log.error(string)
 
     def printDebug(self, string):
-	string = str(string)
+        string = str(string)
         msg = time.strftime('%H:%M:%S ', time.localtime()) + "DEBUG " + self.name + " " + string
-        msg_colored = bcolors.WARNING + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+        msg_colored = bcolors.WARNING + time.strftime('%H:%M ',
+                                                      time.localtime()) + self.name + ": " + string + bcolors.ENDC
 
         if self.color is True:
             print msg_colored
@@ -69,9 +72,10 @@ class base(object):
 
     def config_setfile(self, filename=-1):
         if filename == -1:
-            string = "config_" + str(self.name) + ".json"
-            self.printMsg("Using default config file (devices/" + string + ")")
-            self.configfilename = string
+            filename = "config_" + str(self.name) + ".json"
+            path = os.getenv("LCS_DEVICES") + "/config/"
+            self.printMsg("Using default config file (./devices/config/" + filename + ")")
+            self.configfilename = path + filename
         else:
             self.printMsg("Using config file: " + str(filename))
             self.configfilename = str(filename)
@@ -88,7 +92,7 @@ class base(object):
             configfile.close()
 
 
-    def config_logging(self, RunNr, logit, LogFilename="",):
+    def config_logging(self, RunNr, logit, LogFilename="", ):
         if LogFilename == "":
             LogFilename = time.strftime("%Y-%m-%d-%H%M-Run-", time.localtime()) + str(RunNr) + str(".log")
             LogFilePath = str(self.path_logfiles) + "/" + str(self.name) + "/"
@@ -110,7 +114,7 @@ class base(object):
         else:
             log.addHandler(logging.NullHandler())
         # printing out to console
-        #console = logging.StreamHandler()
+        # console = logging.StreamHandler()
         #console.setLevel(logging.INFO)
         #logging.getLogger(self.name).addHandler(console)
 
@@ -126,14 +130,13 @@ class base(object):
             self.__dict__ = f
 
 
-
 class ComSerial(base):
-    def __init__(self, name=""): #, comport):
+    def __init__(self, name=""):  # , comport):
         super(ComSerial, self).__init__(name=name)
         self.com = serial.Serial()
         self.comBaudrate = 9600
         self.comTimeout = 0.1
-        self.comport =""# comport
+        self.comport = ""  # comport
 
         self.comEcho = False
 
@@ -174,8 +177,8 @@ class ComSerial(base):
 
     def com_write(self, message, echo=False):
         """ write message to comport """
-        msg = self.comPrefix + message + self.comEnd 
-	self.com.isOpen()
+        msg = self.comPrefix + message + self.comEnd
+        self.com.isOpen()
         self.com.write(msg)
 
         if DEBUG is True:
