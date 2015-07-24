@@ -21,16 +21,16 @@ class Mirror(Motor):
         # self.config_setfile()
         # self.config_load()
 
-        self.InstructionSet = {"getName": 50,
-                               "stopMovement": 23,
-                               "home": 1,
-                               "getStatus": 54,
-                               "readRegister": 35,
-                               "setRegister": 35,
+        self.InstructionSet = {"getName":       50,
+                               "stopMovement":  23,
+                               "home":          1,
+                               "getStatus":     54,
+                               "readRegister":  35,
+                               "setRegister":   35,
                                "storePosition": 16,
-                               "getPosition": 60,
-                               "moveAbsolute": 20,  # no absolute movement implemented in hardware
-                               "moveRelative": 21}  # positive direction closes / negative opens
+                               "getPosition":   60,
+                               "moveAbsolute":  20,  # no absolute movement implemented in hardware
+                               "moveRelative":  21}  # positive direction closes / negative opens
 
         """ The motor has backlash error, so approach position always from the same direction."""
 
