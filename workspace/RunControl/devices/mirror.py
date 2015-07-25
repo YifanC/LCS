@@ -51,20 +51,21 @@ class Mirror(Motor):
                           instruction[3])
         reply = self.com_write(msg, echo=True)
         reply = self.translate_reply(reply)
-        if reply[1] == 255:
-            self.printError("device responded with error")
-            self.printError(" error: " + str(reply))
         self.printMsg(reply)
-
         return reply
 
     def translate_reply(self, reply):
         r = [0, 0, 0, 0, 0, 0]
         for i in range(6):
-            r[i] = ord(reply[i])
-        replyData = (256.0**3.0*reply[5]) + (256.0**2.0*reply[4]) + (256.0*reply[3]) + (reply[2])
-        if reply[5] > 127:
-            replyData -= 256.0**4
+            r[i] = int(ord(reply[i]))
+
+        if r[2] == 255:
+            self.printError("device responded with error")
+            self.printError(" error code: " + str(r[3]))
+
+        replyData = (int(256.0**3.0)*r[5]) + (int(256.0**2.0)*r[4]) + (int(256.0)*r[3]) + (r[2])
+        if r[5] > 127:
+            replyData -= int(256**4.0)
         self.printDebug("reply: " + str(r))
         self.printDebug("data: " + str(replyData))
         return replyData
@@ -100,7 +101,9 @@ class Mirror(Motor):
 
     def getSerial(self):
         address = 0
-        return self.readRegister(address)
+        serial_number =  self.readRegister(address)
+        self.printMsg("serial number " + str(serial_number))
+	return serial_number
 
     def readRegister(self, register_adr):
         if 0 > register_adr > 127:
@@ -108,7 +111,7 @@ class Mirror(Motor):
             return -1
         instruction = [register_adr, 0, 0, 0]
         reply = self.com_send(self.InstructionSet["readRegister"], instruction)
-        return reply
+        return int(reply)>>8
 
     def writeRegister(self, register_adr, value):
         if 0 > register_adr > 127:
