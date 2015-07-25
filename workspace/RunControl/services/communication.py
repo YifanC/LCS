@@ -36,28 +36,35 @@ class broker(Communication):
     def __init__(self):
         # Prepare our context and sockets
         name = "broker"
-        context = zmq.Context()
-        frontend = context.socket(zmq.ROUTER)
-        backend = context.socket(zmq.DEALER)
-        frontend.bind("ipc:///tmp/laser-in.ipc")
-        backend.bind("ipc:///tmp/laser-out.ipc")
+
+        super(broker, self).__init__(name=name)
+
+        self.context = zmq.Context()
+        self.frontend = self.context.socket(zmq.ROUTER)
+        self.backend = self.context.socket(zmq.DEALER)
+        self.frontend.bind("ipc:///tmp/laser-in.ipc")
+        self.backend.bind("ipc:///tmp/laser-out.ipc")
 
         # Initialize poll set
-        poller = zmq.Poller()
-        poller.register(frontend, zmq.POLLIN)
-        poller.register(backend, zmq.POLLIN)
+        self.poller = zmq.Poller()
+        self.poller.register(self.frontend, zmq.POLLIN)
+        self.poller.register(self.backend, zmq.POLLIN)
 
-        # Switch messages between sockets
+
+
+        # exchange messages between sockets
         while True:
-            socks = dict(poller.poll())
+            socks = dict(self.poller.poll())
 
-            if socks.get(frontend) == zmq.POLLIN:
-                message = frontend.recv_multipart()
-                backend.send_multipart(message)
+            if socks.get(self.frontend) == zmq.POLLIN:
+                message = self.frontend.recv_multipart()
+                self.backend.send_multipart(message)
 
-            if socks.get(backend) == zmq.POLLIN:
-                message = backend.recv_multipart()
-                frontend.send_multipart(message)
+            if socks.get(self.backend) == zmq.POLLIN:
+                message = self.backend.recv_multipart()
+                self.frontend.send_multipart(message)
+
+
 # ------------------------------ CONSUMER ------------------------------------
 
 class Consumer(Communication):
