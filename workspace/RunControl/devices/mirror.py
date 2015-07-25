@@ -5,7 +5,6 @@ import struct
 from devices.mirror_error import *
 from math import copysign
 
-
 class Mirror(Motor):
     def __init__(self, name):
         self.name = name
@@ -51,10 +50,7 @@ class Mirror(Motor):
         msg = struct.pack("<" + 6 * "B", self.axis, command, instruction[0], instruction[1], instruction[2],
                           instruction[3])
         reply = self.com_write(msg, echo=True)
-	reply_trans = self.translate_reply(reply)
-        if reply[1] == 255:
-            self.printError("device responded with error")
-            self.printError(" error: " + str(reply) + " " + ErrorCodeMirror[reply[2]])
+	reply_trans = self.translate_reply(reply)[0]
         self.printMsg(reply_trans)
 
         return reply_trans
@@ -64,16 +60,20 @@ class Mirror(Motor):
         for i in range(6):
             r[i] = int(ord(reply[i]))
 
-        if r[2] == 255:
-            self.printError("device responded with error")
-            self.printError(" error code: " + str(r[3]))
+        if r[1] == 255:
+            self.printError("device responded with error: " + str(r[2]) )
+            self.printError(ErrorCodeMirror.ErrorDict[r[2]])
 
         replyData = (int(256.0**3.0)*r[5]) + (int(256.0**2.0)*r[4]) + (int(256.0)*r[3]) + (r[2])
         if r[5] > 127:
             replyData -= int(256**4.0)
+	
+	data = replyData
+	msg_id = r[0]
+	axis = r[1]
         self.printDebug("reply: " + str(r))
         self.printDebug("data: " + str(replyData))
-        return replyData
+        return data, axis, msg_id
 
     def getStatus(self):
         reply = self.com_send(self.InstructionSet["getStatus"])
