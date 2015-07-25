@@ -2,6 +2,7 @@ __author__ = 'matthias'
 
 from base.base import *
 import struct
+from devices.mirror_error import *
 from math import copysign
 
 
@@ -21,16 +22,16 @@ class Mirror(Motor):
         # self.config_setfile()
         # self.config_load()
 
-        self.InstructionSet = {"getName": 50,
-                               "stopMovement": 23,
-                               "home": 1,
-                               "getStatus": 54,
-                               "readRegister": 35,
-                               "setRegister": 35,
+        self.InstructionSet = {"getName":       50,
+                               "stopMovement":  23,
+                               "home":          1,
+                               "getStatus":     54,
+                               "readRegister":  35,
+                               "setRegister":   35,
                                "storePosition": 16,
-                               "getPosition": 60,
-                               "moveAbsolute": 20,  # no absolute movement implemented in hardware
-                               "moveRelative": 21}  # positive direction closes / negative opens
+                               "getPosition":   60,
+                               "moveAbsolute":  20,  # no absolute movement implemented in hardware
+                               "moveRelative":  21}  # positive direction closes / negative opens
 
         """ The motor has backlash error, so approach position always from the same direction."""
 
@@ -50,9 +51,13 @@ class Mirror(Motor):
         msg = struct.pack("<" + 6 * "B", self.axis, command, instruction[0], instruction[1], instruction[2],
                           instruction[3])
         reply = self.com_write(msg, echo=True)
-        reply = self.translate_reply(reply)
-        self.printMsg(reply)
-        return reply
+	reply_trans = self.translate_reply(reply)
+        if reply[1] == 255:
+            self.printError("device responded with error")
+            self.printError(" error: " + str(reply) + " " + ErrorCodeMirror[reply[2]])
+        self.printMsg(reply_trans)
+
+        return reply_trans
 
     def translate_reply(self, reply):
         r = [0, 0, 0, 0, 0, 0]
@@ -160,3 +165,6 @@ class Mirror(Motor):
 
     def isMoving(self):
         pass
+
+
+

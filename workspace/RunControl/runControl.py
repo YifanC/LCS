@@ -2,6 +2,7 @@
 from base.controls import *
 from services.communication import Producer
 from services.data import LaserData
+
 from devices.feedtrough import *
 from devices.laser import *
 from devices.attenuator import *
@@ -16,8 +17,8 @@ RunNumber = 99
 rc = Controls(RunNumber=RunNumber)
 data = LaserData()
 rc.com = Producer("runcontrol")
-rc.ft_linear = Feedtrough("linear")
-rc.ft_rotary = Feedtrough("rotary")
+rc.ft_linear = Feedtrough("ft_linear", 1)
+rc.ft_rotary = Feedtrough("ft_rotary", 1)
 rc.laser = Laser()
 rc.attenuator = Attenuator()
 rc.aperture = Aperture()
@@ -55,6 +56,13 @@ rc.encoder_alive()
 # ----------------------------------------------------
 # -------------------- Finalize ----------------------
 # ----------------------------------------------------
+
+# Close com ports
+#rc.ft_linear.com_close()
+#rc.ft_rotary.com_close()
+#rc.laser.com_close()
+#rc.attenuator.com_close()
+#rc.aperture.com_close()
 
 time.sleep(1)
 rc.assembler_stop()
