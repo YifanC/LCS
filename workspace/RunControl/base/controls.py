@@ -45,7 +45,7 @@ class Controls(base):
 
     def assembler_start(self):
         self.printMsg("Starting Assembler")
-        self.proc_assembler = self.process_start(self.path_macros + "/" + "test_server.py", py=True)
+        self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", py=True)
 
     def assembler_alive(self):
         alive = self.process_alive(self.proc_assembler)
@@ -58,7 +58,7 @@ class Controls(base):
 
     def broker_start(self):
         self.printMsg("Starting Broker")
-        self.proc_broker = self.process_start(self.path_macros + "/" + "test_broker.py", py=True)
+        self.proc_broker = self.process_start(self.path_macros + "/" + "broker.py", py=True)
         pass
 
     def broker_alive(self):
