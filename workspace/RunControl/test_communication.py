@@ -40,7 +40,7 @@ rc.com = Producer("runcontrol")
 rc.broker_start()
 rc.assembler_start()
 time.sleep(2)
-rc.encoder_start()
+rc.encoder_start(dry=True)
 
 # Initialize and setup communication
 rc.com.id = 1
