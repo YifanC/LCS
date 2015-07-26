@@ -16,14 +16,23 @@ class Controls(base):
         self.path_base = os.getenv("LCS_BASE")
         self.path_services = os.getenv("LCS_SERVICES")
         self.path_devices = os.getenv("LCS_BASE")
+        self.path_macros = os.getenv("LCS_MACROS")
 
         if self.path_base is None:
             self.printError("Could not find path to base files -> aborting")
             sys.exit(1)
 
-    def encoder_start(self):
-        self.printMsg("Starting Encoder")
-        self.proc_encoder = self.process_start(self.path_services + "/" + "test_client.o", c=True)
+    def encoder_start(self, dry=False):
+
+        if dry is True:
+            self.printMsg("Starting Encoder Test")
+            self.proc_encoder = self.process_start(self.path_services + "/" + "test_client.o", c=True)
+
+        if dry is False:
+            self.printMsg("Starting Encoder")
+            self.proc_encoder = self.process_start(self.path_devices + "/" + "encoder.o -s", c=True)
+
+
 
     def encoder_alive(self):
         alive = self.process_alive(self.proc_encoder)
@@ -36,7 +45,7 @@ class Controls(base):
 
     def assembler_start(self):
         self.printMsg("Starting Assembler")
-        self.proc_assembler = self.process_start(self.path_services + "/" + "test_server.py", py=True)
+        self.proc_assembler = self.process_start(self.path_macros + "/" + "test_server.py", py=True)
 
     def assembler_alive(self):
         alive = self.process_alive(self.proc_assembler)
@@ -49,7 +58,7 @@ class Controls(base):
 
     def broker_start(self):
         self.printMsg("Starting Broker")
-        self.proc_broker = self.process_start(self.path_services + "/" + "test_broker.py", py=True)
+        self.proc_broker = self.process_start(self.path_macros + "/" + "test_broker.py", py=True)
         pass
 
     def broker_alive(self):
