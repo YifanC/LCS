@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export LD_LIBRARY_PATH="/usr/local/lib/"
+
 CURRENTPATH="$(pwd -P)"
 
 LCS_BASE=$CURRENTPATH/base
