@@ -15,7 +15,7 @@ class Controls(base):
 
         self.path_base = os.getenv("LCS_BASE")
         self.path_services = os.getenv("LCS_SERVICES")
-        self.path_devices = os.getenv("LCS_BASE")
+        self.path_devices = os.getenv("LCS_DEVICES")
         self.path_macros = os.getenv("LCS_MACROS")
 
         if self.path_base is None:
@@ -30,7 +30,7 @@ class Controls(base):
 
         if dry is False:
             self.printMsg("Starting Encoder")
-            self.proc_encoder = self.process_start(self.path_devices + "/" + "encoder.o -s", c=True)
+            self.proc_encoder = self.process_start(self.path_devices + "/" + "encoder.o", args="-s", c=True)
 
 
 
