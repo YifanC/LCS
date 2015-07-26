@@ -23,6 +23,7 @@ class Controls(base):
             sys.exit(1)
 
     def encoder_start(self, dry=False):
+        # TODO: Reset encoder before first start. Make sure that the encoder is in a nice state when we try to turn it on.
 
         if dry is True:
             self.printMsg("Starting Encoder Test")
