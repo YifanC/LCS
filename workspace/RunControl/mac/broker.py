@@ -1,5 +1,6 @@
 __author__ = 'matthias'
-from communication import *
+from services.communication import *
+
 import signal
 
 def sigint_handler(signal, frame):
