@@ -78,6 +78,7 @@ for idy in range(start_idy, steps_y):
         print " step x: ", str(idx), " y: ", str(idy)
         print " set position x: ", xx[idy, idx], " y:", yy[idy, idx]
         mirrorX.moveAbsolute(xx[idy, idx])
+
         raw_input("Press Enter to continue...")
 
 print "finished"
