@@ -44,7 +44,7 @@ class Mirror(Motor):
 
     def com_send(self, command, instruction=0):
         self.com.flushInput()
-        time.sleep(0.5)
+        time.sleep(0.1)
         if instruction == 0:
             instruction = [0, 0, 0, 0]
         else:
@@ -165,8 +165,10 @@ class Mirror(Motor):
         self.com_send(self.InstructionSet["moveRelative"], pos_list)
 
     def getPosition(self):
-        reply = self.com_send(self.InstructionSet["getPosition"])
-        self.printDebug("position: " + str(reply))
+        pos = self.com_send(self.InstructionSet["getPosition"])
+        self.printDebug("position: " + str(pos))
+	return pos
+
 
     def translate_pos(self, Cmd_Data):
         if Cmd_Data < 0:
