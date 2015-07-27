@@ -15,7 +15,7 @@ class Mirror(Motor):
         self.state = 0
         self.comport = "/dev/ttyUSB6"
         self.comBaudrate = 9600
-        self.comTimeout = 1
+        self.comTimeout = 20
         self.comEcho = False
         self.InfoInstruction = ""
         self.InfoMsgLength = 100
@@ -53,7 +53,8 @@ class Mirror(Motor):
                           instruction[3])
         reply = self.com_write(msg, echo=True)
         reply_trans = self.translate_reply(reply)[0]
-        self.printMsg(reply_trans)
+        if DEBUG:
+            self.printMsg(reply_trans)
 
         return reply_trans
 

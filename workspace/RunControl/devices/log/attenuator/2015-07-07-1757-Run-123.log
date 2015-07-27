@@ -1,3 +1,0 @@
-2015-07-07 17:57:16,478 - attenuator - INFO - started logger
-2015-07-07 17:57:16,478 - attenuator - INFO - Using default config file (devices/config_attenuator.json)
-2015-07-07 17:57:16,479 - attenuator - ERROR - opening fcom port (/dev/ttyUSB9) failed --> quitting
