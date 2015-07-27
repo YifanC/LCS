@@ -20,7 +20,7 @@ class Mirror(Motor):
         self.InfoInstruction = ""
         self.InfoMsgLength = 100
         self.StandartMsgLength = 15
-        #config file
+        # config file
         self.config_setfile()
         self.config_load()
 
@@ -43,13 +43,16 @@ class Mirror(Motor):
 
 
     def com_send(self, command, instruction=0):
-	self.com.flushInput()        
-	time.sleep(1)
-	if instruction == 0:
+        self.com.flushInput()
+        time.sleep(0.5)
+        if instruction == 0:
             instruction = [0, 0, 0, 0]
         else:
             if len(instruction) != 4:
                 self.printError("data frame has wrong size")
+
+        if DEBUG:
+            self.printDebug("sending: " + str(command) + str(instruction))
 
 
         msg = struct.pack("<" + 6 * "B", self.axis, command, instruction[0], instruction[1], instruction[2],
