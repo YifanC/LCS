@@ -31,7 +31,6 @@ axis1 = int(arguments.name1_str[2])
 name2 = "mirror" + arguments.name2_str
 axis2 = int(arguments.name2_str[2])
 
-
 mirrorX = Mirror(name1, axis1)  # this is x movement
 mirrorY = Mirror(name2, axis2)  # this is y movement
 
@@ -59,8 +58,8 @@ y = offset_y + stepsize_y * np.linspace(0, steps_y - 1, steps_y)
 xx, yy = np.meshgrid(x, y)
 
 # Relative Steps
-xx_step = np.diff(xx,n=1,axis=1)
-yy_step = np.diff(yy,n=0,axis=0)
+xx_step = np.diff(xx, n=1, axis=1)
+yy_step = np.diff(yy, n=0, axis=0)
 
 print "Absolute positions"
 print "xx"
@@ -76,13 +75,13 @@ for idy in range(start_idy, steps_y):
     mirrorX.home()
     mirrorY.moveAbsolute(yy[idy, 0])
     for idx in range(start_idx, steps_x):
-        print "step " + str(idy*steps_x + idx + 1) + "/" + str(steps_x * steps_y)
+        print "step " + str(idy * steps_x + idx + 1) + "/" + str(steps_x * steps_y)
         print " step x: ", str(idx), " y: ", str(idy)
-        print " set position x: ", xx[idy, idx], " y:", yy[idy, idx]
+        print " set position     x: ", xx[idy, idx], " y:", yy[idy, idx]
         mirrorX.moveAbsolute(xx[idy, idx])
         pos_x = mirrorX.getPosition()
         pos_y = mirrorY.getPosition()
-        print "mirror positions x: ", pos_x, " y:",pos_y
+        print " mirror positions x: ", pos_x, " y:", pos_y
         raw_input("Press Enter to continue...")
 
 print "finished"
