@@ -72,7 +72,7 @@ mirrorY.home()
 for idy in range(start_idy, steps_y):
     print "home x "
     mirrorX.home()
-    mirrorY.moveAbsolute(yy[idy, idx])
+    mirrorY.moveAbsolute(yy[idy, 0])
     for idx in range(start_idx, steps_x):
         print "step " + str(idy*steps_x + idx + 1) + "/" + str(steps_x * steps_y)
         print " step x: ", str(idx), " y: ", str(idy)

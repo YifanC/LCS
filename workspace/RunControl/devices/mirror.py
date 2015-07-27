@@ -43,18 +43,21 @@ class Mirror(Motor):
 
 
     def com_send(self, command, instruction=0):
-        if instruction == 0:
+	self.com.flushInput()        
+	time.sleep(1)
+	if instruction == 0:
             instruction = [0, 0, 0, 0]
         else:
             if len(instruction) != 4:
                 self.printError("data frame has wrong size")
+
 
         msg = struct.pack("<" + 6 * "B", self.axis, command, instruction[0], instruction[1], instruction[2],
                           instruction[3])
         reply = self.com_write(msg, echo=True)
         reply_trans = self.translate_reply(reply)[0]
         if DEBUG:
-            self.printMsg(reply_trans)
+            self.printDebug(reply_trans)
 
         return reply_trans
 
@@ -150,12 +153,12 @@ class Mirror(Motor):
 
     def moveAbsolute(self, value, monitor=False, display=False, delta=10):
         self.printDebug("moving absolute in ms:" + str(value))
-        pos_list = self.translate_pos(value)
+        pos_list = self.translate_pos(int(value))
         self.com_send(self.InstructionSet["moveAbsolute"], pos_list)
 
     def moveRelative(self, value, monitor=False, display=False, delta=10):
         self.printDebug("moving relative in ms:" + str(value))
-        pos_list = self.translate_pos(value)
+        pos_list = self.translate_pos(int(value))
         self.com_send(self.InstructionSet["moveRelative"], pos_list)
 
     def getPosition(self):
