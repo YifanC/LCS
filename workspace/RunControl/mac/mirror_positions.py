@@ -72,12 +72,14 @@ mirrorY.home()
 for idy in range(start_idy, steps_y):
     print "home x "
     mirrorX.home()
+    mirrorY.moveAbsolute(yy[idy, idx])
     for idx in range(start_idx, steps_x):
         print "step " + str(idy*steps_x + idx + 1) + "/" + str(steps_x * steps_y)
-        print " step x: ", str(idx),
-        print "y: ", str(idy)
-        print " position x: ", xx[idy, idx],
-        print "y:", yy[idy, idx]
+        print " step x: ", str(idx), " y: ", str(idy)
+        print " set position x: ", xx[idy, idx], " y:", yy[idy, idx]
+        mirrorX.moveAbsolute(xx[idy, idx])
         raw_input("Press Enter to continue...")
 
 print "finished"
+
+mirrorX.com_close()
