@@ -6,7 +6,10 @@ from devices.mirror import *
 
 parser = argparse.ArgumentParser(description='scanning mirror positions script')
 
-parser.add_argument('-n', action='store', dest='name_str', required=True,
+parser.add_argument('-n1', action='store', dest='name1_str', required=True,
+                    help='specify mirror number', type=str)
+
+parser.add_argument('-n2', action='store', dest='name2_str', required=True,
                     help='specify mirror number', type=str)
 
 parser.add_argument('-s', action='store', dest='start', nargs=2,
@@ -14,21 +17,27 @@ parser.add_argument('-s', action='store', dest='start', nargs=2,
 
 arguments = parser.parse_args()
 
-
 if arguments.start is None:
     start_idx = 0
     start_idy = 0
 else:
     [start_idx, start_idy] = arguments.start
 
-# mirror
-name = "mirror" + str(arguments.name_str)
-axis = int(arguments.name_str[2])
-mirror = Mirror(name, axis)
+# mirrors
+name1 = "mirror" + arguments.name1_str
+axis1 = int(arguments.name1_str[2])
+name2 = "mirror" + arguments.name2_str
+axis2 = int(arguments.name2_str[2])
 
-mirror.com_init()
-mirror.getSerial()
 
+mirror1 = Mirror(name1, axis1)
+mirror2 = Mirror(name2, axis2)
+
+# start com ports
+mirror1.com_init()
+mirror2.com = mirror1.com
+
+mirror1.getSerial()
 
 # Scanning array definitions.
 stepsize_x = 100
