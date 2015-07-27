@@ -117,7 +117,7 @@ class Mirror(Motor):
         address = 0
         serial_number = self.readRegister(address)
         self.printMsg("serial number " + str(serial_number))
-        if serial_number != self.name[-3:]:
+        if str(serial_number) != self.name[-3:]:
             self.printError("Name and serial do not match!")
 
         return serial_number
