@@ -7,9 +7,11 @@ from math import copysign
 
 
 class Mirror(Motor):
-    def __init__(self, name):
+    def __init__(self, name, axis):
         self.name = name
         super(Mirror, self).__init__(name=self.name)
+
+        self.axis = axis
         self.state = 0
         self.comport = "/dev/ttyUSB6"
         self.comBaudrate = 9600
@@ -18,9 +20,9 @@ class Mirror(Motor):
         self.InfoInstruction = ""
         self.InfoMsgLength = 100
         self.StandartMsgLength = 15
-        # config file
-        # self.config_setfile()
-        # self.config_load()
+        #config file
+        self.config_setfile()
+        self.config_load()
 
         self.InstructionSet = {"getName": 50,
                                "stopMovement": 23,
@@ -39,7 +41,6 @@ class Mirror(Motor):
         self.dict_axis = {"horizontal": 1,
                           "vertical": 2}
 
-        self.axis = 2
 
     def com_send(self, command, instruction=0):
         if instruction == 0:
@@ -93,6 +94,13 @@ class Mirror(Motor):
         self.printDebug(reply)
         self.com.timeout = 1
         return 1
+
+    def goto_default(self):
+        self.home()
+        time.sleept(5)
+        default_position = self.config.DEFAULT_POSITION
+        self.moveAbsolute(default_position)
+
 
     def setParameter(self, parameter):
         pass
