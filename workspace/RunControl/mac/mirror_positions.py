@@ -30,14 +30,15 @@ name2 = "mirror" + arguments.name2_str
 axis2 = int(arguments.name2_str[2])
 
 
-mirror1 = Mirror(name1, axis1)
-mirror2 = Mirror(name2, axis2)
+mirrorX = Mirror(name1, axis1)  # this is x movement
+mirrorY = Mirror(name2, axis2)  # this is y movement
 
 # start com ports
-mirror1.com_init()
-mirror2.com = mirror1.com
+mirrorX.com_init()
+mirrorY.com = mirrorX.com
 
-mirror1.getSerial()
+mirrorX.getSerial()
+mirrorY.getSerial()
 
 # Scanning array definitions.
 stepsize_x = 100
@@ -66,9 +67,11 @@ print "yy"
 print yy
 
 print "home y"
+mirrorY.home()
 
 for idy in range(start_idy, steps_y):
     print "home x "
+    mirrorX.home()
     for idx in range(start_idx, steps_x):
         print "step " + str(idy*steps_x + idx + 1) + "/" + str(steps_x * steps_y)
         print " step x: ", str(idx),
