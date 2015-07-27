@@ -5,6 +5,7 @@ import struct
 from devices.mirror_error import *
 from math import copysign
 
+
 class Mirror(Motor):
     def __init__(self, name):
         self.name = name
@@ -21,16 +22,16 @@ class Mirror(Motor):
         # self.config_setfile()
         # self.config_load()
 
-        self.InstructionSet = {"getName":       50,
-                               "stopMovement":  23,
-                               "home":          1,
-                               "getStatus":     54,
-                               "readRegister":  35,
-                               "setRegister":   35,
+        self.InstructionSet = {"getName": 50,
+                               "stopMovement": 23,
+                               "home": 1,
+                               "getStatus": 54,
+                               "readRegister": 35,
+                               "setRegister": 35,
                                "storePosition": 16,
-                               "getPosition":   60,
-                               "moveAbsolute":  20,  # no absolute movement implemented in hardware
-                               "moveRelative":  21}  # positive direction closes / negative opens
+                               "getPosition": 60,
+                               "moveAbsolute": 20,  # no absolute movement implemented in hardware
+                               "moveRelative": 21}  # positive direction closes / negative opens
 
         """ The motor has backlash error, so approach position always from the same direction."""
 
@@ -50,7 +51,7 @@ class Mirror(Motor):
         msg = struct.pack("<" + 6 * "B", self.axis, command, instruction[0], instruction[1], instruction[2],
                           instruction[3])
         reply = self.com_write(msg, echo=True)
-	reply_trans = self.translate_reply(reply)[0]
+        reply_trans = self.translate_reply(reply)[0]
         self.printMsg(reply_trans)
 
         return reply_trans
@@ -61,16 +62,16 @@ class Mirror(Motor):
             r[i] = int(ord(reply[i]))
 
         if r[1] == 255:
-            self.printError("device responded with error: " + str(r[2]) )
+            self.printError("device responded with error: " + str(r[2]))
             self.printError(ErrorCodeMirror.ErrorDict[r[2]])
 
-        replyData = (int(256.0**3.0)*r[5]) + (int(256.0**2.0)*r[4]) + (int(256.0)*r[3]) + (r[2])
+        replyData = (int(256.0 ** 3.0) * r[5]) + (int(256.0 ** 2.0) * r[4]) + (int(256.0) * r[3]) + (r[2])
         if r[5] > 127:
-            replyData -= int(256**4.0)
-	
-	data = replyData
-	msg_id = r[0]
-	axis = r[1]
+            replyData -= int(256 ** 4.0)
+
+        data = replyData
+        msg_id = r[0]
+        axis = r[1]
         self.printDebug("reply: " + str(r))
         self.printDebug("data: " + str(replyData))
         return data, axis, msg_id
@@ -106,9 +107,9 @@ class Mirror(Motor):
 
     def getSerial(self):
         address = 0
-        serial_number =  self.readRegister(address)
+        serial_number = self.readRegister(address)
         self.printMsg("serial number " + str(serial_number))
-	return serial_number
+        return serial_number
 
     def readRegister(self, register_adr):
         if 0 > register_adr > 127:
@@ -116,7 +117,7 @@ class Mirror(Motor):
             return -1
         instruction = [register_adr, 0, 0, 0]
         reply = self.com_send(self.InstructionSet["readRegister"], instruction)
-        return int(reply)>>8
+        return int(reply) >> 8
 
     def writeRegister(self, register_adr, value):
         if 0 > register_adr > 127:
@@ -153,12 +154,12 @@ class Mirror(Motor):
         if Cmd_Data < 0:
             Cmd_Data = 256 ** 4 + Cmd_Data
 
-        Cmd_Byte_6 = Cmd_Data / 256**3
-        Cmd_Data   = Cmd_Data - 256**3 * Cmd_Byte_6
-        Cmd_Byte_5 = Cmd_Data / 256**2
-        Cmd_Data   = Cmd_Data - 256**2 * Cmd_Byte_5
+        Cmd_Byte_6 = Cmd_Data / 256 ** 3
+        Cmd_Data = Cmd_Data - 256 ** 3 * Cmd_Byte_6
+        Cmd_Byte_5 = Cmd_Data / 256 ** 2
+        Cmd_Data = Cmd_Data - 256 ** 2 * Cmd_Byte_5
         Cmd_Byte_4 = Cmd_Data / 256
-        Cmd_Data   = Cmd_Data - 256 * Cmd_Byte_4
+        Cmd_Data = Cmd_Data - 256 * Cmd_Byte_4
         Cmd_Byte_3 = Cmd_Data
 
         return [Cmd_Byte_3, Cmd_Byte_4, Cmd_Byte_5, Cmd_Byte_6]
