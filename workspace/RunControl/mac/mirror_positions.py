@@ -44,8 +44,8 @@ mirrorY.getSerial()
 stepsize_x = 100
 stepsize_y = 50
 
-offset_x = 0
-offset_y = 0
+offset_x = -50000
+offset_y = -50000
 
 steps_x = 4
 steps_y = 4
