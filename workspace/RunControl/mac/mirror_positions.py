@@ -4,8 +4,6 @@ import numpy as np
 import argparse
 from devices.mirror import *
 
-DEBUG = False
-
 parser = argparse.ArgumentParser(description='scanning mirror positions script')
 
 parser.add_argument('-n1', action='store', dest='name1_str', required=True,
@@ -17,7 +15,14 @@ parser.add_argument('-n2', action='store', dest='name2_str', required=True,
 parser.add_argument('-s', action='store', dest='start', nargs=2,
                     help='specify start indices', type=int)
 
+parser.add_argument('-D', action='store_true', default=False,
+                    dest='debug',
+                    help='print out debug messages')
+
 arguments = parser.parse_args()
+
+# Arguments
+DEBUG = arguments.debug
 
 if arguments.start is None:
     start_idx = 0
