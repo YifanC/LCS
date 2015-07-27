@@ -36,7 +36,7 @@ mirrorX = Mirror(name1, axis1)  # this is x movement
 mirrorY = Mirror(name2, axis2)  # this is y movement
 
 # start com ports
-#mirrorX.com_init()
+mirrorX.com_init()
 mirrorY.com = mirrorX.com
 
 mirrorX.getSerial()
@@ -52,8 +52,8 @@ offset_y = -50000
 steps_x = 4
 steps_y = 4
 
-x = offset_x + stepsize_x * np.linspace(0, steps_x - 1, steps_x, dtype=int)
-y = offset_y + stepsize_y * np.linspace(0, steps_y - 1, steps_y, dtype=int)
+x = offset_x + stepsize_x * np.linspace(0, steps_x - 1, steps_x)
+y = offset_y + stepsize_y * np.linspace(0, steps_y - 1, steps_y)
 
 # Positions
 xx, yy = np.meshgrid(x, y)
