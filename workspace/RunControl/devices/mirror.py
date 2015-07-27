@@ -51,16 +51,14 @@ class Mirror(Motor):
             if len(instruction) != 4:
                 self.printError("data frame has wrong size")
 
-        if DEBUG:
-            self.printDebug("sending: " + str(command) + str(instruction))
+        self.printDebug("sending: " + str(command) + str(instruction))
 
 
         msg = struct.pack("<" + 6 * "B", self.axis, command, instruction[0], instruction[1], instruction[2],
                           instruction[3])
         reply = self.com_write(msg, echo=True)
         reply_trans = self.translate_reply(reply)[0]
-        if DEBUG:
-            self.printDebug(reply_trans)
+        self.printDebug(reply_trans)
 
         return reply_trans
 
@@ -167,7 +165,7 @@ class Mirror(Motor):
     def getPosition(self):
         pos = self.com_send(self.InstructionSet["getPosition"])
         self.printDebug("position: " + str(pos))
-	return pos
+        return pos
 
 
     def translate_pos(self, Cmd_Data):

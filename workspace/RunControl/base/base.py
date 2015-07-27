@@ -58,15 +58,15 @@ class base(object):
         self.log.error(string)
 
     def printDebug(self, string):
-        string = str(string)
-        msg = time.strftime('%H:%M:%S ', time.localtime()) + "DEBUG " + self.name + " " + string
-        msg_colored = bcolors.WARNING + time.strftime('%H:%M ',
-                                                      time.localtime()) + self.name + ": " + string + bcolors.ENDC
-
-        if self.color is True:
-            print msg_colored
-        else:
-            print msg
+        if DEBUG is False:
+            string = str(string)
+            msg = time.strftime('%H:%M:%S ', time.localtime()) + "DEBUG " + self.name + " " + string
+            msg_colored = bcolors.WARNING + time.strftime('%H:%M ',
+                                                          time.localtime()) + self.name + ": " + string + bcolors.ENDC
+            if self.color is True:
+                print msg_colored
+            else:
+                print msg
 
         self.log.debug(string)
 
