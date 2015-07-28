@@ -58,7 +58,7 @@ class base(object):
         self.log.error(string)
 
     def printDebug(self, string):
-        if DEBUG is False:
+        if DEBUG is True:
             string = str(string)
             msg = time.strftime('%H:%M:%S ', time.localtime()) + "DEBUG " + self.name + " " + string
             msg_colored = bcolors.WARNING + time.strftime('%H:%M ',
