@@ -147,7 +147,10 @@ class ComSerial(base):
         self.comPrefix = ""
         self.comEnd = None
         self.NumberOfAxes = 1
-	self.com.flushInput()
+
+	self.comReplyPrefix = ""
+	self.comReplyEnd = ""
+
 	time.sleep(1)
 
     def com_init(self):
