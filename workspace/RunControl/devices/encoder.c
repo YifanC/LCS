@@ -297,7 +297,7 @@ int main(int argc, char *argv[])
 	   {
 		   context = zmq_ctx_new ();
 		   encoder = zmq_socket (context, ZMQ_REQ);
-		   int rc = zmq_connect (encoder, "ipc:///tmp/feed-laser.ipc");
+		   int rc = zmq_connect (encoder, "ipc:///tmp/laser-in.ipc");
 		   assert (rc == 0);
 		   // Send initial empty message to assembler so he knows we are alive
 		   printf("Sending Hello to assembler\n");

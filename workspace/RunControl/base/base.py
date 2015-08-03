@@ -5,47 +5,77 @@ from abc import ABCMeta, abstractmethod
 import sys
 import time
 import json
+
+import logging
 import os
 
 DEBUG = True
 
 
 class base(object):
-    def __init__(self, name, com):
+    def __init__(self, name="", RunNumber=0, logit=True):  # TODO: Implement to put name in all classes
         self.name = name
-        self.com = com
         self.state = 0
-        self.State = {0: "Not Initialized",
-                      1: "Ready",
-                      2: "Error"}
+        self.StateDict = {0: "Not Initialized",
+                          1: "Ready",
+                          2: "Error"}
         # switch this to false if using bpython
         self.color = True
-
         self.config = None
+        self.RunNumber = RunNumber  # TODO: Implement passing of run number from the instance
+
+        self.path_logfiles = os.getenv("LCS_LOGFILES")
+        if self.path_logfiles is None:
+            self.printError("Could not find path to log file -> aborting")
+            sys.exit(1)
+
+        # TODO: Make this available everywhere
+        self.log = self.config_logging(self.RunNumber, logit)
+        self.log.info("started logger")
+
 
     def printMsg(self, string, nonewline=False):
+        string = str(string)
+        msg = time.strftime('%H:%M:%S ', time.localtime()) + self.name + ": " + string
         if nonewline == True:
-            print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string,
+            print msg,
         else:
-            print time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string
+            print msg
+
+        self.log.info(string)
 
     def printError(self, string):
+        string = str(string)
+        msg = time.strftime('%H:%M:%S ', time.localtime()) + self.name + " ERROR: " + string
+        msg_colored = bcolors.FAIL + time.strftime('%H:%M ',
+                                                   time.localtime()) + self.name + ": " + string + bcolors.ENDC
+
         if self.color is True:
-            print bcolors.FAIL + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
+            print msg_colored
         else:
-            print time.strftime('%H:%M ', time.localtime()) + self.name + " ERROR: " + string
+            print msg
+
+        self.log.error(string)
 
     def printDebug(self, string):
-        if self.color is True:
-            print bcolors.WARNING + time.strftime('%H:%M ', time.localtime()) + self.name + ": " + string + bcolors.ENDC
-        else:
-            print time.strftime('%H:%M ', time.localtime()) + "DEBUG " + self.name + " " + string
+        if DEBUG is True:
+            string = str(string)
+            msg = time.strftime('%H:%M:%S ', time.localtime()) + "DEBUG " + self.name + " " + string
+            msg_colored = bcolors.WARNING + time.strftime('%H:%M ',
+                                                          time.localtime()) + self.name + ": " + string + bcolors.ENDC
+            if self.color is True:
+                print msg_colored
+            else:
+                print msg
+
+        self.log.debug(string)
 
     def config_setfile(self, filename=-1):
         if filename == -1:
-            string = "config_" + str(self.name) + ".json"
-            self.printMsg("Using default config file (devices/" + string + ")")
-            self.configfilename = string
+            filename = "config_" + str(self.name) + ".json"
+            path = os.getenv("LCS_DEVICES") + "/config/"
+            self.printMsg("Using default config file (./devices/config/" + filename + ")")
+            self.configfilename = path + filename
         else:
             self.printMsg("Using config file: " + str(filename))
             self.configfilename = str(filename)
@@ -61,6 +91,38 @@ class base(object):
             json.dump(self.config.__dict__, configfile)
             configfile.close()
 
+
+    def config_logging(self, RunNr, logit, LogFilename="", ):
+        if LogFilename == "":
+            LogFilename = time.strftime("%Y-%m-%d-%H%M-Run-", time.localtime()) + str(RunNr) + str(".log")
+            LogFilePath = str(self.path_logfiles) + "/" + str(self.name) + "/"
+
+        else:
+            LogFilePath = ""
+
+        # TODO: Make the logfiles merge into eachother, so only one logfile is generated
+
+
+        log = logging.getLogger(self.name)
+
+        if logit is True:
+            fh = logging.FileHandler(LogFilePath + LogFilename, "wb")
+            f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            fh.setFormatter(f)
+            log.setLevel(logging.DEBUG)
+            log.addHandler(fh)
+        else:
+            log.addHandler(logging.NullHandler())
+        # printing out to console
+        # console = logging.StreamHandler()
+        #console.setLevel(logging.INFO)
+        #logging.getLogger(self.name).addHandler(console)
+
+        return log
+
+    def close_logfile(self):
+        pass
+
     class Config():
         """" Config class just to translate the json file into a dict """
 
@@ -69,11 +131,12 @@ class base(object):
 
 
 class ComSerial(base):
-    def __init__(self, comport):
+    def __init__(self, name=""):  # , comport):
+        super(ComSerial, self).__init__(name=name)
         self.com = serial.Serial()
         self.comBaudrate = 9600
         self.comTimeout = 0.1
-        self.comport = comport
+        self.comport = ""  # comport
 
         self.comEcho = False
 
@@ -98,10 +161,10 @@ class ComSerial(base):
             self.com.flushInput()
             time.sleep(1)
         except:
-            self.printError("opening fcom port (" + self.comport + ") failed --> quitting")
+            self.printError("opening fcom port (" + str(self.comport) + ") failed --> quitting")
             sys.exit(1)
 
-        self.printMsg("Com port (" + self.com.portstr + ") opened")
+        self.printMsg("Com port (" + str(self.com.portstr) + ") opened")
 
     def com_close(self):
         """ closes com port """
@@ -116,9 +179,10 @@ class ComSerial(base):
 
     def com_write(self, message, echo=False):
         """ write message to comport """
-        msg = self.comPrefix + message
+        msg = self.comPrefix + message + self.comEnd
         self.com.isOpen()
-        self.com.write(msg + self.comEnd)
+        self.com.write(msg)
+
         if DEBUG is True:
             self.printDebug("String sent: " + msg + self.comEnd)
 
@@ -136,12 +200,16 @@ class ComSerial(base):
         except:
             self.printError("Could not read to com port")
             sys.exit(1)
-        return self.msg_filter(msg)
+        return self.reply_filter(msg)
 
-    def msg_filter(self, msg):
-        """ function which filters the output, should be defined in the device class if required. Useful for example if there
+    def reply_filter(self, msg):
+        """ function which filters the reply, should be defined in the device class if required. Useful for example if there
         is axis information which is sent in a reply."""
         return msg
+
+    def msg_filter(self, msg):
+        """ Should be over written if  """
+        return self.comPrefix + msg + self.comEnd
 
     def printComStatus(self):
         self.printMsg(str(self.com))
@@ -150,7 +218,8 @@ class ComSerial(base):
 class Motor(ComSerial):
     """" At the moment only an idea of a nice classe """
 
-    def __init__(self):
+    def __init__(self, name=''):
+        super(Motor, self).__init__(name=name)
         self.InstructionSet = {"getInfo": None,
                                "getName": None,
                                "maxSpeed": None,
@@ -169,13 +238,13 @@ class Motor(ComSerial):
         self.comDefaultReplyLength = None
         self.comInfoReplyLength = None
 
-        self.comPrefix = None  # this string is put in front of any message transmitted
-        self.comSetPrefix = None  # this string is sent in front of a setParameter(para, value) call
+        self.comPrefix = ""  # this string is put in front of any message transmitted
+        self.comSetPrefix = ""  # this string is sent in front of a setParameter(para, value) call
         self.comSetCommand = None  # this string is sent in between of a setParameter(para, value) call
         self.comGetCommand = None  # this string is sent in font of the getParameter(para) call
-        self.comReplyPrefix = None  # is used to determine the reply length when the device sends back an echo
-        self.comReplyEnd = None  # is used to determine the reply length when the device sends back an echo
-        self.comEnd = None  # is added to any message sent to the device
+        self.comReplyPrefix = ""  # is used to determine the reply length when the device sends back an echo
+        self.comReplyEnd = ""  # is used to determine the reply length when the device sends back an echo
+        self.comEnd = ""  # is added to any message sent to the device
 
     def getName(self, display=True):
         name = self.getParameter("getName")
@@ -234,7 +303,7 @@ class Motor(ComSerial):
 
     def setParameter(self, parameter, value, check=True, echo=False, attempts=1):
         """ Function sends the defined string + value to the device.
-            Arguments:  check:      If true the value is read back from the device and checked against the set value
+            Arguments:  check:      If true calls the function checkParameter which should be defined by the device class
                         echo:       The set command expects an echo from the device, confirming the transmission, this
                                     is not confirming that tha value was set.
                         attempts:   Number of tries for setting the parameter before giving up """

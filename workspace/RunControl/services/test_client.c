@@ -1,3 +1,4 @@
+ 
 #include <zmq.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -41,11 +42,11 @@ int main (void)
 
     struct EncoderInfo EncoderInfo;
 
-   signal(SIGINT, CtrlHandler);
-   signal(SIGTERM, CtrlHandler);
+    signal(SIGINT, CtrlHandler);
+    signal(SIGTERM, CtrlHandler);
 
     EncoderInfo.ID = 2;
-    EncoderInfo.Status = 0;
+    EncoderInfo.Status = -1;
 
     my_laser_event.SystemTime_sec = -1;
     my_laser_event.SystemTime_usec = -1;
@@ -62,9 +63,22 @@ int main (void)
     //  Socket to talk to clients
     void *context = zmq_ctx_new ();
     void *encoder = zmq_socket (context, ZMQ_REQ);
-    int rc = zmq_connect (encoder, "ipc:///tmp/feed-laser.ipc");
+    int rc = zmq_connect (encoder, "ipc:///tmp/laser-in.ipc");
 
     assert (rc == 0);
+
+    printf("Sending Hello to assembler\n");
+
+    zmq_send (encoder,&BufferInfo, sizeof(BufferInfo) , ZMQ_SNDMORE);
+    zmq_send (encoder, &BufferData, sizeof(BufferData), 0);
+	zmq_recv (encoder, BufferReply, 2, 0);
+
+    //nanosleep((struct timespec[]){{1, 0}}, NULL);
+
+    EncoderInfo.Status = 0;
+    printf ("Received:%s\n", BufferReply);
+
+
     int request_nbr = 0;
 
     while (!stop) {
@@ -100,7 +114,7 @@ int main (void)
             stop = 1;
         }
         request_nbr += 1;
-        nanosleep((struct timespec[]){{0, 500000000}}, NULL);
+        sleep(1);
     }
 
     printf ("Shutting down.");

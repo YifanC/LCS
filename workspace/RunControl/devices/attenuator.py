@@ -7,6 +7,7 @@ from math import cos, acos, sqrt, degrees, radians, floor
 class Attenuator(Motor):
     def __init__(self):
         self.name = "attenuator"
+        super(Attenuator, self).__init__(name=self.name)
         self.state = 0
         self.comport = None
         self.comBaudrate = 38400
@@ -48,7 +49,7 @@ class Attenuator(Motor):
         self.comPrefix = ""
         self.comSetCommand = " "
         self.comGetCommand = ""
-	self.comReplyPrefix = ""
+        self.comReplyPrefix = ""
         self.comEnd = "\r"
 
         self.microsteps = 2
@@ -195,8 +196,8 @@ class Attenuator(Motor):
             return -1
 
     def checkParameter(self, parameter, value, echo):
-	SetValue = self.getParameter(parameter)
+        SetValue = self.getParameter(parameter)
         if SetValue == str(value):
             return 0
         else:
-	    return -1
+            return -1

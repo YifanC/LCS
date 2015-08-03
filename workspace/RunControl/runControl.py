@@ -1,31 +1,76 @@
-import subprocess as subprocess
-import time
-import signal
 
+from base.controls import *
+from services.communication import Producer
+from services.data import LaserData
 
-def openLogfile(RunNr, service):
-    LogFilenmae = time.strftime("%Y-%m-%d-%H%M-Run-", time.localtime()) + str(RunNr) + str(".log")
-    LogFilePath = "./log/" + str(service)
+from devices.feedtrough import *
+from devices.laser import *
+from devices.attenuator import *
+from devices.aperture import *
 
-    OutputLogfile = open(LogFilePath + LogFilenmae, "wb")
+# ----------------------------------------------------
+# ----------------------- Init -----------------------
+# ----------------------------------------------------
 
-    return OutputLogfile
+RunNumber = 99
+# Construct needed instances
+rc = Controls(RunNumber=RunNumber)
+data = LaserData()
+rc.com = Producer("runcontrol")
+rc.ft_linear = Feedtrough("ft_linear", 1)
+rc.ft_rotary = Feedtrough("ft_rotary", 1)
+rc.laser = Laser()
+rc.attenuator = Attenuator()
+rc.aperture = Aperture()
 
+# Start broker / encoder
+rc.broker_start()
+rc.assembler_start()
+time.sleep(2)
+rc.encoder_start()
 
-def startEncoder(RunNr):
-    LogfileEncoder = openLogfile(RunNumber, "encoder")
-    ProdEncoder = subprocess.Popen(['./write.o'], stdout=LogfileEncoder)
-    return ProdEncoder
+# Initialize and setup communication
+rc.com.id = 1
+rc.com.state = -1
+rc.com.start()
+rc.com.send_hello()
+rc.com.state = 0
 
+# Initialize com ports
+#rc.ft_linear.com_init()
+#rc.ft_rotary.com = rc.ft_linear.com
+#rc.laser.com_init()
+#rc.attenuator.com_init()
+#rc.aperture.com_init()
 
-def stopEncoder():
-    subEncoder.send_signal(signal.SIGINT)
+# ----------------------------------------------------
+# --------------------- Operation --------------------
+# ----------------------------------------------------
+rc.com.send_data(data)
 
+time.sleep(10)
+rc.assembler_alive()
+rc.broker_alive()
+rc.encoder_alive()
 
-RunNumber = 000
-subEncoder = startEncoder(0)
-time.sleep(5)
+# ----------------------------------------------------
+# -------------------- Finalize ----------------------
+# ----------------------------------------------------
 
-stopEncoder()
+# Close com ports
+#rc.ft_linear.com_close()
+#rc.ft_rotary.com_close()
+#rc.laser.com_close()
+#rc.attenuator.com_close()
+#rc.aperture.com_close()
 
+time.sleep(1)
+rc.assembler_stop()
+rc.broker_stop()
+rc.encoder_stop()
 
+time.sleep(1)
+
+rc.assembler_alive()
+rc.broker_alive()
+rc.encoder_alive()
