@@ -4,13 +4,30 @@ import numpy as np
 import argparse
 from devices.mirror import *
 
+""" Little script which steps trough T-OMG mirror positions in x and y spanned by array defined trough:
+    stepsize_x:     stepsize for mirror_x
+    stepsize_y:     stepsize for mirror_y
+    steps_x:
+    steps_y:
+    offset_x:
+    offset_y:
+
+    Procedure:
+        1. Home both axes
+        2. Go to array position (0,0), corresponding to positions (offset_x, offset_y)
+        3. loop over x positions until end of row is reached
+        4. home x axis
+        5. move to second row positions
+        6. goto 3.
+    """
+
 parser = argparse.ArgumentParser(description='scanning mirror positions script')
 
 parser.add_argument('-n1', action='store', dest='name1_str', required=True,
-                    help='specify mirror number', type=str)
+                    help='specify mirror number 1 (e.g. 221)', type=str)
 
 parser.add_argument('-n2', action='store', dest='name2_str', required=True,
-                    help='specify mirror number', type=str)
+                    help='specify mirror number 2 (e.g. 222)(', type=str)
 
 parser.add_argument('-s', action='store', dest='start', nargs=2,
                     help='specify start indices', type=int)
@@ -23,7 +40,7 @@ arguments = parser.parse_args()
 
 # Arguments
 DEBUG = arguments.debug
-
+print DEBUG
 if arguments.start is None:
     start_idx = 0
     start_idy = 0

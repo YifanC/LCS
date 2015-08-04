@@ -5,7 +5,7 @@ from devices.feedtrough import *
 
 
 LinearMotor = Feedtrough("linear_actuator", 1)
-RotaryMotor = Feedtrough("rotary_actuator", 1)
+RotaryMotor = Feedtrough("rotary_actuator", 2)
 
 LinearMotor.comport = "/dev/pts/14"
 LinearMotor.com_init()

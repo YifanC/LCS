@@ -1,6 +1,6 @@
 __author__ = 'matthias'
 
-from base.base import *
+from base.motor import *
 from math import cos, acos, sqrt, degrees, radians, floor
 
 

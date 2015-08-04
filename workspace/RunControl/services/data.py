@@ -89,6 +89,24 @@ class LaserData(object):
                 self.pos_tomg_2_axis1,
                 self.pos_tomg_2_axis2]
 
+    def fill(self, data_list):
+        """ Fill the data class according to the supplied list """
+        self.laserid = data_list[0]
+        self.status = data_list[1]
+        self.pos_rot = data_list[2]
+        self.pos_lin = data_list[3]
+        self.pos_att = data_list[4]
+        self.pos_iris = data_list[5]
+        self.trigger_time_sec = data_list[6]
+        self.trigger_time_usec = data_list[7]
+        self.count_trigger = data_list[8]
+        self.count_run = data_list[9]
+        self.count_laser = data_list[10]
+        self.pos_tomg_1_axis1 = data_list[11]
+        self.pos_tomg_1_axis2 = data_list[12]
+        self.pos_tomg_2_axis1 = data_list[13]
+        self.pos_tomg_2_axis2 = data_list[14]
+
     def dump_time(self):
         pass
 
@@ -101,11 +119,21 @@ class LaserData(object):
 
     def writeBinary(self, filename):
         ''' write the data to a binary file '''
-        LaserdataList = self.dump()
-        packed_data = struct.pack('i' + 'f' * (len(LaserdataList) - 1),
-                                  *LaserdataList)  # first an int then floats follow
-        file = self.path_binary + "laser.bin"
-        print file
-        f = open(file, 'wt')
-        f.write(packed_data)
+
+        file_binary = self.path_binary + "laser.bin"
+        f = open(file_binary, 'wt')
+        f.write(self.pack())
         f.close()
+
+    def pack(self):
+        """ serialization routine to write data to binary file or send over tcp """
+        LaserdataList = self.dump()
+        serialized_data = struct.pack('i' + 'f' * (len(LaserdataList) - 1), *LaserdataList)
+        return serialized_data
+
+    def unpack(self, packed_data):
+        """ de-serialization routine to read data from binary file or receive  over tcp """
+
+        LaserdataList = self.dump()
+        unpacked_data = struct.unpack('i' + 'f' * (len(LaserdataList) - 1), packed_data)
+        return unpacked_data
