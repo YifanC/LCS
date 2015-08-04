@@ -8,14 +8,18 @@ class Laser(Device):
         self.name = "laser"
         super(Laser, self).__init__(name=self.name)
         self.state = 0
-        self.comport = "/dev/ttyUSB0"
+        self.comport = "/dev/ttyUSB3"
         self.comBaudrate = 9600
         self.comTimeout = 2
         self.InfoInstruction = "SE"
-        self.InfoMsgLength = 20
-        self.StandartMsgLength = 10
+        self.InfoMsgLength = 100
+        self.StandartMsgLength = 100
         self.comPrefix = ""
         self.comEnd = "\r"
+
+	self.comReplyPrefix = "\r"
+
+	self.comEcho = True
 
         self.InstructionSet = {"getStatus": "SE",
                                "getShots": "SC",
@@ -42,15 +46,17 @@ class Laser(Device):
 
         reply = self.com_recv(self.InfoMsgLength)
         self.printMsg(reply)
-
+	if int(reply) != 0:
+		self.printError("Laser error")
         # TODO: Implement return message disply
 
     def getShots(self):
         msg = self.InstructionSet["getShots"]
         self.com_write(msg)
 
-        reply = self.com_recv(self.InfoMsgLength)
+        reply = self.com_recv(self.StandartMsgLength)
         self.printMsg(reply)
+	return int(reply)
 
     def start(self):
         msg = self.InstructionSet["start"]
