@@ -6,7 +6,7 @@ from services.data import LaserData
 # TODO: Split classes into files
 # TODO: Implement shut down of zmq messaging
 
-class Communication(base):
+class Communication(Base):
     ID = {0: "Assembler",
           1: "RunControl",
           2: "Encoder"}

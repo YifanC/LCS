@@ -7,6 +7,7 @@ from devices.feedtrough import *
 from devices.laser import *
 from devices.attenuator import *
 from devices.aperture import *
+from devices.mirror import *
 
 # ----------------------------------------------------
 # ----------------------- Init -----------------------
@@ -22,6 +23,8 @@ rc.ft_rotary = Feedtrough("ft_rotary", 1)
 rc.laser = Laser()
 rc.attenuator = Attenuator()
 rc.aperture = Aperture()
+rc.mirror_x = Mirror("mirror221")  # not yet defined correctly
+rc.mirror_y = Mirror("mirror222")  # not yet defined correctly
 
 # Start broker / encoder
 rc.broker_start()
@@ -42,6 +45,8 @@ rc.com.state = 0
 #rc.laser.com_init()
 #rc.attenuator.com_init()
 #rc.aperture.com_init()
+#rc.mirror_x.com_init()
+#rc.mirror_y.com = rc.mirror_x.com
 
 # ----------------------------------------------------
 # --------------------- Operation --------------------
