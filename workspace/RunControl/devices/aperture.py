@@ -1,7 +1,6 @@
 __author__ = 'matthias'
 
-from base.base import *
-from math import copysign
+from base.motor import *
 
 
 class Aperture(Motor):

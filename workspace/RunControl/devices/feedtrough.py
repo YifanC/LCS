@@ -1,6 +1,6 @@
 __author__ = 'matthias'
 
-from base.base import *
+from base.motor import *
 
 
 class Feedtrough(Motor):

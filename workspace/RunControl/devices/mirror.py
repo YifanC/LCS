@@ -1,6 +1,6 @@
 __author__ = 'matthias'
 
-from base.base import *
+from base.motor import *
 import struct
 from devices.mirror_error import *
 from math import copysign

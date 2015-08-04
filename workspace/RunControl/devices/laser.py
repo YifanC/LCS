@@ -3,7 +3,7 @@ __author__ = 'matthias'
 from base.base import *
 
 
-class Laser(ComSerial):
+class Laser(Device):
     def __init__(self):
         self.name = "laser"
         super(Laser, self).__init__(name=self.name)
