@@ -7,7 +7,7 @@ from base import *
 import os
 
 
-class Controls(base):
+class Controls(Base):
 
     def __init__(self, RunNumber):
         self.name = "controls"
