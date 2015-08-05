@@ -20,7 +20,7 @@ class Feedtrough(Motor):
         self.comInfoReplyLength = 800
 
         self.axis = axis
-        self.homeSwitch = "S1"
+        self.homeSwitch = "S2"
 
         self.MICROSTEPS = 256
 
@@ -34,6 +34,8 @@ class Feedtrough(Motor):
 
             self.HOMINGVELOCITY = 8000
             self.MAX_HOMING_OVERSHOOT = -18000
+	    self.HOME_SWITCH = "S2"
+	    self.HOME_DIRECTION = 1
 
         elif self.name.find("rotary") >= 0:
             self.ACCELERATION = 30000
@@ -45,6 +47,8 @@ class Feedtrough(Motor):
 
             self.HOMINGVELOCITY = 15000
             self.MAX_HOMING_OVERSHOOT = -18000
+            self.HOME_SWITCH = "S2" # not clear yet
+            self.HOME_DIRECTION = 1
 
         else:
             self.printError("Could not recognize axis type, please provide manual configuration")
@@ -62,14 +66,15 @@ class Feedtrough(Motor):
         """ write message to, overwriting the base.com_write function adding the axis preamble """
         try:
             self.com.isOpen()
-            print "sending message: " + str(self.axis) + msg + self.comEnd
+            self.printDebug(str(self.axis) + msg + self.comEnd)
             self.com.write(str(self.axis) + msg + self.comEnd)
 
         except:
             self.printError("Could not write message \"" + str(msg) + "\" to com port (" + str(self.com.portstr) + ")")
 
     def initAxis(self):
-        self.setParameter("A", self.ACCELERATION)
+        self.setParameter("MS", self.MICROSTEPS)
+	self.setParameter("A", self.ACCELERATION)
         self.setParameter("D", self.DECELLERATION)
         self.setParameter("VI", self.INITIALVELOCITY)
         self.setParameter("VM", self.ENDVELOCITY)
@@ -158,8 +163,8 @@ class Feedtrough(Motor):
             self.printError("Setting the home switch failed 5 times -> exiting")
             sys.exit(-1)
 
-        self.printMsg("Set " + self.homeSwitch + " as home switch")
-        set = self.setParameter(self.homeSwitch, "1,1,0")  # set counterclockwise endswitch as home switch
+        self.printMsg("Set " + self.HOME_SWITCH + " as home switch")
+        set = self.setParameter(self.HOME_SWITCH, "1,1,0")  # set counterclockwise endswitch as home switch
         time.sleep(0.5)
         # check if S1 was set correctly
         if set != 0:
@@ -176,7 +181,7 @@ class Feedtrough(Motor):
         self.setParameter("VM", self.HOMINGVELOCITY)
         self.setHomeSwitch(0)
         self.printMsg("Homing")
-        self.sendCommand("HM", 1)
+        self.sendCommand("HM", self.HOME_DIRECTION)
 
         # monitor the movement and abort in the movement goes out too far from the known zero position
         self.printMsg("Position:")
