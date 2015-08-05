@@ -1,5 +1,5 @@
 __author__ = 'matthias'
-from base.com_serial import *
+from comserial import *
 
 class Motor(ComSerial):
     """" At the moment only an idea of a nice classe """

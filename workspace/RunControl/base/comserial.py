@@ -1,5 +1,5 @@
 __author__ = 'matthias'
-from base.base import *
+from base import *
 
 class ComSerial(Base):
     def __init__(self, name=""):  # , comport):

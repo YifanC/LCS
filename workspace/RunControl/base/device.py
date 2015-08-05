@@ -1,6 +1,6 @@
 __author__ = 'matthias'
 
-from base.com_serial import *
+from comserial import *
 
 class Device(ComSerial):
     def __init__(self, name=''):
