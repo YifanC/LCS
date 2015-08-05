@@ -30,7 +30,7 @@ class Feedtrough(Motor):
             self.INITIALVELOCITY = 1000
             self.ENDVELOCITY = 15000
             self.HOLDCURRENT = 10
-            self.RUNCURRENT = 80
+            self.RUNCURRENT = 75
 
             self.HOMINGVELOCITY = 8000
             self.MAX_HOMING_OVERSHOOT = -18000
@@ -43,7 +43,7 @@ class Feedtrough(Motor):
             self.INITIALVELOCITY = 1000
             self.ENDVELOCITY = 15000
             self.HOLDCURRENT = 5
-            self.RUNCURRENT = 80
+            self.RUNCURRENT = 90
 
             self.HOMINGVELOCITY = 15000
             self.MAX_HOMING_OVERSHOOT = -18000
