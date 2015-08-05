@@ -1,7 +1,6 @@
 __author__ = 'matthias'
 
 import subprocess as subprocess
-import time
 import signal
 from base import *
 import os
