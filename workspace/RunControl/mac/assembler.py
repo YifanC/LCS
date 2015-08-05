@@ -1,6 +1,7 @@
 __author__ = 'matthias'
 from services.communication import *
 from services.data import *
+from services.tcp import *
 import signal
 
 def sigint_handler(signal, frame):
@@ -10,8 +11,12 @@ def sigint_handler(signal, frame):
 
     raise SystemExit(1)
 
+SERVER = "131.225.237.31"
+PORT = 33487
+
 signal.signal(signal.SIGINT, sigint_handler)
 data = LaserData()
+client = TCP(SERVER, PORT)
 
 assembler = Consumer("assembler")
 assembler.start()
@@ -26,7 +31,11 @@ while not ready:
 
 print "--------------- Start DAQ --------------"
 while True:
-    assembler.recv(data)
+    [source_id, state] = assembler.recv(data)
     data.writeBinary('test.bin')
-    data.writeTxt()
+
+    # only write if new encoder data arrived
+    if source_id == 2:
+        client.send_client(data)
+        data.writeTxt()
     print "trigger " + str(data.count_trigger)
