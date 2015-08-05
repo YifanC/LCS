@@ -7,13 +7,14 @@ from services.data import *
 from base.base import *
 
 
-class TCP(object):
+class TCP(Base):
     def __init__(self, server_name="localhost", port=10000):
         """ Initialize data """
+        self.name = "tcp"
+        super(TCP, self).__init__(name=self.name,  logit=True)
 
         self.server_address = (server_name, port)
         self.laser_data = LaserData()
-
 
     def start_server(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -45,24 +46,44 @@ class TCP(object):
 
 
     def send_client(self, data):
+        """ sends laser data over tcp socket to TPC DAQ. Returns True if successful and False if not. If server is not
+        availabe or if pipe is broken the data is not send and function returns False. """
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect(self.server_address)
-        self.laser_data = data
-        packed_data = self.laser_data.pack()
         try:
-            message = packed_data
-            print >> sys.stderr, 'sending "%s"' % message
-            self.sock.sendall(message)
+            self.sock.connect(self.server_address)
+        except Exception as e:
+            self.printError("Could not connect to server: " + str(e))
+            return False
+        self.printMsg("sending data")
+        packed_data = data.pack()
+        try:
+            self.sock.sendall(packed_data)
 
             amount_received = 0
             amount_expected = len("OK")
             while amount_received < amount_expected:
                 data = self.sock.recv(4)
                 amount_received += len(data)
-                print >> sys.stderr, 'received "%s"' % data
+                self.printMsg("recieved: " + str(data))
+        except Exception as e:
+            self.printError("Could not send data to server: " + str(e))
+
 
         finally:
             self.sock.close()
 
         self.sock.close()
 
+    def check_server(self):
+        """ checks if server is alive """
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            self.sock.connect(self.server_address)
+        except Exception as e:
+            self.printMsg("Could not connect to server: " + str(e))
+            return False
+
+        self.printMsg("server is alive")
+        self.sock.close()
+
+        return True
