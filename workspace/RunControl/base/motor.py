@@ -41,9 +41,7 @@ class Motor(ComSerial):
 
 
     def getInfo(self, display=False):
-
         if self.InstructionSet['getInfo'] != None and self.comInfoReplyLength != None:
-
             self.com_write(self.InstructionSet["getInfo"])
             reply = self.com_recv(self.comInfoReplyLength)
             if display == True:

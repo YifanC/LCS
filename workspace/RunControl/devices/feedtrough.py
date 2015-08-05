@@ -62,9 +62,11 @@ class Feedtrough(Motor):
         """ write message to, overwriting the base.com_write function adding the axis preamble """
         try:
             self.com.isOpen()
+            print "sending message: " + str(self.axis) + msg + self.comEnd
             self.com.write(str(self.axis) + msg + self.comEnd)
+
         except:
-            self.printError("Could not write message \"" + msg + "\" to com port (" + self.com.portstr + ")")
+            self.printError("Could not write message \"" + str(msg) + "\" to com port (" + str(self.com.portstr) + ")")
 
     def initAxis(self):
         self.setParameter("A", self.ACCELERATION)
@@ -90,7 +92,10 @@ class Feedtrough(Motor):
         string = "Set " + parameter + "=" + str(value)
 
         if SetValue.replace(" ", "") == str(value):
-            self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC)
+            if self.color is True:
+	    	self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC)
+	    else:
+		self.printMsg(string + " -> OK")
             return 0
         else:
             self.printError(string + " failed")
