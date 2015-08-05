@@ -6,7 +6,7 @@ from services.data import *
 
 data = LaserData()
 
-client = TCP()
+client = TCP("131.225.237.31",33487)
 
 
 for i in range(100,120):
