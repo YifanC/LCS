@@ -8,6 +8,9 @@ data = LaserData()
 
 client = TCP("131.225.237.31",33487)
 
+alive = client.check_server()
+print alive
+
 
 for i in range(100,120):
     data.count_trigger = i
