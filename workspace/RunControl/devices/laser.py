@@ -8,12 +8,12 @@ class Laser(Device):
         self.name = "laser"
         super(Laser, self).__init__(name=self.name)
         self.state = 0
-        self.comport = "/dev/ttyUSB3"
+        self.comport = "/dev/ttyUSB2"
         self.comBaudrate = 9600
         self.comTimeout = 2
         self.InfoInstruction = "SE"
-        self.InfoMsgLength = 100
-        self.StandartMsgLength = 100
+        self.InfoMsgLength = 10
+        self.StandartMsgLength = 10
         self.comPrefix = ""
         self.comEnd = "\r"
 
@@ -41,7 +41,7 @@ class Laser(Device):
     7. stop laser"""
 
     def getStatus(self):
-        msg = self.InstructionSet["getStatus"]
+        msg = self.InstructionSet["getStatus"]ope
         self.com_write(msg)
 
         reply = self.com_recv(self.InfoMsgLength)
@@ -66,7 +66,7 @@ class Laser(Device):
         msg = self.InstructionSet["stop"]
         self.com_write(msg)
 
-    def openShutter(self):
+    def openShutter(self):las
         msg = self.InstructionSet["openShutter"]
         self.com_write(msg)
 
