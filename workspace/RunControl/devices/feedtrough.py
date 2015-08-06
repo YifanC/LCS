@@ -66,6 +66,7 @@ class Feedtrough(Motor):
             self.printError("Could not write message \"" + str(msg) + "\" to com port (" + str(self.com.portstr) + ")")
 
     def initAxis(self):
+	self.printMsg("---------------- init axis -----------------")
         self.setParameter("MS", self.MICROSTEPS)
         self.setParameter("A", self.ACCELERATION)
         self.setParameter("D", self.DECELLERATION)
@@ -128,13 +129,17 @@ class Feedtrough(Motor):
         reply = self.getParameter("P")
         return int(reply)
 
-    def moveRelative(self, microsteps):
+    def moveRelative(self, microsteps, monitor=False):
         self.printMsg("Moving " + str(microsteps) + " microsteps")
         self.sendCommand("MR", microsteps)
+	if monitor:
+	    self.monitorMovement()
 
-    def moveAbsolute(self, microsteps):
+    def moveAbsolute(self, microsteps, monitor=False):
         self.printMsg("Moving to position: " + str(microsteps))
         self.sendCommand("MA", microsteps)
+	if monitor:
+	    self.monitorMovement()
 
 
     def setLimitSwitches(self, attempts):
@@ -179,16 +184,28 @@ class Feedtrough(Motor):
         # monitor the movement and abort in the movement goes out too far from the known zero position
         self.printMsg("Position:")
         while self.isMoving():
-            pos = int(self.getPosition())
+            pos = self.getPosition()
             if pos < self.MAX_HOMING_OVERSHOOT:
                 self.stopMovement()
                 self.setParameter("R1", 0)
                 self.setLimitSwitches(0)
                 self.printError(" Position went to far over home switch, movement was stopped")
                 return -1
-            self.printMsg("\r" + str(pos), nonewline=True)
-            time.sleep(0.1)
+            self.printMsg("homing, current position: " + str(pos))
+            time.sleep(0.2)
 
         self.setLimitSwitches(0)
         self.setParameter("VM", self.ENDVELOCITY)
         self.setParameter("R1", counts + 1)
+
+    def monitorMovement(self, show=True):
+        while self.isMoving():
+            if show:
+		pos = self.getPosition()
+		self.printMsg("current position: " + str(pos))
+	
+	pos = self.getPosition()
+	self.printMsg("final position: " + str(pos))
+	
+		
+
