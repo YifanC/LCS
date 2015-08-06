@@ -28,6 +28,8 @@ class ComSerial(Base):
         self.comReplyEnd = ""  # is used to determine the reply length when the device sends back an echo
         self.comEnd = ""  # is added to any message sent to the device
 
+        self.comDryRun = False
+
 
 
     def com_init(self, useconfig=True):
@@ -37,16 +39,18 @@ class ComSerial(Base):
             port = str(self.ComPortsDict[self.name])
         else:
             port = self.comport
-        try:
-            self.com = serial.Serial(port, self.comBaudrate, 8, 'N', 1, timeout=0.1)
 
-            # get rid of all the shit from a possible crash before
-            self.com.flushInput()
-            self.com.flushInput()
-            time.sleep(1)
-        except:
-            self.printError("opening fcom port (" + str(self.comport) + ") failed --> quitting")
-            sys.exit(1)
+        if self.comDryRun is False:
+            try:
+                self.com = serial.Serial(port, self.comBaudrate, 8, 'N', 1, timeout=0.1)
+
+                # get rid of all the shit from a possible crash before
+                self.com.flushInput()
+                self.com.flushInput()
+                time.sleep(1)
+            except:
+                self.printError("opening fcom port (" + str(self.comport) + ") failed --> quitting")
+                sys.exit(1)
 
         self.printMsg("Com port (" + str(self.com.portstr) + ") opened")
 
@@ -63,28 +67,37 @@ class ComSerial(Base):
 
     def com_write(self, message, echo=False):
         """ write message to comport """
-        msg = self.comPrefix + message + self.comEnd
-        self.com.isOpen()
-        self.com.write(msg)
 
-        if DEBUG is True:
+        if self.comDryRun is False:
+            msg = self.comPrefix + message + self.comEnd
+            self.com.isOpen()
+            self.com.write(msg)
+
             self.printDebug("String sent: " + msg + self.comEnd)
 
-        if (self.comEcho is True) or (echo is True):
-            reply = self.com_recv(len(self.comReplyPrefix + message + self.comReplyEnd))
-            return reply
+            if (self.comEcho is True) or (echo is True):
+                reply = self.com_recv(len(self.comReplyPrefix + message + self.comReplyEnd))
+                return reply
+
+        else:
+            self.printMsg("DRY run:" + self.comPrefix + message + self.comEnd)
 
     def com_recv(self, msg_length=100):
         """ read message from comport """
-        try:
-            self.com.isOpen()
-            msg = self.com.read(msg_length)
-            if DEBUG is True:
-                self.printDebug("Answer: " + msg)
-        except:
-            self.printError("Could not read to com port")
-            sys.exit(1)
-        return self.reply_filter(msg)
+
+        if self.comDryRun is False:
+            try:
+                self.com.isOpen()
+                msg = self.com.read(msg_length)
+                if DEBUG is True:
+                    self.printDebug("Answer: " + msg)
+            except:
+                self.printError("Could not read to com port")
+                sys.exit(1)
+            return self.reply_filter(msg)
+        else:
+            self.printMsg("No replys expected")
+            return "123456\r"
 
     def reply_filter(self, msg):
         """ function which filters the reply, should be defined in the device class if required. Useful for example if there

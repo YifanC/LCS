@@ -4,7 +4,7 @@ from devices.attenuator import *
 
 att = Attenuator()
 att.color = False       # just for the use with bpython
-
+att.comDryRun = True
 att.comport = "/dev/ttyUSB9"
 
 # startup

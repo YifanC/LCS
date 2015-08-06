@@ -17,6 +17,8 @@ class Laser(Device):
         self.comPrefix = ""
         self.comEnd = "\r"
 
+        self.comGetCommand = ""
+        self.comSetCommand = " "
         self.comReplyPrefix = "\r"
 
         self.comEcho = True
