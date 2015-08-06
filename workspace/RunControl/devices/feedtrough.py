@@ -4,7 +4,7 @@ from base.motor import *
 
 
 class Feedtrough(Motor):
-    def __init__(self, name, axis):
+    def __init__(self, name, axis=0):
         self.name = name
         super(Feedtrough, self).__init__(name=self.name)
         self.state = 0
@@ -20,47 +20,37 @@ class Feedtrough(Motor):
         self.comInfoReplyLength = 800
 
         self.axis = axis
-        self.homeSwitch = "S2"
 
-        self.MICROSTEPS = 256
 
-        if self.name.find("linear") >= 0:
-            self.ACCELERATION = 50000
-            self.DECELLERATION = 50000
-            self.INITIALVELOCITY = 1000
-            self.ENDVELOCITY = 15000
-            self.HOLDCURRENT = 10
-            self.RUNCURRENT = 75
+        self.config_load()
+        self.MICROSTEPS = None
+        self.ACCELERATION = None
+        self.DECELLERATION = None
+        self.INITIALVELOCITY = None
+        self.ENDVELOCITY = None
+        self.HOLDCURRENT = None
+        self.RUNCURRENT = None
+        self.HOMINGVELOCITY = None
+        self.MAX_HOMING_OVERSHOOT = None
 
-            self.HOMINGVELOCITY = 8000
-            self.MAX_HOMING_OVERSHOOT = -18000
-	    self.HOME_SWITCH = "S2"
-	    self.HOME_DIRECTION = 1
+        self.init()
 
-        elif self.name.find("rotary") >= 0:
-            self.ACCELERATION = 30000
-            self.DECELLERATION = 30000
-            self.INITIALVELOCITY = 1000
-            self.ENDVELOCITY = 15000
-            self.HOLDCURRENT = 5
-            self.RUNCURRENT = 90
+    def init(self):
+        self.axis = self.config.AXIS
+        self.MICROSTEPS = self.config.MICROSTEPS
+        self.ACCELERATION = self.config.ACCELERATION
+        self.DECELLERATION = self.config.DECELLERATION
+        self.INITIALVELOCITY = self.config.INITIALVELOCITY
+        self.ENDVELOCITY = self.config.ENDVELOCITY
+        self.HOLDCURRENT = self.config.HOLDCURRENT
+        self.RUNCURRENT  = self.config.RUNCURRENT
+        self.HOMINGVELOCITY = self.config.HOMINGVELOCITY
+        self.MAX_HOMING_OVERSHOOT = self.config.MAX_HOMING_OVERSHOOT
+        self.HOME_SWITCH = self.config.HOME_SWITCH
+        self.HOME_DIRECTION = self.config.HOME_DIRECTION
 
-            self.HOMINGVELOCITY = 15000
-            self.MAX_HOMING_OVERSHOOT = -18000
-            self.HOME_SWITCH = "S2" # not clear yet
-            self.HOME_DIRECTION = 1
 
-        else:
-            self.printError("Could not recognize axis type, please provide manual configuration")
-            self.ACCELERATION = None
-            self.DECELLERATION = None
-            self.INITIALVELOCITY = None
-            self.ENDVELOCITY = None
-            self.HOLDCURRENT = None
-            self.RUNCURRENT = None
 
-            self.HOMINGVELOCITY = None
-            self.MAX_HOMING_OVERSHOOT = None
 
     def com_write(self, msg):
         """ write message to, overwriting the base.com_write function adding the axis preamble """
@@ -74,7 +64,7 @@ class Feedtrough(Motor):
 
     def initAxis(self):
         self.setParameter("MS", self.MICROSTEPS)
-	self.setParameter("A", self.ACCELERATION)
+        self.setParameter("A", self.ACCELERATION)
         self.setParameter("D", self.DECELLERATION)
         self.setParameter("VI", self.INITIALVELOCITY)
         self.setParameter("VM", self.ENDVELOCITY)
@@ -98,9 +88,9 @@ class Feedtrough(Motor):
 
         if SetValue.replace(" ", "") == str(value):
             if self.color is True:
-	    	self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC)
-	    else:
-		self.printMsg(string + " -> OK")
+                self.printMsg(string + bcolors.OKGREEN + " -> OK" + bcolors.ENDC)
+            else:
+                self.printMsg(string + " -> OK")
             return 0
         else:
             self.printError(string + " failed")
