@@ -11,7 +11,7 @@ def sigint_handler(signal, frame):
 
     raise SystemExit(1)
 
-SERVER = "131.225.237.31"
+SERVER = "131.225.237.27"
 PORT = 33487
 
 signal.signal(signal.SIGINT, sigint_handler)
