@@ -1,5 +1,6 @@
 {
     "AXIS":                      1,
+    "MICROSTEPS":                256,
     "ACCELERATION":              50000,
     "DECELLERATION":             50000,
     "INITIALVELOCITY":           1000,
