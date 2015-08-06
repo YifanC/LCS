@@ -18,7 +18,6 @@ class Aperture(Motor):
         self.comEnd = "\r"
 
         # config file
-        self.config_setfile()
         self.config_load()
 
         self.InstructionSet = {"getInfo": None,

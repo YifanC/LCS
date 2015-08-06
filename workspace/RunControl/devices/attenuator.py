@@ -19,7 +19,6 @@ class Attenuator(Motor):
         self.color = True
 
         # config file
-        self.config_setfile()
         self.config_load()
 
         self.InstructionSet = {"getInfo": "p",
