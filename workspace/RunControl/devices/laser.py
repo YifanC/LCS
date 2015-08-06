@@ -30,7 +30,7 @@ class Laser(Device):
                                "openShutter": "SH 1",
                                "closeShutter": "SH 0",
                                "singleShot": "SS",
-                               "setRate": "PD"}
+                               "setPulseDivision": "PD"}
 
 
     """ The procedure for shooting the laser is the following:
@@ -88,6 +88,13 @@ class Laser(Device):
         if rate > 10:
             self.printError("Too high repetition rate")
             return -1
+	pulse_division = 10/rate
+	self.setParameter("setPulseDivision", pulse_division)
+        #msg = self.InstructionSet["setRate"] + " " + str(rate)
+        #self.com_write(msg)
 
-        msg = self.InstructionSet["setRate"] + " " + str(rate)
-        self.com_write(msg)
+    def checkParameter(self, parameter, value, echo):
+        if echo == str(self.InstructionSet[parameter]) + self.comSetCommand + str(value):
+            return 0
+        else:
+            return -1
