@@ -76,9 +76,6 @@ class Base(object):
         if filename == -1:
             filename = "config_" + str(self.name) + ".json"
 
-        else:
-            self.printMsg("Using config file: " + str(filename))
-
         hostname = os.uname()[1]
         if hostname[11:14] == "one":
             path = os.getenv("LCS_DEVICES") + "/config_server1/"
@@ -90,7 +87,7 @@ class Base(object):
 
         configfilename = path + str(filename)
 
-        self.printMsg("Using default config file (" + configfilename + ")")
+        self.printMsg("Using config file (" + configfilename + ")")
 
         return configfilename
 
