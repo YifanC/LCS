@@ -1,0 +1,14 @@
+{
+    "AXIS":                      1,
+    "MICROSTEPS":                256,
+    "ACCELERATION":              50000,
+    "DECELLERATION":             50000,
+    "INITIALVELOCITY":           1000,
+    "ENDVELOCITY":               15000,
+    "HOLDCURRENT":               10,
+    "RUNCURRENT":                75,
+    "HOMINGVELOCITY":            8000,
+    "MAX_HOMING_OVERSHOOT":      -18000,
+    "HOME_SWITCH":               "S2",
+    "HOME_DIRECTION":            1
+}

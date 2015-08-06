@@ -9,7 +9,7 @@ import json
 import logging
 import os
 
-DEBUG = True
+DEBUG = False
 
 
 class Base(object):
@@ -22,6 +22,7 @@ class Base(object):
         # switch this to false if using bpython
         self.color = True
         self.config = None
+        self.config_com = None
         self.RunNumber = RunNumber  # TODO: Implement passing of run number from the instance
 
         self.path_logfiles = os.getenv("LCS_LOGFILES")
@@ -71,18 +72,39 @@ class Base(object):
         self.log.debug(string)
 
     def config_setfile(self, filename=-1):
+        """ Look for config files in the folders """
         if filename == -1:
             filename = "config_" + str(self.name) + ".json"
-            path = os.getenv("LCS_DEVICES") + "/config/"
-            self.printMsg("Using default config file (./devices/config/" + filename + ")")
-            self.configfilename = path + filename
-        else:
-            self.printMsg("Using config file: " + str(filename))
-            self.configfilename = str(filename)
 
-    def config_load(self):
-        with open(self.configfilename, 'r') as configfile:
-            self.config = json.load(configfile, object_hook=self.Config)
+        hostname = os.uname()[1]
+        if hostname[11:14] == "one":
+            path = os.getenv("LCS_DEVICES") + "/config_server1/"
+        elif hostname[11:14] == "two":
+            path = os.getenv("LCS_DEVICES") + "/config_server2/"
+        else:
+            self.printMsg("CAUTION USING NON SPECIFIC CONFIG FILES")
+            path = os.getenv("LCS_DEVICES") + "/config/"
+
+        configfilename = path + str(filename)
+
+        self.printMsg("Using config file (" + configfilename + ")")
+
+        return configfilename
+
+
+    def com_load(self, filename):
+        """ load the json file containing the mapping of com ports to devices """
+        configfilename = self.config_setfile(filename)
+
+        with open(configfilename, 'r') as configfile:
+            self.ComPortsDict = json.load(configfile)
+            configfile.close()
+
+    def config_load(self, filename=-1):
+        configfilename = self.config_setfile(filename)
+
+        with open(configfilename, 'r') as configfile:
+            self.config = json.load(configfile, object_hook=self.Device_Config)
             configfile.close()
 
     def config_dump(self):
@@ -123,12 +145,15 @@ class Base(object):
     def close_logfile(self):
         pass
 
-    class Config():
-        """" Config class just to translate the json file into a dict """
-
+    class Device_Config():
+        """" Config class just to translate the json file into a dict for actual device configurations """
         def __init__(self, f):
             self.__dict__ = f
 
+    class Com_Config():
+        """" Config class just to translate the json file into a dict for com port configuration of server """
+        def __init__(self, f):
+            self.__dict__ = f
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'

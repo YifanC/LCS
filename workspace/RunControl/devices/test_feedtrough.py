@@ -3,9 +3,9 @@ __author__ = 'matthias'
 import serial
 from devices.feedtrough import *
 
+LinearMotor = Feedtrough("linear_actuator")
+RotaryMotor = Feedtrough("rotary_actuator")
 
-LinearMotor = Feedtrough("linear_actuator", 2)
-RotaryMotor = Feedtrough("rotary_actuator", 1)
 LinearMotor.color = False
 LinearMotor.comport = "/dev/ttyUSB0"
 LinearMotor.com_init()

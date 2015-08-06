@@ -17,6 +17,4 @@ ap.enableMotor()    # there is an echo comming back
 # test to do: (in this order)
 ap.init()
 
-
-
 ap.disableMotor()
