@@ -1,0 +1,13 @@
+{
+    "AXIS":                      1,
+    "ACCELERATION":              30000,
+    "DECELLERATION":             30000,
+    "INITIALVELOCITY":           1000,
+    "ENDVELOCITY":               15000,
+    "HOLDCURRENT":               5,
+    "RUNCURRENT":                90,
+    "HOMINGVELOCITY":            8000,
+    "MAX_HOMING_OVERSHOOT":      -18000,
+    "HOME_SWITCH":               "S2",
+    "HOME_DIRECTION":            1
+}

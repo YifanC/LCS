@@ -72,8 +72,18 @@ class Base(object):
 
     def config_setfile(self, filename=-1):
         if filename == -1:
+            hostname = os.uname()[1]
+
             filename = "config_" + str(self.name) + ".json"
-            path = os.getenv("LCS_DEVICES") + "/config/"
+
+            if hostname[11:14] == "one":
+                path = os.getenv("LCS_DEVICES") + "/config_server1/"
+            elif hostname[11:14] == "two":
+                path = os.getenv("LCS_DEVICES") + "/config_server2/"
+            else:
+                self.printMsg("CAUTION USING NON SPECIFIC CONFIG FILES")
+                path = os.getenv("LCS_DEVICES") + "/config/"
+
             self.printMsg("Using default config file (./devices/config/" + filename + ")")
             self.configfilename = path + filename
         else:
