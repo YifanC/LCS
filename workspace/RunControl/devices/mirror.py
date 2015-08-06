@@ -13,7 +13,6 @@ class Mirror(Motor):
 
         self.axis = axis
         self.state = 0
-        self.comport = "/dev/ttyUSB6"
         self.comBaudrate = 9600
         self.comTimeout = 20
         self.comEcho = False
@@ -21,7 +20,7 @@ class Mirror(Motor):
         self.InfoMsgLength = 100
         self.StandartMsgLength = 15
         # config file
-        self.config_setfile()
+
         self.config_load()
 
         self.InstructionSet = {"getName": 50,
