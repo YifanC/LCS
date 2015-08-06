@@ -15,12 +15,13 @@ class Feedtrough(Motor):
         self.StandartMsgLength = 10
         self.comEnd = "\n"
 
+        self.comEcho = False
+
         # TODO: Implement this class into new Motor class
         self.InstructionSet = {"getInfo": "PR ALL"}
         self.comInfoReplyLength = 800
 
         self.axis = axis
-
 
         self.config_load()
         self.MICROSTEPS = None
@@ -49,10 +50,12 @@ class Feedtrough(Motor):
         self.HOME_SWITCH = self.config.HOME_SWITCH
         self.HOME_DIRECTION = self.config.HOME_DIRECTION
 
+        self.comPrefix = str(self.axis)  # this string is put in front of any message transmitted
 
 
 
-    def com_write(self, msg):
+
+    def com_write_(self, msg):
         """ write message to, overwriting the base.com_write function adding the axis preamble """
         try:
             self.com.isOpen()
