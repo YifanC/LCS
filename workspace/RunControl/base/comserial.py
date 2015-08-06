@@ -80,7 +80,7 @@ class ComSerial(Base):
                 return reply
 
         else:
-            self.printMsg("DRY run:" + self.comPrefix + message + self.comEnd)
+            self.printMsg("DRY run: " + self.comPrefix + message + self.comEnd)
 
     def com_recv(self, msg_length=100):
         """ read message from comport """

@@ -9,7 +9,7 @@ import json
 import logging
 import os
 
-DEBUG = True
+DEBUG = False
 
 
 class Base(object):
