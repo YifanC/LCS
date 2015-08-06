@@ -36,7 +36,7 @@ class ComSerial(Base):
         """ Tries to open com port specified in comport """
         if useconfig is True:
             self.com_load("com_ports.json")
-            self.comport = self.ComPortsDict[self.name]
+            port = str(self.ComPortsDict[self.name])
         else:
             port = self.comport
 
