@@ -1,0 +1,9 @@
+{
+    "aperture":         "/dev/ttyUSB1",
+    "attenuator":       "/dev/ttyUSB2",
+    "linear_actuator":  "/dev/ttyUSB0",
+    "rotary_actuator":  "/dev/ttyUSB0",
+    "laser":            "/dev/ttyUSB6",
+    "mirror221":        "/dev/ttyUSB3",
+    "mirror221":        "/dev/ttyUSB4"
+}
