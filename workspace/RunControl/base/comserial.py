@@ -30,10 +30,14 @@ class ComSerial(Base):
 
 
 
-    def com_init(self):
+    def com_init(self, useconfig=True):
         """ Tries to open com port specified in comport """
-        try:
+        if useconfig is True:
+            self.com_load("com_ports.json")
+            self.comport = self.ComPortsDict[self.name]
+        else:
             port = self.comport
+        try:
             self.com = serial.Serial(port, self.comBaudrate, 8, 'N', 1, timeout=0.1)
 
             # get rid of all the shit from a possible crash before
