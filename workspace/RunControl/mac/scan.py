@@ -17,8 +17,7 @@ SCAN_SPEED = 10000
 LASER_REPETITION = 1  # in Hz
 
 # Initialize
-Linear
-Motor = Feedtrough("linear_actuator")
+LinearMotor = Feedtrough("linear_actuator")
 RotaryMotor = Feedtrough("rotary_actuator")
 Laser = Laser()
 
@@ -35,7 +34,7 @@ RotaryMotor.initAxis()
 
 # Home axis
 print "homing axes"
-#LinearMotor.homeAxis()
+# LinearMotor.homeAxis()
 #eRotaryMotor.homeAxis()
 
 # goto first position
@@ -48,27 +47,26 @@ Laser.setRate(1)
 LinearMotor.setParameter("VM", LinearMotor.config.ENDVELOCITY)
 stop = False
 
-
 while stop is False:
     # goto start position and set scan speed
     LinearMotor.setParameter("VM", SCAN_SPEED)
     LinearMotor.moveRelative(START_VERTICAL, monitor=True)
-    
+
     # actual scanning with laser
     Laser.openShutter()
     LinearMotor.moveRelative(WIDTH_HORIZONTAL, monitor=True)
     Laser.closeShutter()
-    
+
     # go back to default speed
     LinearMotor.setParameter("VM", LinearMotor.config.ENDVELOCITY)
 
     # logics for scanning again or aborting    
     again = raw_input("scan again [(y)es] / (n)o?")
     if again == "y" or again == "":
-	print "scanning again" 	
+        print "scanning again"
     elif again == "n":
-	print "stopping" 	
-	stop = True
+        print "stopping"
+        stop = True
 
     # anyway go to home position
     LinearMotor.homeAxis()
