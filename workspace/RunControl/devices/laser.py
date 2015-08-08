@@ -25,7 +25,7 @@ class Laser(Device):
 
         self.InstructionSet = {"getStatus": "SE",
                                "getShots": "SC",
-                               "start": "ST 1",
+                               "start": "ST",
                                "stop": "ST 0",
                                "openShutter": "SH 1",
                                "closeShutter": "SH 0",
@@ -61,8 +61,9 @@ class Laser(Device):
         return int(reply)
 
     def start(self):
-        msg = self.InstructionSet["start"]
-        self.com_write(msg)
+        self.setParameter("start", 1)
+        #msg = self.InstructionSet["start"]
+        #self.com_write(msg)
 
     def stop(self):
         msg = self.InstructionSet["stop"]
@@ -79,6 +80,7 @@ class Laser(Device):
 
 
     def singleShot(self):
+
         msg = self.InstructionSet["singleShot"]
         self.com_write(msg)
 
