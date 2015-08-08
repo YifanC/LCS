@@ -1,7 +1,7 @@
 __author__ = 'matthias'
 
+from math import copysign
 from base.motor import *
-
 
 class Feedtrough(Motor):
     def __init__(self, name, axis=0):
@@ -84,7 +84,7 @@ class Feedtrough(Motor):
 
 
     def setParameter(self, parameter, value):
-        msg = parameter + "=" + str(value)
+        msg = str(parameter) + "=" + str(value)
         self.com_write(msg)
         SetValue = self.getParameter(parameter)
 
@@ -155,14 +155,16 @@ class Feedtrough(Motor):
         if set != 0:
             self.printMsg("limit switches were not set correctly")
             self.setLimitSwitches(attempts + 1)
+	    self.stopMovement()
 
     def setHomeSwitch(self, attempts):
         if attempts == 4:
+	    self.stopMovement()
             self.printError("Setting the home switch failed 5 times -> exiting")
             sys.exit(-1)
 
         self.printMsg("Set " + self.HOME_SWITCH + " as home switch")
-        set = self.setParameter(self.HOME_SWITCH, "1,1,0")  # set counterclockwise endswitch as home switch
+        set = self.setParameter(self.HOME_SWITCH.encode(), "1,1,0")  # set counterclockwise endswitch as home switch
         time.sleep(0.5)
         # check if S1 was set correctly
         if set != 0:
@@ -183,16 +185,34 @@ class Feedtrough(Motor):
 
         # monitor the movement and abort in the movement goes out too far from the known zero position
         self.printMsg("Position:")
+	out_of_bounds = False
+	change_dir = False
+	pos_old = self.getPosition()
+	dir_old = -1 # lets assume we home in the negative direction
         while self.isMoving():
-            pos = self.getPosition()
-            if pos < self.MAX_HOMING_OVERSHOOT:
+	    time.sleep(0.2)
+            pos_now = self.getPosition()
+	    
+	    dir_now = copysign(1,pos_now - pos_old)
+
+	    if dir_now != dir_old:
+		change_dir = True
+
+	    if pos_now < self.MAX_HOMING_OVERSHOOT:
+		out_of_bounds = True
+	    if pos_now > abs(self.MAX_HOMING_OVERSHOOT) and change_dir is True: 
+		out_of_bounds = True
+
+	    if out_of_bounds is True:
                 self.stopMovement()
                 self.setParameter("R1", 0)
                 self.setLimitSwitches(0)
                 self.printError(" Position went to far over home switch, movement was stopped")
                 return -1
-            self.printMsg("homing, current position: " + str(pos))
-            time.sleep(0.2)
+            self.printMsg("homing, current position: " + str(pos_now))
+	    pos_old = pos_now
+	    dir_old = dir_now
+		
 
         self.setLimitSwitches(0)
         self.setParameter("VM", self.ENDVELOCITY)

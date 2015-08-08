@@ -73,7 +73,7 @@ class ComSerial(Base):
             self.com.isOpen()
             self.com.write(msg)
 
-            self.printDebug("String sent: " + msg + self.comEnd)
+            self.printDebug("String sent: " + msg)
 
             if (self.comEcho is True) or (echo is True):
                 reply = self.com_recv(len(self.comReplyPrefix + message + self.comReplyEnd))
@@ -81,6 +81,10 @@ class ComSerial(Base):
 
         else:
             self.printMsg("DRY run: " + self.comPrefix + message + self.comEnd)
+            if (self.comEcho is True) or (echo is True):
+                echo = self.comPrefix + message + self.comEnd
+                self.printMsg("DRY run: echo: " + self.comPrefix + message + self.comEnd)
+                return self.comPrefix + message + self.comEnd
 
     def com_recv(self, msg_length=100):
         """ read message from comport """
@@ -97,7 +101,7 @@ class ComSerial(Base):
             return self.reply_filter(msg)
         else:
             self.printMsg("No replys expected")
-            return "123456\r"
+            return "12\n"
 
     def reply_filter(self, msg):
         """ function which filters the reply, should be defined in the device class if required. Useful for example if there
