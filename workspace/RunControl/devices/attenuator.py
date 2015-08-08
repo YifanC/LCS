@@ -151,7 +151,7 @@ class Attenuator(Motor):
             self.offsetZeroTrans = value
 
         self.config.ZERO_TRANSMISSION_OFFSET = self.offsetZeroTrans
-        self.config_dump()
+        #self.config_dump()
 
     def home(self, monitor=False, display=False):
         """ Go to the home switch (hardware switch) and reset position counter """

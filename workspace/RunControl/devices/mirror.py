@@ -31,8 +31,12 @@ class Mirror(Motor):
                                "setRegister": 35,
                                "storePosition": 16,
                                "getPosition": 60,
+			       "Reset": 0,
+			       "FactoryReset": 36,
+			       "Range": 44,
+			       "HomeOffset": 47,
                                "moveAbsolute": 20,  # no absolute movement implemented in hardware
-                               "moveRelative": 21}  # positive direction closes / negative opens
+                               "moveRelative": 21,}  # positive direction closes / negative opens
 
         """ The motor has backlash error, so approach position always from the same direction."""
 
@@ -56,7 +60,11 @@ class Mirror(Motor):
         msg = struct.pack("<" + 6 * "B", self.axis, command, instruction[0], instruction[1], instruction[2],
                           instruction[3])
         reply = self.com_write(msg, echo=True)
-        reply_trans = self.translate_reply(reply)[0]
+        try:
+	    reply_trans = self.translate_reply(reply)[0]
+	except IndexError:
+	    self.printError("Index error")
+	    reply_trans = 0
         self.printDebug(reply_trans)
 
         return reply_trans
@@ -106,11 +114,12 @@ class Mirror(Motor):
         self.moveAbsolute(default_position)
 
 
-    def setParameter(self, parameter):
-        pass
+    def setParameter(self, parameter,value=""):
+        self.com_send(self.InstructionSet[parameter],value)
 
-    def getParameter(self, parameter, value):
-        pass
+    def getParameter(self, parameter):
+        reply = self.com_send(self.InstructionSet[parameter])
+        return reply
 
     def setSerial(self, serial):
         address = 0
