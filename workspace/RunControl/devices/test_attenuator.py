@@ -10,19 +10,19 @@ att.comport = "/dev/ttyUSB9"
 att.com_init()
 att.getName()
 att.enableMotor()
-att.home(monitor=True, display=True)
+#att.home(monitor=True, display=True)
 
 # go somewhere
-att.moveAbsolute(754, monitor=True, display=True)
+#att.moveAbsolute(754, monitor=True, display=True)
 
 # this is the new zero transmission position
-att.setZero()
+#att.setZero()
 
 # go to some transmission position
-att.setTransmission(0.95, monitor=True, display=True)
+#att.setTransmission(0.95, monitor=True, display=True)
 
 # go relative somewhere
-att.moveRelative(-1300, monitor=True, display=True)
+#att.moveRelative(-1300, monitor=True, display=True)
 
 # finalize
 #att.disableMotor()
