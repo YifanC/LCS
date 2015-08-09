@@ -3,7 +3,7 @@
     "attenuator":       "/dev/ttyUSB2",
     "linear_actuator":  "/dev/ttyUSB0",
     "rotary_actuator":  "/dev/ttyUSB0",
-    "laser":            "/dev/ttyUSB6",
-    "mirror221":        "/dev/ttyUSB3",
-    "mirror221":        "/dev/ttyUSB4"
+    "laser":            "/dev/ttyUSB3",
+    "mirror121":        "/dev/ttyUSB7",
+    "mirror122":        "/dev/ttyUSB7"
 }
