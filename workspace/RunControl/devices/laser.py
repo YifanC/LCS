@@ -25,7 +25,7 @@ class Laser(Device):
 
         self.InstructionSet = {"getStatus": "SE",
                                "getShots": "SC",
-                               "start": "ST 1",
+                               "start": "ST",
                                "stop": "ST 0",
                                "openShutter": "SH 1",
                                "closeShutter": "SH 0",
@@ -36,7 +36,7 @@ class Laser(Device):
     """ The procedure for shooting the laser is the following:
     1. start laser (warm up period of 25min)
     2. check if status is ready
-    3. set repetition rate
+    3. set repetition rate (zero for single shot)
     4. open shutter
     (5. only in single shot mode: shoot)
     6. close shutter
@@ -61,8 +61,9 @@ class Laser(Device):
         return int(reply)
 
     def start(self):
-        msg = self.InstructionSet["start"]
-        self.com_write(msg)
+        self.setParameter("start", 1)
+        #msg = self.InstructionSet["start"]
+        #self.com_write(msg)
 
     def stop(self):
         msg = self.InstructionSet["stop"]
@@ -79,6 +80,7 @@ class Laser(Device):
 
 
     def singleShot(self):
+
         msg = self.InstructionSet["singleShot"]
         self.com_write(msg)
 
@@ -88,13 +90,15 @@ class Laser(Device):
         if rate > 10:
             self.printError("Too high repetition rate")
             return -1
-	pulse_division = 10/rate
-	self.setParameter("setPulseDivision", pulse_division)
+        pulse_division = 10/rate
+        self.setParameter("setPulseDivision", pulse_division)
         #msg = self.InstructionSet["setRate"] + " " + str(rate)
         #self.com_write(msg)
 
     def checkParameter(self, parameter, value, echo):
-        if echo == str(self.InstructionSet[parameter]) + self.comSetCommand + str(value):
+
+        expected_echo = self.InstructionSet[parameter] + self.comSetCommand + str(value)
+        if echo[:-1] == expected_echo:
             return 0
         else:
             return -1

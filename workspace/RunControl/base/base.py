@@ -9,7 +9,7 @@ import json
 import logging
 import os
 
-DEBUG = False
+DEBUG = True
 
 
 class Base(object):
@@ -101,9 +101,9 @@ class Base(object):
             configfile.close()
 
     def config_load(self, filename=-1):
-        configfilename = self.config_setfile(filename)
+        self.configfilename = self.config_setfile(filename)
 
-        with open(configfilename, 'r') as configfile:
+        with open(self.configfilename, 'r') as configfile:
             self.config = json.load(configfile, object_hook=self.Device_Config)
             configfile.close()
 

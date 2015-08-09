@@ -62,16 +62,22 @@ mirrorY.com = mirrorX.com
 
 mirrorX.getSerial()
 mirrorY.getSerial()
-
+mirror221_midpoint = 4102
+mirror222_midpoint = -19981
 # Scanning array definitions.
-stepsize_x = 100
-stepsize_y = 50
 
-offset_x = -50000
-offset_y = -50000
+
+mirror221_width = 20000
+mirror222_width = 20000
+
+offset_x = mirror221_midpoint - mirror221_width/2
+offset_y = mirror222_midpoint - mirror222_width/2
 
 steps_x = 4
 steps_y = 4
+
+stepsize_x = mirror221_width / steps_x
+stepsize_y = mirror222_width / steps_y
 
 x = offset_x + stepsize_x * np.linspace(0, steps_x - 1, steps_x)
 y = offset_y + stepsize_y * np.linspace(0, steps_y - 1, steps_y)

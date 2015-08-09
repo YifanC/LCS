@@ -4,7 +4,6 @@ from devices.attenuator import *
 
 att = Attenuator()
 att.color = False       # just for the use with bpython
-att.comDryRun = True
 att.comport = "/dev/ttyUSB9"
 
 # startup
@@ -26,8 +25,8 @@ att.setTransmission(0.95, monitor=True, display=True)
 att.moveRelative(-1300, monitor=True, display=True)
 
 # finalize
-att.disableMotor()
-att.com_close()
+#att.disableMotor()
+
 
 
 
