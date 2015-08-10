@@ -90,7 +90,11 @@ class Laser(Device):
         if rate > 10:
             self.printError("Too high repetition rate")
             return -1
-        pulse_division = 10/rate
+        if rate == 0:
+	    pulse_division = 0
+	else:
+	    pulse_division = 10/rate
+	
         self.setParameter("setPulseDivision", pulse_division)
         #msg = self.InstructionSet["setRate"] + " " + str(rate)
         #self.com_write(msg)

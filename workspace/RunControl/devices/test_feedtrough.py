@@ -7,7 +7,7 @@ LinearMotor = Feedtrough("linear_actuator")
 RotaryMotor = Feedtrough("rotary_actuator")
 
 LinearMotor.color = False
-LinearMotor.comport = "/dev/ttyUSB0"
+#LinearMotor.comport = "/dev/ttyUSB0"
 LinearMotor.com_init()
 RotaryMotor.com = LinearMotor.com
 LinearMotor.color = False
