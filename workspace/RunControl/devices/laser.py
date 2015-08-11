@@ -2,7 +2,7 @@ __author__ = 'matthias'
 
 from base.base import *
 from base.device import *
-
+from laser_error import ErrorCodeLaser
 
 class Laser(Device):
     def __init__(self):
@@ -13,7 +13,7 @@ class Laser(Device):
         self.comTimeout = 2
         self.InfoInstruction = "SE"
         self.InfoMsgLength = 10
-        self.StandartMsgLength = 10
+        self.StandartMsgLength = 3
         self.comPrefix = ""
         self.comEnd = "\r"
 
@@ -43,14 +43,15 @@ class Laser(Device):
     7. stop laser"""
 
     def getStatus(self):
-        msg = self.InstructionSet["getStatus"]
-        self.com_write(msg)
-
-        reply = self.com_recv(self.InfoMsgLength)
-        self.printMsg(reply)
+        reply = self.getParameter("getStatus")
         if int(reply) != 0:
-            self.printError("Laser error")
-            # TODO: Implement return message disply
+            self.printError(ErrorCodeLaser.ErrorDict[int(reply)])
+
+        elif reply == 0:
+            self.printMsg("Laser status is good")
+        else:
+            self.printError("reply not understood --> exiting.")
+            sys.exit(-1)
 
     def getShots(self):
         msg = self.InstructionSet["getShots"]
@@ -62,7 +63,7 @@ class Laser(Device):
 
     def start(self):
         self.setParameter("start", 1)
-        #msg = self.InstructionSet["start"]
+        # msg = self.InstructionSet["start"]
         #self.com_write(msg)
 
     def stop(self):
@@ -80,7 +81,6 @@ class Laser(Device):
 
 
     def singleShot(self):
-
         msg = self.InstructionSet["singleShot"]
         self.com_write(msg)
 
@@ -91,17 +91,14 @@ class Laser(Device):
             self.printError("Too high repetition rate")
             return -1
         if rate == 0:
-	    pulse_division = 0
-	else:
-	    pulse_division = 10/rate
-	
+            pulse_division = 0
+        else:
+            pulse_division = int(10 / rate)
 
-	self.setParameter("setPulseDivision", format(str(pulse_division), "03"))
-        #msg = self.InstructionSet["setRate"] + " " + str(rate)
-        #self.com_write(msg)
+        self.setParameter("setPulseDivision", format(pulse_division, ">3"))
+
 
     def checkParameter(self, parameter, value, echo):
-
         expected_echo = self.InstructionSet[parameter] + self.comSetCommand + str(value)
         if echo[:-1] == expected_echo:
             return 0
