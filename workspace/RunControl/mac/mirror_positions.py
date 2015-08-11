@@ -62,19 +62,19 @@ mirrorY.com = mirrorX.com
 
 mirrorX.getSerial()
 mirrorY.getSerial()
+
 mirror221_midpoint = 4102
 mirror222_midpoint = -19981
 # Scanning array definitions.
 
-
-mirror221_width = 20000
-mirror222_width = 20000
+mirror221_width = 1000
+mirror222_width = 0.001 # scan only in x direction
 
 offset_x = mirror221_midpoint - mirror221_width/2
 offset_y = mirror222_midpoint - mirror222_width/2
 
-steps_x = 4
-steps_y = 4
+steps_x = 10
+steps_y = 1
 
 stepsize_x = mirror221_width / steps_x
 stepsize_y = mirror222_width / steps_y
@@ -106,7 +106,7 @@ for idy in range(start_idy, steps_y):
         print "step " + str(idy * steps_x + idx + 1) + "/" + str(steps_x * steps_y)
         print " step x: ", str(idx), " y: ", str(idy)
         print " set position     x: ", xx[idy, idx], " y:", yy[idy, idx]
-        mirrorX.moveAbsolute(xx[idy, idx])
+        mirrorX.moveAbsolute(xx[idy, idx],monitor=True)
         pos_x = mirrorX.getPosition()
         pos_y = mirrorY.getPosition()
         print " mirror positions x: ", pos_x, " y:", pos_y
