@@ -13,7 +13,8 @@ class Laser(Device):
         self.comTimeout = 2
         self.InfoInstruction = "SE"
         self.InfoMsgLength = 10
-        self.StandartMsgLength = 3
+        self.StandartMsgLength = 10
+	self.comDefaultReplyLength = 10
         self.comPrefix = ""
         self.comEnd = "\r"
 
@@ -46,20 +47,16 @@ class Laser(Device):
         reply = self.getParameter("getStatus")
         if int(reply) != 0:
             self.printError(ErrorCodeLaser.ErrorDict[int(reply)])
-
-        elif reply == 0:
+        elif int(reply) == 0:
             self.printMsg("Laser status is good")
         else:
             self.printError("reply not understood --> exiting.")
             sys.exit(-1)
 
     def getShots(self):
-        msg = self.InstructionSet["getShots"]
-        self.com_write(msg)
-
-        reply = self.com_recv(self.StandartMsgLength)
+        reply = self.getParameter("getShots")
         self.printMsg(reply)
-        return int(reply)
+	return int(reply)
 
     def start(self):
         self.setParameter("start", 1)
@@ -104,3 +101,6 @@ class Laser(Device):
             return 0
         else:
             return -1
+
+    def reply_filter(self, msg):
+	return msg.replace("\r","")
