@@ -101,7 +101,7 @@ class ComSerial(Base):
             return self.reply_filter(msg)
         else:
             self.printMsg("No replys expected")
-            return "12\n"
+            return "03\n"
 
     def reply_filter(self, msg):
         """ function which filters the reply, should be defined in the device class if required. Useful for example if there
