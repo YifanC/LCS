@@ -161,9 +161,10 @@ class Mirror(Motor):
         return 0
 
     def moveAbsolute(self, value, monitor=False, display=False, delta=10):
-        self.printDebug("moving absolute in ms:" + str(value))
+	self.printDebug("moving absolute in ms:" + str(value))
         pos_list = self.translate_pos(int(value))
         self.com_send(self.InstructionSet["moveAbsolute"], pos_list)
+	time.sleep(1)	
 
     def moveRelative(self, value, monitor=False, display=False, delta=10):
         self.printDebug("moving relative in ms:" + str(value))
