@@ -95,7 +95,8 @@ class Laser(Device):
 	else:
 	    pulse_division = 10/rate
 	
-        self.setParameter("setPulseDivision", pulse_division)
+
+	self.setParameter("setPulseDivision", format(str(pulse_division), "03"))
         #msg = self.InstructionSet["setRate"] + " " + str(rate)
         #self.com_write(msg)
 
