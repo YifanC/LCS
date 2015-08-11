@@ -1,9 +1,11 @@
 {
     "aperture":         "/dev/ttyUSB1",
-    "attenuator":       "/dev/ttyUSB2",
+    "attenuator":       "/dev/ttyUSB9",
     "linear_actuator":  "/dev/ttyUSB0",
     "rotary_actuator":  "/dev/ttyUSB0",
     "laser":            "/dev/ttyUSB3",
+    "mirror111":        "/dev/ttyUSB6",
+    "mirror112":        "/dev/ttyUSB6",
     "mirror121":        "/dev/ttyUSB7",
     "mirror122":        "/dev/ttyUSB7"
 }
