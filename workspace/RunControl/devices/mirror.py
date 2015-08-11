@@ -14,7 +14,7 @@ class Mirror(Motor):
         self.axis = axis
         self.state = 0
         self.comBaudrate = 9600
-        self.comTimeout = 20
+        self.comTimeout = 1
         self.comEcho = False
         self.InfoInstruction = ""
         self.InfoMsgLength = 100
