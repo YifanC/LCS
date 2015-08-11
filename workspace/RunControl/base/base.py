@@ -47,9 +47,9 @@ class Base(object):
 
     def printError(self, string):
         string = str(string)
-        msg = time.strftime('%H:%M:%S ', time.localtime()) + self.name + " ERROR: " + string
-        msg_colored = bcolors.FAIL + time.strftime('%H:%M ',
-                                                   time.localtime()) + self.name + ": " + string + bcolors.ENDC
+        msg = time.strftime('%H:%M:%S ', time.localtime()) + self.name + " ERROR: :" + string
+        msg_colored = bcolors.FAIL + time.strftime('%H:%M:%S ',
+                                                   time.localtime()) + self.name + ": ERROR: " + string + bcolors.ENDC
 
         if self.color is True:
             print msg_colored
