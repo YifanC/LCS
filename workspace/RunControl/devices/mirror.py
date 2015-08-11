@@ -31,12 +31,12 @@ class Mirror(Motor):
                                "setRegister": 35,
                                "storePosition": 16,
                                "getPosition": 60,
-			       "Reset": 0,
-			       "FactoryReset": 36,
-			       "Range": 44,
-			       "HomeOffset": 47,
+                               "Reset": 0,
+                               "FactoryReset": 36,
+                               "Range": 44,
+                               "HomeOffset": 47,
                                "moveAbsolute": 20,  # no absolute movement implemented in hardware
-                               "moveRelative": 21,}  # positive direction closes / negative opens
+                               "moveRelative": 21, }  # positive direction closes / negative opens
 
         """ The motor has backlash error, so approach position always from the same direction."""
 
@@ -56,15 +56,14 @@ class Mirror(Motor):
 
         self.printDebug("sending: " + str(command) + str(instruction))
 
-
         msg = struct.pack("<" + 6 * "B", self.axis, command, instruction[0], instruction[1], instruction[2],
                           instruction[3])
         reply = self.com_write(msg, echo=True)
         try:
-	    reply_trans = self.translate_reply(reply)[0]
-	except IndexError:
-	    self.printError("Index error")
-	    reply_trans = 0
+            reply_trans = self.translate_reply(reply)[0]
+        except IndexError:
+            self.printError("Index error")
+            reply_trans = 0
         self.printDebug(reply_trans)
 
         return reply_trans
@@ -114,8 +113,8 @@ class Mirror(Motor):
         self.moveAbsolute(default_position)
 
 
-    def setParameter(self, parameter,value=""):
-        self.com_send(self.InstructionSet[parameter],value)
+    def setParameter(self, parameter, value=""):
+        self.com_send(self.InstructionSet[parameter], value)
 
     def getParameter(self, parameter):
         reply = self.com_send(self.InstructionSet[parameter])
@@ -161,10 +160,10 @@ class Mirror(Motor):
         return 0
 
     def moveAbsolute(self, value, monitor=False, display=False, delta=10):
-	self.printDebug("moving absolute in ms:" + str(value))
+        self.printDebug("moving absolute in ms:" + str(value))
         pos_list = self.translate_pos(int(value))
         self.com_send(self.InstructionSet["moveAbsolute"], pos_list)
-	time.sleep(1)	
+        time.sleep(1)
 
     def moveRelative(self, value, monitor=False, display=False, delta=10):
         self.printDebug("moving relative in ms:" + str(value))
