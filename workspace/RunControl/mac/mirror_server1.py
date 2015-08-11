@@ -13,9 +13,9 @@ mirror112.getSerial()
 mirror121 = Mirror("mirror121", 1)
 mirror122 = Mirror("mirror122", 2)
 mirror121.com_init()
-mirror122.com = mirror111.com
+mirror122.com = mirror121.com
 
 mirror121.getSerial()
-mirror12a2.getSerial()
+mirror122.getSerial()
 # pretend mirror221 is vertical / mirror222 is horizontal
 
