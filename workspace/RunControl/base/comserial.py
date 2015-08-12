@@ -56,14 +56,18 @@ class ComSerial(Base):
 
     def com_close(self):
         """ closes com port """
-        try:
-            self.com.close()
 
-        except:
-            self.printError("Com port could not be closed")
-            sys.exit(1)
+        if self.comDryRun == False:
+            try:
+                self.com.close()
 
-        self.printMsg("Com port (" + self.com.port + ") closed")
+            except:
+                self.printError("Com port could not be closed")
+                sys.exit(1)
+
+            self.printMsg("Com port (" + self.com.port + ") closed")
+        else:
+            self.printMsg("Com port closed")
 
     def com_write(self, message, echo=False):
         """ write message to comport """
