@@ -1,8 +1,14 @@
-__author__ = 'matthias'
+_author__ = 'matthias'
 
 import numpy as np
 import argparse
 from devices.mirror import *
+from devices.laser import *
+
+def shoot():
+        laser.openShutter()
+        time.sleep(3)
+        laser.closeShutter()
 
 """ Little script which steps trough T-OMG mirror positions in x and y spanned by array defined trough:
     stepsize_x:     stepsize for mirror_x
@@ -53,31 +59,39 @@ axis1 = int(arguments.name1_str[2])
 name2 = "mirror" + arguments.name2_str
 axis2 = int(arguments.name2_str[2])
 
-mirrorX = Mirror(name1, axis1)  # this is x movement
-mirrorY = Mirror(name2, axis2)  # this is y movement
+mirror_X = Mirror(name1, axis1)  # this is x movement
+mirror_Y = Mirror(name2, axis2)  # this is y movement
+
+laser = Laser()
 
 # start com ports
-mirrorX.com_init()
-mirrorY.com = mirrorX.com
+mirror_X.com_init()
+mirror_Y.com = mirror_X.com
+laser.com_init()
 
-mirrorX.getSerial()
-mirrorY.getSerial()
+laser.setRate(1)
+
+mirror_X.getSerial()
+mirror_Y.getSerial()
 
 mirror221_midpoint = 4102
 mirror222_midpoint = -19981
 # Scanning array definitions.
 
-mirror221_width = 1000
-mirror222_width = 0.001 # scan only in x direction
+mirror221_width = 10000
+mirror222_width = 20000 # scan only in x direction
 
 offset_x = mirror221_midpoint - mirror221_width/2
 offset_y = mirror222_midpoint - mirror222_width/2
 
-steps_x = 10
-steps_y = 1
+steps_x = 5
+steps_y = 5
+steps_r = 10
 
 stepsize_x = mirror221_width / steps_x
 stepsize_y = mirror222_width / steps_y
+
+print "steps:", stepsize_x, stepsize_y
 
 x = offset_x + stepsize_x * np.linspace(0, steps_x - 1, steps_x)
 y = offset_y + stepsize_y * np.linspace(0, steps_y - 1, steps_y)
@@ -96,22 +110,54 @@ print "yy"
 print yy
 
 print "home y"
-mirrorY.home()
+mirror_X.home()
+mirror_Y.home()
 
-for idy in range(start_idy, steps_y):
-    print "home x "
-    mirrorX.home()
-    mirrorY.moveAbsolute(yy[idy, 0])
-    for idx in range(start_idx, steps_x):
-        print "step " + str(idy * steps_x + idx + 1) + "/" + str(steps_x * steps_y)
-        print " step x: ", str(idx), " y: ", str(idy)
-        print " set position     x: ", xx[idy, idx], " y:", yy[idy, idx]
-        mirrorX.moveAbsolute(xx[idy, idx],monitor=True)
-        pos_x = mirrorX.getPosition()
-        pos_y = mirrorY.getPosition()
-        print " mirror positions x: ", pos_x, " y:", pos_y
-        raw_input("Press Enter to continue...")
+time.sleep(5)
+print mirror_X.getPosition(), mirror_Y.getPosition()
+
+mirror_X.moveRelative(1000)
+mirror_Y.moveRelative(1000)
+
+mirror_x = mirror221_midpoint
+mirror_y = mirror222_midpoint
+
+for idr in range(1,steps_r):
+    print "home x ", idr
+    mirror_x += idr * stepsize_x
+    mirror_y += idr * stepsize_y
+    for idy in range(2 * idr):
+	mirror_y -= stepsize_y
+	mirror_X.moveAbsolute(mirror_x)
+	mirror_Y.moveAbsolute(mirror_y)
+	print "pos:",mirror_X.getPosition(), mirror_Y.getPosition()
+        print idy, mirror_x, mirror_y
+        print "shooting !"
+        shoot()
+    for idy in range(2 * idr):
+        mirror_x -= stepsize_x
+        mirror_X.moveAbsolute(mirror_x)
+        mirror_Y.moveAbsolute(mirror_y)
+        print "pos:",mirror_X.getPosition(), mirror_Y.getPosition()
+        print idy, mirror_x, mirror_y
+        print "shooting !"
+        shoot()
+    for idy in range(2 * idr):
+        mirror_y += stepsize_y
+        mirror_X.moveAbsolute(mirror_x)
+        mirror_Y.moveAbsolute(mirror_y)
+        print "pos:",mirror_X.getPosition(), mirror_Y.getPosition()
+        print idy, mirror_x, mirror_y
+        print "shooting !" 
+        shoot()
+    for idy in range(2 * idr):
+        mirror_x += stepsize_x
+        mirror_X.moveAbsolute(mirror_x)
+        mirror_Y.moveAbsolute(mirror_y)
+        print "pos:",mirror_X.getPosition(), mirror_Y.getPosition()
+        print mirror_x, mirror_y
+        print "shooting !"
+        shoot()
 
 print "finished"
-
-mirrorX.com_close()
+mirror_X.com_close()

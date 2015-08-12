@@ -39,6 +39,8 @@ class Device(ComSerial):
         if reply == "":
             self.printError("No reply received")
 
+        return reply
+
     def setParameter(self, parameter, value, check=True, echo=False, attempts=1):
         """ Function sends the defined string + value to the device.
             Arguments:  check:      If true calls the function checkParameter which should be defined by the device class
