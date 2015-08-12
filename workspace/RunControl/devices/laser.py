@@ -95,12 +95,12 @@ class Laser(Device):
         else:
             pulse_division = int(10 / rate)
 
-        self.setParameter("setPulseDivision", format(pulse_division, ">3"))
+        self.setParameter("setPulseDivision", format(pulse_division, "03"))
 
 
     def checkParameter(self, parameter, value, echo):
         expected_echo = self.InstructionSet[parameter] + self.comSetCommand + str(value)
-        if echo[:-1] == expected_echo:
+        if echo.replace("\r", "") == expected_echo:
             return 0
         else:
             return -1
