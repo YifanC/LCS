@@ -1,89 +1,82 @@
 __author__ = 'matthias'
 
 import socket
-import sys
 
 from services.data import *
 from base.base import *
 
+""" A little class containing routines to start a server and a client to exchange laser data. The server should be
+    started in the following order and is intended for testing only. The actual server lives in C on the uboone DAQ.
+                                     1. start_server(),
+                                     2. server_revcv() which returns the data
+                                     3. server_close()
+    The client sends the laser data supplied to the host/server, it expects no answer. The starting should follow this
+    procedure:  1. start_client() returns True if connection could be established
+                2. send_client(DATA) takes the data and sends it over the socket to the server
+                3. stop_client()
+    """
 
 class TCP(Base):
-    def __init__(self, server_name="localhost", port=10000):
-        """ Initialize data """
+    def __init__(self, server_ip="localhost", port_server=10000, port_client=10001):
+        """ You shoulf supply a serber ip, an port which is used on the server to listen for messages and a port on the
+         client on which the data is sent from. """
         self.name = "tcp"
-        super(TCP, self).__init__(name=self.name,  logit=True)
-
-        self.server_address = (server_name, port)
+        super(TCP, self).__init__(name=self.name, logit=True)
+        self.port_client = port_client
+        self.server_address = (server_ip, port_server)
         self.laser_data = LaserData()
 
     def start_server(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.bind(self.server_address)
         self.sock.listen(1)
+        self.connection, self.client_address = self.sock.accept()
 
     def stop_server(self):
+        self.connection.close()
+        self.sock.shutdown(1)
         self.sock.close()
 
     def recv_server(self):
-        print >> sys.stderr, 'waiting for a connection'
-        connection, client_address = self.sock.accept()
+        """ Expects some data to be received """
+        self.printMsg("waiting for data")
         try:
-            print >> sys.stderr, 'client connected:', client_address
-            while True:
-                data = connection.recv(60)
-                if DEBUG:
-                    print >> sys.stderr, 'received "%s"' % data
-                if data:
-                    self.laser_data.fill(self.laser_data.unpack(data))
-                    connection.sendall("OK")
-                else:
-                    break
-
-        finally:
-            connection.close()
-
+            self.printDebug("new data from" + str(self.client_address))
+            data = self.connection.recv(60)
+            self.printDebug("client received: " + str(data))
+            self.laser_data.fill(self.laser_data.unpack(data))
+        except:
+            pass
         return self.laser_data
 
-
-    def send_client(self, data):
-        """ sends laser data over tcp socket to TPC DAQ. Returns True if successful and False if not. If server is not
-        availabe or if pipe is broken the data is not send and function returns False. """
+    def start_client(self):
+        """ This starts a client connection to the specified address and port. """
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.bind(("", self.port_client))
         try:
             self.sock.connect(self.server_address)
         except Exception as e:
             self.printError("Could not connect to server: " + str(e))
             return False
+        return True
+
+    def stop_client(self):
+        """ If your done with sending, call this function. """
+        self.sock.shutdown(1)
+        self.sock.close()
+
+    def send_client(self, data):
+        """ sends laser data over tcp socket to TPC DAQ. Returns True if successful and False if not. If server is not
+        availabe or if pipe is broken the data is not send and function returns False. """
+
         self.printMsg("sending data")
         packed_data = data.pack()
         try:
             self.sock.sendall(packed_data)
+            self.printDebug("sending data to " + str(self.server_address) + " from port: " + str(self.port_client))
+            self.printDebug("data sent: " + packed_data)
+            return True
 
-            amount_received = 0
-            amount_expected = len("OK")
-            while amount_received < amount_expected:
-                data = self.sock.recv(4)
-                amount_received += len(data)
-                self.printMsg("recieved: " + str(data))
         except Exception as e:
             self.printError("Could not send data to server: " + str(e))
-
-
-        finally:
-            self.sock.close()
-
-        self.sock.close()
-
-    def check_server(self):
-        """ checks if server is alive """
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            self.sock.connect(self.server_address)
-        except Exception as e:
-            self.printMsg("Could not connect to server: " + str(e))
             return False
-
-        self.printMsg("server is alive")
-        self.sock.close()
-
-        return True
