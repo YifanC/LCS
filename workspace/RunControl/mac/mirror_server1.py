@@ -15,7 +15,6 @@ mirror121 = Mirror("mirror121", 1)
 mirror122 = Mirror("mirror122", 2)
 mirror121.com_init()
 mirror122.com = mirror121.com
-<<<<<<< HEAD
 mirror122.color = False
 mirror121.color = False
 
