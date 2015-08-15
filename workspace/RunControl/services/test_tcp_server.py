@@ -3,7 +3,7 @@ from services.tcp import *
 from services.data import *
 
 
-server = TCP("localhost", port_server=37888, port_client=37999)  # Just for local tests
+server = TCP("localhost", port_server=33487, port_client=33488)  # Just for local tests
 data = LaserData()
 
 server.start_server()

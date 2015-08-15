@@ -8,16 +8,22 @@ data = LaserData()
 
 #client = TCP("131.225.237.31",33487)
 
-client = TCP("localhost", port_server=37888, port_client=37999)  # Just for local tests
+client = TCP("localhost", port_server=33487, port_client=33488)  # Just for local tests
 
 # try to connect to the server
 while client.start_client() is False:
     time.sleep(1)
 
-
-for i in range(100,120):
+i = 0
+while True:
+    """ Run forever """
     data.count_trigger = i
-    client.send_client(data)
-    time.sleep(2)
+    if client.send_client(data) is False:
+        """ Try to reconnect forever if the server dies  """
+        while client.start_client() is False:
+            time.sleep(1)
+
+    i += 1
+    time.sleep(1)
 
 client.stop_client()
