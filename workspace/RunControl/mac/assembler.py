@@ -11,24 +11,26 @@ def sigint_handler(signal, frame):
 
     raise SystemExit(1)
 
-SERVER = "131.225.237.27"
-PORT = 33487
-
+SERVER = "localhost"
+PORT_SERVER = 33487
+PORT_CLIENT = 33488
 signal.signal(signal.SIGINT, sigint_handler)
 data = LaserData()
-client = TCP(SERVER, PORT)
+client = TCP("localhost", port_server=PORT_SERVER, port_client=PORT_CLIENT)  # Just for local tests
 
 assembler = Consumer("assembler")
 assembler.start()
 assembler.color = False
 #assembler.open_logfile()
 
+while client.start_client() is False:
+    time.sleep(1)
+
 print "------------ Wait for Hello ------------"
 ready = False
 assembler.timeout = 5
 while not ready:
     ready = assembler.recv_hellos()
-
 print "--------------- Start DAQ --------------"
 while True:
     [source_id, state] = assembler.recv(data)
