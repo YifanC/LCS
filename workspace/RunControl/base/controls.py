@@ -10,7 +10,7 @@ class Controls(Base):
 
     def __init__(self, RunNumber):
         self.name = "controls"
-        super(Controls, self).__init__(name=self.name, logit=True)
+        super(Controls, self).__init__(name=self.name, logit=True, RunNumber=RunNumber)
 
         self.path_base = os.getenv("LCS_BASE")
         self.path_services = os.getenv("LCS_SERVICES")
