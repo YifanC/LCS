@@ -23,7 +23,7 @@ assembler.start()
 assembler.color = False
 #assembler.open_logfile()
 
-while client.start_client() is False:
+while client.start_server() is False:
     time.sleep(1)
 
 print "------------ Wait for Hello ------------"
@@ -38,6 +38,6 @@ while True:
 
     # only write if new encoder data arrived
     if source_id == 2:
-        client.send_client(data)
+        client.send_server(data)
         data.writeTxt()
     print "trigger " + str(data.count_trigger)
