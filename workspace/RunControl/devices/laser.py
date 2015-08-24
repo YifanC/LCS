@@ -28,7 +28,8 @@ class Laser(Device):
                                "getShots": "SC",
                                "start": "ST",
                                "stop": "ST 0",
-                               "openShutter": "SH 1",
+                               "Shutter": "SH",
+                               "openShutter_": "SH 1",
                                "closeShutter": "SH 0",
                                "singleShot": "SS",
                                "setPulseDivision": "PD"}
@@ -68,18 +69,18 @@ class Laser(Device):
         self.com_write(msg)
 
     def openShutter(self):
-        msg = self.InstructionSet["openShutter"]
-        self.com_write(msg)
+	self.setParameter("Shutter", 1)        
+	#msg = self.InstructionSet["openShutter"]
+        #self.com_write(msg)
 
 
     def closeShutter(self):
-        msg = self.InstructionSet["closeShutter"]
-        self.com_write(msg)
-
+	self.setParameter("Shutter", 0)
 
     def singleShot(self):
         msg = self.InstructionSet["singleShot"]
-        self.com_write(msg)
+        reply = self.com_write(msg)
+	self.printMsg(reply)
 
 
     def setRate(self, rate):
