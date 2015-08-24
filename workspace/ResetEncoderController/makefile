@@ -31,5 +31,5 @@ distclean: clean
 #
 
 reset: reset.c
-	gcc $(CFLAGS) -o reset reset.c $(EIBLIB) $(LIBS) $(LIBPATH)
+	gcc $(CFLAGS) -o reset.o reset.c $(EIBLIB) $(LIBS) $(LIBPATH)
 	    
