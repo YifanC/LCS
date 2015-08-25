@@ -63,7 +63,7 @@
 
 /* definitions */
 #define EIB_TCP_TIMEOUT   5000   /* timeout for TCP connection in ms      */
-#define NUM_OF_AXIS       4      /* number of axes of the EIB             */
+#define NUM_OF_AXIS       2      /* number of axes of the EIB             */
 #define NUM_OF_IO         4      /* number of inputs and outputs          */
 #define MAX_SRT_DATA      200    /* maximum size of recording data    */
 #define MAX_TEXT_LEN      200    /* maximum size of console input string  */
@@ -410,11 +410,17 @@ int main(int argc, char *argv[])
    printf("\n\npress Ctrl-C to stop\n\n");
 
    if (RefRun == 1) {
+      CheckError(EIB7ClearRefStatus(axis[RotaryEncoder]));
+
       /* Do a reference movement for the rotarty encoder (get two reference marks) */
-      CheckError(EIB7StartRef(axis[RotaryEncoder], EIB7_RP_RefPos2)); // start waiting for 2 reference marks on the rotary axis
+      CheckError(EIB7StartRef(axis[RotaryEncoder], EIB7_RP_RefPos1)); // start waiting for 2 reference marks on the rotary axis
       active = 1;   
-      while(active==1 || stop == 0) {
+      while(active==1) {
          CheckError(EIB7GetRefActive(axis[RotaryEncoder], &active));
+	 if (stop == 1){
+		CheckError(EIB7StopRef(axis[RotaryEncoder]));
+		break;
+	}
          printf("waiting for reference run...\r");
       }
    }
