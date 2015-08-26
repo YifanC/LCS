@@ -317,8 +317,12 @@ int main(int argc, char *argv[])
    CheckError(EIB7Open(ip, &eib, EIB_TCP_TIMEOUT, fw_version, sizeof(fw_version)));
    printf("\nEIB firmware version: %s\n\n", fw_version);
 
+
+
    /* read axes array */
    CheckError(EIB7GetAxis(eib, axis, NUM_OF_AXIS, &num));
+
+   CheckError(EIB7ResetTriggerCounter(eib));
 
    /* initialize axis 1 (linear encoder) for EnDat 2.2*/
    fprintf(stderr, "Initializing axis %d for EnDat 2.2\n", LinearEncoder+1);
@@ -370,8 +374,6 @@ int main(int argc, char *argv[])
    CheckError(EIB7ConfigDataPacket(eib, packet, 3));
    
 
-
-   /* set up trigger */
    if(ExtTrigger)
    {
       /* enable external trigger */
@@ -425,6 +427,8 @@ int main(int argc, char *argv[])
       }
    }
 
+   //CheckError(EIB7ResetTriggerCounter(axis[RotaryEncoder]));
+
    if(ExtTrigger)
    {
 		CheckError(EIB7GlobalTriggerEnable(eib, EIB7_MD_Enable, EIB7_TS_TrgInput1));
@@ -435,7 +439,8 @@ int main(int argc, char *argv[])
    }
    
 
-  
+   //CheckError(EIB7ResetTriggerCounter(axis[RotaryEncoder]));
+
 
    while(!stop)
    {
