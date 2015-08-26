@@ -45,7 +45,7 @@ class Controls(Base):
 
     def assembler_start(self):
         self.printMsg("Starting Assembler")
-        self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", py=True)
+        self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", args="-c", py=True)
 
     def assembler_alive(self):
         alive = self.process_alive(self.proc_assembler)
@@ -74,13 +74,15 @@ class Controls(Base):
         # TODO: Handle error messages of c process
         if py is True:
             prefix = "python"
-            command =  [prefix, filename, args]
+            command = [prefix, filename]
         elif c is True:
             #prefix = "./"
-            command =  [filename, args]
+            command = [filename]
         else:
             self.printError("do not know how to execute!")
             return False
+        if args is not "":
+            command.append(args)
         # For debugging
         #process = subprocess.Popen(command)
         process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=False)
