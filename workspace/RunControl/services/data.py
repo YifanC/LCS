@@ -26,7 +26,8 @@ class LaserData(object):
                  pos_tomg_1_axis1=float(-66666.),
                  pos_tomg_1_axis2=float(-77777.),
                  pos_tomg_2_axis1=float(-88888.),
-                 pos_tomg_2_axis2=float(-99999.)):
+                 pos_tomg_2_axis2=float(-99999.),
+                 RunNumber = 0):
 
         self.laserid = laserid  # which laser system: 1 or 2
         self.status = status
@@ -46,6 +47,7 @@ class LaserData(object):
 
         self.path_data = os.getenv("LCS_DATA")
         self.path_binary = os.getenv("LCS_BINARYFILE")
+        self.RunNumber = RunNumber
 
 
     def __str__(self):
@@ -111,7 +113,7 @@ class LaserData(object):
         pass
 
     def writeTxt(self):
-        with open(self.path_data + "/" +"testfile.txt", "a") as f:
+        with open(self.path_data + "/" +"Run-" + str(self.RunNumber) + ".txt", "a") as f:
             for item in self.dump():
                 f.write("%s " % item)
             f.write("\n")
