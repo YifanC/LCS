@@ -30,7 +30,7 @@ class Controls(Base):
 
         if dry is False:
             self.printMsg("Starting Encoder")
-            self.proc_encoder = self.process_start(self.path_devices + "/" + "encoder.o", args="-s", c=True)
+            self.proc_encoder = self.process_start(self.path_devices + "/" + "encoder.o", args="-s -t 1000", c=True)
 
 
 
@@ -96,7 +96,7 @@ class Controls(Base):
     def process_stop(self, procces):
         if self.process_alive(procces):
             procces.send_signal(signal.SIGINT)
-            procces.terminate()
+            #procces.terminate()
             return True
         else:
             return True
