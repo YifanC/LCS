@@ -1,5 +1,6 @@
 
 from datetime import datetime
+import argparse
 
 from base.controls import *
 from services.communication import Producer
@@ -11,14 +12,22 @@ from devices.attenuator import *
 from devices.aperture import *
 from devices.mirror import *
 
+# Ask for the runnumber
+parser = argparse.ArgumentParser(description='Script to control the UV laser system')
+
+parser.add_argument("-r", "--runnumber", action='store', dest='RunNumber', required=True,
+                    help='current run number issued by DAQ', type=int)
+
+arguments = parser.parse_args()
+
+
 # ----------------------------------------------------
 # ----------------------- Init -----------------------
 # ----------------------------------------------------
 
-RunNumber = 99
 # Construct needed instances
-rc = Controls(RunNumber=RunNumber)
-data = LaserData(RunNumber=RunNumber)
+rc = Controls(RunNumber=arguments.RunNumber)
+data = LaserData(RunNumber=arguments.RunNumber)
 rc.com = Producer("runcontrol")
 rc.ft_linear = Feedtrough("linear_actuator")
 rc.ft_rotary = Feedtrough("rotary_actuator")
