@@ -10,7 +10,7 @@ class Controls(Base):
 
     def __init__(self, RunNumber):
         self.name = "controls"
-        super(Controls, self).__init__(name=self.name, logit=True)
+        super(Controls, self).__init__(name=self.name, logit=True, RunNumber=RunNumber)
 
         self.path_base = os.getenv("LCS_BASE")
         self.path_services = os.getenv("LCS_SERVICES")
@@ -30,7 +30,7 @@ class Controls(Base):
 
         if dry is False:
             self.printMsg("Starting Encoder")
-            self.proc_encoder = self.process_start(self.path_devices + "/" + "encoder.o", args="-s", c=True)
+            self.proc_encoder = self.process_start(self.path_devices + "/" + "encoder.o", args="-s -t 1000", c=True)
 
 
 
@@ -43,9 +43,13 @@ class Controls(Base):
         self.printMsg("Stopping Encoder")
         self.process_stop(self.proc_encoder)
 
-    def assembler_start(self):
+    def assembler_start(self, senddata=True):
         self.printMsg("Starting Assembler")
-        self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", py=True)
+        if senddata is True:
+            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", args="-c", py=True)
+        else:
+            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", py=True)
+
 
     def assembler_alive(self):
         alive = self.process_alive(self.proc_assembler)
@@ -74,13 +78,15 @@ class Controls(Base):
         # TODO: Handle error messages of c process
         if py is True:
             prefix = "python"
-            command =  [prefix, filename, args]
+            command = [prefix, filename]
         elif c is True:
             #prefix = "./"
-            command =  [filename, args]
+            command = [filename]
         else:
             self.printError("do not know how to execute!")
             return False
+        if args is not "":
+            command.append(args)
         # For debugging
         #process = subprocess.Popen(command)
         process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=False)
@@ -96,7 +102,7 @@ class Controls(Base):
     def process_stop(self, procces):
         if self.process_alive(procces):
             procces.send_signal(signal.SIGINT)
-            procces.terminate()
+            #procces.terminate()
             return True
         else:
             return True

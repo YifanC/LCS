@@ -37,6 +37,22 @@ class TCP(Base):
         self.sock.shutdown(1)
         self.sock.close()
 
+    def send_server(self, data):
+        """ sends laser data over tcp socket to TPC DAQ. Returns True if successful and False if not. If server is not
+        availabe or if pipe is broken the data is not send and function returns False. """
+
+        self.printMsg("sending data to client")
+        packed_data = data.pack()
+        try:
+            self.connection.sendall(packed_data)
+            self.printDebug("sending data to " + str(self.client_address))
+            self.printDebug("data sent: " + packed_data)
+            return True
+
+        except Exception as e:
+            self.printError("Could not send data to client: " + str(e))
+            return False
+
     def recv_server(self):
         """ Expects some data to be received """
         self.printMsg("waiting for data")
@@ -52,7 +68,11 @@ class TCP(Base):
     def start_client(self):
         """ This starts a client connection to the specified address and port. """
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+<<<<<<< HEAD
         self.sock.bind(("131.225.237.34", self.port_client))
+=======
+        self.sock.bind(("localhost", self.port_client))
+>>>>>>> 27edccadaead719ee50a8a5e7a11bb3a9382fcfb
         try:
             self.sock.connect(self.server_address)
         except Exception as e:
@@ -69,7 +89,7 @@ class TCP(Base):
         """ sends laser data over tcp socket to TPC DAQ. Returns True if successful and False if not. If server is not
         availabe or if pipe is broken the data is not send and function returns False. """
 
-        self.printMsg("sending data")
+        self.printMsg("sending data to server")
         packed_data = data.pack()
         try:
             self.sock.sendall(packed_data)
@@ -80,3 +100,18 @@ class TCP(Base):
         except Exception as e:
             self.printError("Could not send data to server: " + str(e))
             return False
+
+    def recv_client(self):
+        """ Expects some data to be received, if data has no length because nothing was in the buffer it raises an
+            exception"""
+        self.printMsg("waiting for data")
+        self.printDebug("new data from " + str(self.server_address))
+        data = self.sock.recv(60)
+        if len(data) == 0:
+            raise ValueError("Empty data string")
+
+        self.printDebug("client received: " + str(data))
+        self.laser_data.fill(self.laser_data.unpack(data))
+
+
+        return self.laser_data

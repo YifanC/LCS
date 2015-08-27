@@ -20,4 +20,5 @@ data.fill(unpacked)
 # check it changed
 print data
 
+data.writeTxt()
 data.writeBinary("test_laserdata.bin")

@@ -63,7 +63,7 @@
 
 /* definitions */
 #define EIB_TCP_TIMEOUT   5000   /* timeout for TCP connection in ms      */
-#define NUM_OF_AXIS       4      /* number of axes of the EIB             */
+#define NUM_OF_AXIS       2      /* number of axes of the EIB             */
 #define NUM_OF_IO         4      /* number of inputs and outputs          */
 #define MAX_SRT_DATA      200    /* maximum size of recording data    */
 #define MAX_TEXT_LEN      200    /* maximum size of console input string  */
@@ -317,8 +317,12 @@ int main(int argc, char *argv[])
    CheckError(EIB7Open(ip, &eib, EIB_TCP_TIMEOUT, fw_version, sizeof(fw_version)));
    printf("\nEIB firmware version: %s\n\n", fw_version);
 
+
+
    /* read axes array */
    CheckError(EIB7GetAxis(eib, axis, NUM_OF_AXIS, &num));
+
+   CheckError(EIB7ResetTriggerCounter(eib));
 
    /* initialize axis 1 (linear encoder) for EnDat 2.2*/
    fprintf(stderr, "Initializing axis %d for EnDat 2.2\n", LinearEncoder+1);
@@ -370,8 +374,6 @@ int main(int argc, char *argv[])
    CheckError(EIB7ConfigDataPacket(eib, packet, 3));
    
 
-
-   /* set up trigger */
    if(ExtTrigger)
    {
       /* enable external trigger */
@@ -410,14 +412,22 @@ int main(int argc, char *argv[])
    printf("\n\npress Ctrl-C to stop\n\n");
 
    if (RefRun == 1) {
+      CheckError(EIB7ClearRefStatus(axis[RotaryEncoder]));
+
       /* Do a reference movement for the rotarty encoder (get two reference marks) */
-      CheckError(EIB7StartRef(axis[RotaryEncoder], EIB7_RP_RefPos2)); // start waiting for 2 reference marks on the rotary axis
+      CheckError(EIB7StartRef(axis[RotaryEncoder], EIB7_RP_RefPos1)); // start waiting for 2 reference marks on the rotary axis
       active = 1;   
-      while(active==1 || stop == 0) {
+      while(active==1) {
          CheckError(EIB7GetRefActive(axis[RotaryEncoder], &active));
+	 if (stop == 1){
+		CheckError(EIB7StopRef(axis[RotaryEncoder]));
+		break;
+	}
          printf("waiting for reference run...\r");
       }
    }
+
+   //CheckError(EIB7ResetTriggerCounter(axis[RotaryEncoder]));
 
    if(ExtTrigger)
    {
@@ -429,7 +439,8 @@ int main(int argc, char *argv[])
    }
    
 
-  
+   //CheckError(EIB7ResetTriggerCounter(axis[RotaryEncoder]));
+
 
    while(!stop)
    {

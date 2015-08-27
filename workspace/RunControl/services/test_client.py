@@ -26,8 +26,8 @@ rc.state = 0
 
 
 laser.count_trigger = 9999999.
-print str(laser)
+#print str(laser)
 #encoder.send_data(laser)
-laser.pos_att = 99.
-rc.send_data(laser)
-print str(laser)
+#laser.pos_att = 99.
+#rc.send_data(laser)
+#print str(laser)
