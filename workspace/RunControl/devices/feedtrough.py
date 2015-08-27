@@ -3,6 +3,7 @@ __author__ = 'matthias'
 from math import copysign
 from base.motor import *
 
+
 class Feedtrough(Motor):
     def __init__(self, name, axis=0):
         self.name = name
@@ -44,15 +45,13 @@ class Feedtrough(Motor):
         self.INITIALVELOCITY = self.config.INITIALVELOCITY
         self.ENDVELOCITY = self.config.ENDVELOCITY
         self.HOLDCURRENT = self.config.HOLDCURRENT
-        self.RUNCURRENT  = self.config.RUNCURRENT
+        self.RUNCURRENT = self.config.RUNCURRENT
         self.HOMINGVELOCITY = self.config.HOMINGVELOCITY
         self.MAX_HOMING_OVERSHOOT = self.config.MAX_HOMING_OVERSHOOT
         self.HOME_SWITCH = self.config.HOME_SWITCH
         self.HOME_DIRECTION = self.config.HOME_DIRECTION
 
         self.comPrefix = str(self.axis)  # this string is put in front of any message transmitted
-
-
 
 
     def com_write_(self, msg):
@@ -66,7 +65,7 @@ class Feedtrough(Motor):
             self.printError("Could not write message \"" + str(msg) + "\" to com port (" + str(self.com.portstr) + ")")
 
     def initAxis(self):
-	self.printMsg("---------------- init axis -----------------")
+        self.printMsg("---------------- init axis -----------------")
         self.setParameter("MS", self.MICROSTEPS)
         self.setParameter("A", self.ACCELERATION)
         self.setParameter("D", self.DECELLERATION)
@@ -132,14 +131,14 @@ class Feedtrough(Motor):
     def moveRelative(self, microsteps, monitor=False):
         self.printMsg("Moving " + str(microsteps) + " microsteps")
         self.sendCommand("MR", microsteps)
-	if monitor:
-	    self.monitorMovement()
+        if monitor:
+            self.monitorMovement()
 
     def moveAbsolute(self, microsteps, monitor=False):
         self.printMsg("Moving to position: " + str(microsteps))
         self.sendCommand("MA", microsteps)
-	if monitor:
-	    self.monitorMovement()
+        if monitor:
+            self.monitorMovement()
 
 
     def setLimitSwitches(self, attempts):
@@ -155,11 +154,11 @@ class Feedtrough(Motor):
         if set != 0:
             self.printMsg("limit switches were not set correctly")
             self.setLimitSwitches(attempts + 1)
-	    self.stopMovement()
+            self.stopMovement()
 
     def setHomeSwitch(self, attempts):
         if attempts == 4:
-	    self.stopMovement()
+            self.stopMovement()
             self.printError("Setting the home switch failed 5 times -> exiting")
             sys.exit(-1)
 
@@ -185,34 +184,33 @@ class Feedtrough(Motor):
 
         # monitor the movement and abort in the movement goes out too far from the known zero position
         self.printMsg("Position:")
-	out_of_bounds = False
-	change_dir = False
-	pos_old = self.getPosition()
-	dir_old = -1 # lets assume we home in the negative direction
+        out_of_bounds = False
+        change_dir = False
+        pos_old = self.getPosition()
+        dir_old = -1  # lets assume we home in the negative direction
         while self.isMoving():
-	    time.sleep(0.2)
+            time.sleep(0.2)
             pos_now = self.getPosition()
-	    
-	    dir_now = copysign(1,pos_now - pos_old)
 
-	    if dir_now != dir_old:
-		change_dir = True
+            dir_now = copysign(1, pos_now - pos_old)
 
-	    if pos_now < self.MAX_HOMING_OVERSHOOT:
-		out_of_bounds = True
-	    if pos_now > abs(self.MAX_HOMING_OVERSHOOT) and change_dir is True: 
-		out_of_bounds = True
+            if dir_now != dir_old:
+                change_dir = True
 
-	    if out_of_bounds is True:
+            if pos_now < self.MAX_HOMING_OVERSHOOT:
+                out_of_bounds = True
+            if pos_now > abs(self.MAX_HOMING_OVERSHOOT) and change_dir is True:
+                out_of_bounds = True
+
+            if out_of_bounds is True:
                 self.stopMovement()
                 self.setParameter("R1", 0)
                 self.setLimitSwitches(0)
                 self.printError(" Position went to far over home switch, movement was stopped")
                 return -1
             self.printMsg("homing, current position: " + str(pos_now))
-	    pos_old = pos_now
-	    dir_old = dir_now
-		
+            pos_old = pos_now
+            dir_old = dir_now
 
         self.setLimitSwitches(0)
         self.setParameter("VM", self.ENDVELOCITY)
@@ -221,11 +219,8 @@ class Feedtrough(Motor):
     def monitorMovement(self, show=True):
         while self.isMoving():
             if show:
-		pos = self.getPosition()
-		self.printMsg("current position: " + str(pos))
-	
-	pos = self.getPosition()
-	self.printMsg("final position: " + str(pos))
-	
-		
+                pos = self.getPosition()
+                self.printMsg("current position: " + str(pos))
 
+        pos = self.getPosition()
+        self.printMsg("final position: " + str(pos))
