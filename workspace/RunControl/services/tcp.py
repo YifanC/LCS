@@ -52,7 +52,7 @@ class TCP(Base):
     def start_client(self):
         """ This starts a client connection to the specified address and port. """
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.bind(("", self.port_client))
+        self.sock.bind(("131.225.237.34", self.port_client))
         try:
             self.sock.connect(self.server_address)
         except Exception as e:
