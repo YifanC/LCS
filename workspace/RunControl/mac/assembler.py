@@ -9,8 +9,13 @@ import signal
 # handling arguments
 parser = argparse.ArgumentParser(description='Script controlling the start and stop of the data assembler')
 
+parser.add_argument("-r", "-runnumber", dest='RunNumber', required=True, action="store",
+                    help='Neccessary run number where to store the data for the txt file.')
+
 parser.add_argument("-c", "-connect", dest='connect', required=False, action="store_true",
                     help='If set assembler will try to connect over a pipe to seb10 abd send data.')
+
+
 parser.set_defaults(connect=False)
 arguments = parser.parse_args()
 connect = arguments.connect
@@ -27,7 +32,7 @@ SERVER = "localhost"
 PORT_SERVER = 33487
 PORT_CLIENT = 33488
 signal.signal(signal.SIGINT, sigint_handler)
-data = LaserData()
+data = LaserData(RunNumber=arguments.RunNumber)
 client = TCP("localhost", port_server=PORT_SERVER, port_client=PORT_CLIENT)  # Just for local tests
 
 assembler = Consumer("assembler")
