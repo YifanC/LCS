@@ -5,6 +5,7 @@ import argparse
 from base.controls import *
 from services.communication import Producer
 from services.data import LaserData
+from services.positions import *
 
 from devices.feedtrough import *
 from devices.laser import *
@@ -28,24 +29,29 @@ arguments = parser.parse_args()
 # Construct needed instances
 rc = Controls(RunNumber=arguments.RunNumber)
 data = LaserData(RunNumber=arguments.RunNumber)
+pos = Positions()
 rc.com = Producer("runcontrol")
 rc.ft_linear = Feedtrough("linear_actuator")
 rc.ft_rotary = Feedtrough("rotary_actuator")
 rc.laser = Laser()
 rc.attenuator = Attenuator()
-rc.aperture = Aperture()
-rc.mirror_x = Mirror("mirror221", 1)  # not yet defined correctly
-rc.mirror_y = Mirror("mirror222", 2)  # not yet defined correctly
+#rc.aperture = Aperture()
+#rc.mirror_x = Mirror("mirror221", 1)  # not yet defined correctly
+#rc.mirror_y = Mirror("mirror222", 2)  # not yet defined correctly
 
 # Start broker / encoder
 rc.broker_start()
 print rc.RunNumber
-rc.assembler_start()
+rc.assembler_start(senddata=False)
 time.sleep(2)
+
+# Load Positions from file
+pos.load("./services/config.csv")
 
 # Dry run configuration
 rc.encoder_start(dry=True)
 rc.laser.comDryRun = True
+rc.attenuator.comDryRun = True
 rc.ft_rotary.comDryRun = True
 rc.ft_linear.comDryRun = True
 
@@ -53,7 +59,7 @@ rc.ft_linear.comDryRun = True
 rc.ft_linear.com_init()
 rc.ft_rotary.com = rc.ft_linear.com
 rc.laser.com_init()
-#rc.attenuator.com_init()
+rc.attenuator.com_init()
 #rc.aperture.com_init()
 #rc.mirror_x.com_init()
 #rc.mirror_y.com = rc.mirror_x.com
@@ -82,6 +88,8 @@ while (datetime.today() - starttime).seconds < 5: # int(60 * rc.laser.timeout):
 
     time.sleep(1)
 
+rc.laser.setRate(0)
+rc.laser.closeShutter()
 
 raw_input("Start Laser Scan?")
 # ----------------------------------------------------
@@ -89,9 +97,47 @@ raw_input("Start Laser Scan?")
 # ----------------------------------------------------
 rc.com.send_data(data)
 
-time.sleep(5)
-rc.laser.setRate(1)
-rc.laser.openShutter()
+for scanstep in range(len(pos)):
+    pos.printStep(scanstep)
+    # Set scanning speeds of axis
+    rc.ft_rotary.setParameter("VM", pos.getHorSpeed(scanstep))
+    rc.ft_linear.setParameter("VM", pos.getVerSpeed(scanstep))
+
+    # Set Attenuator Position
+    rc.attenuator.moveAbsolute(pos.getAttenuator(scanstep))
+
+    # Configure the Laser to shoot at a given frequency while moving
+    if pos.getShotFreq(scanstep) > 0:
+        rc.printMsg("Moving and shooting @ " + str(pos.getShotFreq(scanstep)) + "Hz")
+        rc.laser.setRate(pos.getShotFreq(scanstep))
+        rc.laser.openShutter()
+    else:
+        rc.laser.setRate(0)
+
+    # Do the actual movement and monitor it
+    rc.ft_rotary.moveRelative(pos.getHorRelativeMovement(scanstep),monitor=True)
+    rc.ft_linear.moveRelative(pos.getVerRelativeMovement(scanstep),monitor=True)
+    rc.laser.closeShutter()
+
+    # Sigle shot if frequency is 0
+    if pos.getShotFreq(scanstep) == 0:
+        rc.printMsg("Firing a single shot")
+        rc.laser.openShutter()
+        rc.laser.singleShot()
+        rc.laser.closeShutter()
+
+    # Shoot at a position a number of shots at a given rate,
+    elif pos.getShotFreq(scanstep) < 0:
+        if pos.getShotCount(scanstep) > 0:
+            rc.printMsg("Shooting at given position @ " + str(-pos.getShotFreq(scanstep)) + "Hz for " +
+                        str(pos.getShotCount(scanstep)/float(abs(pos.getShotFreq(scanstep)))) + " seconds")
+            rc.laser.setRate(abs(pos.getShotFreq(scanstep)))
+            rc.laser.openShutter()
+            time.sleep(pos.getShotCount(scanstep)/float(abs(pos.getShotFreq(scanstep))))
+            rc.laser.closeShutter()
+        else:
+            rc.printMsg("No laser shots in this step")
+
 rc.assembler_alive()
 rc.broker_alive()
 rc.encoder_alive()
