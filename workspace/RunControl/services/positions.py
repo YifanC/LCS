@@ -8,9 +8,7 @@ from matplotlib.collections import LineCollection
 class Positions(Base):
     def __init__(self):
         self.name = "configuration"
-        super(Positions, self).__init__(name=self.name, logit=False, RunNumber=1)
-
-        pass
+        super(Positions, self).__init__(name=self.name, logit=True, RunNumber=1)
 
     def __len__(self):
         return np.size(self.data, axis=0)

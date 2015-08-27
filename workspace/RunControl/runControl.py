@@ -52,12 +52,12 @@ pos.load("./services/config.csv")
 rc.encoder_start(dry=True)
 rc.laser.comDryRun = True
 rc.attenuator.comDryRun = True
-rc.ft_rotary.comDryRun = True
+rc.ft_rotary.comDryRun = False
 rc.ft_linear.comDryRun = True
 
 # Initialize com ports
-rc.ft_linear.com_init()
-rc.ft_rotary.com = rc.ft_linear.com
+rc.ft_rotary.com_init()
+rc.ft_linear.com = rc.ft_rotary.com
 rc.laser.com_init()
 rc.attenuator.com_init()
 #rc.aperture.com_init()
