@@ -43,9 +43,13 @@ class Controls(Base):
         self.printMsg("Stopping Encoder")
         self.process_stop(self.proc_encoder)
 
-    def assembler_start(self):
+    def assembler_start(self, senddata=True):
         self.printMsg("Starting Assembler")
-        self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", args="-c", py=True)
+        if senddata is True:
+            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", args="-c", py=True)
+        else:
+            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", py=True)
+
 
     def assembler_alive(self):
         alive = self.process_alive(self.proc_assembler)
