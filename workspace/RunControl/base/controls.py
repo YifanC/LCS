@@ -21,18 +21,26 @@ class Controls(Base):
             self.printError("Could not find path to base files -> aborting")
             sys.exit(1)
 
-    def encoder_start(self, dry=False):
+    def encoder_start(self, dry_run=False, ext_trig=False, ref_run=False, send_data=True):
         # TODO: Reset encoder before first start. Make sure that the encoder is in a nice state when we try to turn it on.
-
-        if dry is True:
-            self.printMsg("Starting Encoder Test")
-            self.proc_encoder = self.process_start(self.path_services + "/" + "test_client.o", c=True)
-
-        if dry is False:
+	args=""
+        if dry_run is True:
+	    command = self.path_services + "/" + "test_client.o"
+        if dry_run is False:
             self.printMsg("Starting Encoder")
-            self.proc_encoder = self.process_start(self.path_devices + "/" + "encoder.o", args="-s -t 1000", c=True)
+            command = self.path_devices + "/" + "encoder.o"
+	    if send_data is True:
+		# send data to zmq server
+		args += '-s'
+	    if ext_trig is True:
+		# Trigger every second
+		args += ' -t 1000'
+	    if ref_run is True:
+		# do a reference run first
+		args += ' -r'
 
-
+	self.printMsg(args)
+	self.proc_encoder = self.process_start(command,args=args, c=True)
 
     def encoder_alive(self):
         alive = self.process_alive(self.proc_encoder)
@@ -46,9 +54,9 @@ class Controls(Base):
     def assembler_start(self, senddata=True):
         self.printMsg("Starting Assembler")
         if senddata is True:
-            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", args="-c", py=True)
+            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", args="-c -r " + str(self.RunNumber), py=True)
         else:
-            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", py=True)
+            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", args="-r " + str(self.RunNumber), py=True)
 
 
     def assembler_alive(self):
