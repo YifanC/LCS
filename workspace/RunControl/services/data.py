@@ -2,8 +2,8 @@ import struct  # for packing integers
 import time
 import os
 
-class LaserData(object):
 
+class LaserData(object):
     ID_RunControl = 1
     ID_Encoder = 2
     debug = 1
@@ -27,15 +27,14 @@ class LaserData(object):
                  pos_tomg_1_axis2=float(-77777.),
                  pos_tomg_2_axis1=float(-88888.),
                  pos_tomg_2_axis2=float(-99999.),
-                 RunNumber = -1):
-
+                 RunNumber=-1):
         self.laserid = laserid  # which laser system: 1 or 2
         self.status = status
         self.pos_rot = pos_rot  # Position Rotary Heidenhain Encoder
         self.pos_lin = pos_lin  # Position Linear Heidenhain Encoder
         self.pos_att = pos_att  # Position Attenuator Watt Pilot
         self.pos_iris = pos_iris  # Position Iris Standa
-        self.trigger_time_sec = trigger_time_sec    # Epoch time (in seconds) of Laser Server at receive of Encoder data
+        self.trigger_time_sec = trigger_time_sec  # Epoch time (in seconds) of Laser Server at receive of Encoder data
         self.trigger_time_usec = trigger_time_usec  # Fraction to add to Epoch time in microseconds
         self.count_trigger = count_trigger  # Trigger Counter by Heidenhain Encoder
         self.count_run = count_run  # Run Counter of step in calibration run
@@ -112,7 +111,7 @@ class LaserData(object):
         pass
 
     def writeTxt(self):
-        with open(self.path_data + "/" +"Run-" + str(self.RunNumber) + ".txt", "a+") as f:
+        with open(self.path_data + "/" + "Run-" + str(self.RunNumber) + ".txt", "a+") as f:
             for item in self.dump():
                 f.write("%s " % item)
             f.write("\n")

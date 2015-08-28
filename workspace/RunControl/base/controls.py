@@ -7,7 +7,6 @@ import os
 
 
 class Controls(Base):
-
     def __init__(self, RunNumber):
         self.name = "controls"
         super(Controls, self).__init__(name=self.name, logit=True, RunNumber=RunNumber)
@@ -23,24 +22,24 @@ class Controls(Base):
 
     def encoder_start(self, dry_run=False, ext_trig=False, ref_run=False, send_data=True):
         # TODO: Reset encoder before first start. Make sure that the encoder is in a nice state when we try to turn it on.
-	args=""
+        args = ""
         if dry_run is True:
-	    command = self.path_services + "/" + "test_client.o"
+            command = self.path_services + "/" + "test_client.o"
         if dry_run is False:
             self.printMsg("Starting Encoder")
             command = self.path_devices + "/" + "encoder.o"
-	    if send_data is True:
-		# send data to zmq server
-		args += '-s'
-	    if ext_trig is True:
-		# Trigger every second
-		args += ' -t 1000'
-	    if ref_run is True:
-		# do a reference run first
-		args += ' -r'
+            if send_data is True:
+                # send data to zmq server
+                args += '-s'
+            if ext_trig is True:
+                # Trigger every second
+                args += ' -t 1000'
+            if ref_run is True:
+                # do a reference run first
+                args += ' -r'
 
-	self.printMsg(args)
-	self.proc_encoder = self.process_start(command,args=args, c=True)
+        self.printMsg(args)
+        self.proc_encoder = self.process_start(command, args=args, c=True)
 
     def encoder_alive(self):
         alive = self.process_alive(self.proc_encoder)
@@ -54,9 +53,11 @@ class Controls(Base):
     def assembler_start(self, senddata=True):
         self.printMsg("Starting Assembler")
         if senddata is True:
-            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", args="-c -r " + str(self.RunNumber), py=True)
+            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py",
+                                                     args="-c -r " + str(self.RunNumber), py=True)
         else:
-            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py", args="-r " + str(self.RunNumber), py=True)
+            self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py",
+                                                     args="-r " + str(self.RunNumber), py=True)
 
 
     def assembler_alive(self):
@@ -88,7 +89,7 @@ class Controls(Base):
             prefix = "python"
             command = [prefix, filename]
         elif c is True:
-            #prefix = "./"
+            # prefix = "./"
             command = [filename]
         else:
             self.printError("do not know how to execute!")
@@ -96,7 +97,7 @@ class Controls(Base):
         if args is not "":
             command.append(args)
         # For debugging
-        #process = subprocess.Popen(command)
+        # process = subprocess.Popen(command)
         process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=False)
         return process
 
@@ -110,7 +111,7 @@ class Controls(Base):
     def process_stop(self, procces):
         if self.process_alive(procces):
             procces.send_signal(signal.SIGINT)
-            #procces.terminate()
+            # procces.terminate()
             return True
         else:
             return True
@@ -120,7 +121,7 @@ class Controls(Base):
         proc1 = self.process_start(self.path_base + "/" + "test_proc.py", py=True, args="-p 1")
         print "starting c process"
         proc2 = self.process_start(self.path_base + "/" + "test_proc.o", c=True)
-        #print proc2
+        # print proc2
         time.sleep(2)
         print "is the python process alive? \n" + str(self.process_alive(proc1))
         print "is the c process alive? \n" + str(self.process_alive(proc2))

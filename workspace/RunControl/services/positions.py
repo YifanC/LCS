@@ -49,31 +49,33 @@ class Positions(Base):
         return self.data[i, :]
 
     def printStep(self, i):
-        self.printMsg("Scanning info for step " + str(i+1) + "/" + str(self.len))
-        self.printMsg(" - Horizontal Mirror Movement: steps: " + str(self.getHorRelativeMovement(i)) + " speed: " + str(self.getHorSpeed(i)))
-        self.printMsg(" - Vertical Mirror Movement:   steps: " + str(self.getVerRelativeMovement(i)) + " speed: " + str(self.getVerSpeed(i)))
+        self.printMsg("Scanning info for step " + str(i + 1) + "/" + str(self.len))
+        self.printMsg(" - Horizontal Mirror Movement: steps: " + str(self.getHorRelativeMovement(i)) + " speed: " + str(
+            self.getHorSpeed(i)))
+        self.printMsg(" - Vertical Mirror Movement:   steps: " + str(self.getVerRelativeMovement(i)) + " speed: " + str(
+            self.getVerSpeed(i)))
         self.printMsg(" - Laser Shot Frequency: " + str(self.getShotFreq(i)) + "Hz")
         self.printMsg(" - Attenuator Movement:  " + str(self.getAttenuator(i)))
         self.printMsg(" - Aperture Movement:    " + str(self.getAperture(i)))
 
     def plotMovement(self):
-        x = np.zeros(len(self.data)+1)
-        y = np.zeros(len(self.data)+1)
+        x = np.zeros(len(self.data) + 1)
+        y = np.zeros(len(self.data) + 1)
 
         x[1:] = np.cumsum(self.data[:, 1])
         y[1:] = np.cumsum(self.data[:, 2])
 
-        lwidths=self.data[:,7]/10000.
+        lwidths = self.data[:, 7] / 10000.
         print lwidths
         points = np.array([x, y]).T.reshape(-1, 1, 2)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
-        lc = LineCollection(segments, linewidths=lwidths,colors='blue')
+        lc = LineCollection(segments, linewidths=lwidths, colors='blue')
 
-        print x,y
-        fig,a = plt.subplots()
+        print x, y
+        fig, a = plt.subplots()
         a.add_collection(lc)
-        a.set_xlim(0,200000)
-        a.set_ylim(0,10000)
+        a.set_xlim(0, 200000)
+        a.set_ylim(0, 10000)
         plt.show()
 
 

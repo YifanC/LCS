@@ -6,7 +6,7 @@ from services.data import *
 
 data = LaserData()
 
-#client = TCP("131.225.237.31",33487)
+# client = TCP("131.225.237.31",33487)
 
 client = TCP("131.225.237.27", port_server=33488, port_client=33488)  # Just for local tests
 

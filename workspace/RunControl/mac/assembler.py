@@ -15,11 +15,11 @@ parser.add_argument("-r", "-runnumber", dest='RunNumber', required=True, action=
 parser.add_argument("-c", "-connect", dest='connect', required=False, action="store_true",
                     help='If set assembler will try to connect over a pipe to seb10 abd send data.')
 
-
 parser.set_defaults(connect=False)
 arguments = parser.parse_args()
 connect = arguments.connect
 print connect
+
 
 def sigint_handler(signal, frame):
     print "stopping assembler"
@@ -27,6 +27,7 @@ def sigint_handler(signal, frame):
     assembler.stop()
 
     raise SystemExit(1)
+
 
 SERVER = "localhost"
 PORT_SERVER = 33487
@@ -38,7 +39,7 @@ client = TCP("localhost", port_server=PORT_SERVER, port_client=PORT_CLIENT)  # J
 assembler = Consumer("assembler")
 assembler.start()
 assembler.color = False
-#assembler.open_logfile()
+# assembler.open_logfile()
 if connect is True:
     while client.start_server() is False:
         time.sleep(1)
