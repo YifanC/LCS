@@ -24,6 +24,7 @@ class Mirror(Motor):
         self.config_load()
 
         self.InstructionSet = {"getName": 50,
+                               "getParameter": 53,
                                "stopMovement": 23,
                                "home": 1,
                                "getStatus": 54,
@@ -35,6 +36,7 @@ class Mirror(Motor):
                                "FactoryReset": 36,
                                "Range": 44,
                                "HomeOffset": 47,
+                               "Mode": 40,
                                "moveAbsolute": 20,  # no absolute movement implemented in hardware
                                "moveRelative": 21, }  # positive direction closes / negative opens
 
@@ -117,12 +119,19 @@ class Mirror(Motor):
         self.com_send(self.InstructionSet[parameter], value)
 
     def getParameter(self, parameter):
-        reply = self.com_send(self.InstructionSet[parameter])
+        reply = self.com_send(self.InstructionSet["getParameter"], self.InstructionSet[parameter])
         return reply
 
     def setSerial(self, serial):
         address = 0
         self.writeRegister(address, serial)
+        return 0
+
+    def disableLED(self):
+        setbits = pow(2, 14) + pow(2, 15)
+
+        self.printMsg("Disableing LEDs")
+        self.setParameter("Mode", setbits)
         return 0
 
     def getSerial(self):
