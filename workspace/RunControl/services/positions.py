@@ -4,7 +4,37 @@ import matplotlib.pyplot as plt
 
 from base.base import *
 from matplotlib.collections import LineCollection
-# Collection of functions to read movement pattern configuration, the file looks like this
+# Collection of functions to read movement pattern configuration, the file format is described below:
+# N     Instruction Number:
+#       is the step number and has no effect for the input
+# HRM   Horizontal Relative Movement:
+#       Horizontal movement in microsteps
+# VRM   Vertical Relativ Movement:
+#       Vertical movement in microsteps
+# HS    Horizontal Speed:
+#       Horizontal movement speed in microsteps/s
+# VS    Vertical speed:
+#       Vertical movement speed in microsteps/s
+# S     Shot Frequency:
+#       Shot frequency: - positive = shooting at a given frequency,
+#                       - zero     = single shot,
+#                       - negative = shooting after movement at a given frequency
+# SC    Number of Shots:
+#       Shot count, only relevant if a negative shot frequency is selected. Used to determine the time to hold during
+#       the shooting of the laser. To do a move without shooting, select a negative frequency and set this value to 0.
+# AT    Attenuator Positions:
+#       Absolute attenuator position
+# AP    Aperture Pos:
+#       Absolute aperture position (not implemented yet)
+#
+# An example file would look like this, see also comments for each step
+#N      HRM,   VRM,   HS,    VS, S, SC,   AT, AP
+#0,   80000, 	0, 10000, 10000, 1, 0, 8000, -1     # shooting at 1 Hz while moving
+#1,  200000, 	0, 10000, 10000, 1, 0, 8000, -1     # shooting at 1 Hz while moving
+#2, -200000, 	0, 10000, 10000, -2, 10, 8000, -1   # move relative and after stop, shoot 10 shot at 2Hz
+#3,  -50000, 	0, 10000, 10000, 0, 0, 8000, -1     # move relative and fire a single shot
+#4,       0,  1000, 1000, 10000, -1, 20, 8000, -1   # move relative and after stop fire 20 shots at 1Hz
+#5,  100000,     0, 1000, 10000, -1, 0, 8000, -1    # move relative without any shots
 class Positions(Base):
     def __init__(self, RunNumber):
         self.name = "configuration"
