@@ -6,9 +6,9 @@ from base.base import *
 from matplotlib.collections import LineCollection
 # Collection of functions to read movement pattern configuration, the file looks like this
 class Positions(Base):
-    def __init__(self):
+    def __init__(self, RunNumber):
         self.name = "configuration"
-        super(Positions, self).__init__(name=self.name, logit=True, RunNumber=1)
+        super(Positions, self).__init__(name=self.name, logit=True, RunNumber=RunNumber)
 
     def __len__(self):
         return np.size(self.data, axis=0)
