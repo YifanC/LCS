@@ -2,7 +2,7 @@ __author__ = 'matthias'
 
 from services.positions import *
 
-pos = Positions()
+pos = Positions(123)
 pos.load('./config.csv')
 
 
