@@ -15,6 +15,7 @@ DEBUG = False
 class Base(object):
     def __init__(self, name="", RunNumber=0, logit=True):  # TODO: Implement to put name in all classes
         self.name = name
+        self.server = -1
         self.state = 0
         self.StateDict = {0: "Not Initialized",
                           1: "Ready",
@@ -79,11 +80,14 @@ class Base(object):
         hostname = os.uname()[1]
         if hostname[11:14] == "one":
             path = os.getenv("LCS_DEVICES") + "/config_server1/"
+            self.server = 1
         elif hostname[11:14] == "two":
             path = os.getenv("LCS_DEVICES") + "/config_server2/"
+            self.server = 2
         else:
             self.printMsg("CAUTION USING NON SPECIFIC CONFIG FILES")
             path = os.getenv("LCS_DEVICES") + "/config/"
+            self.server = 0
 
         configfilename = path + str(filename)
 
