@@ -15,6 +15,8 @@ parser.add_argument("-r", "-runnumber", dest='RunNumber', required=True, action=
 parser.add_argument("-c", "-connect", dest='connect', required=False, action="store_true",
                     help='If set assembler will try to connect over a pipe to seb10 abd send data.')
 
+# TODO: Implement a logic so states from the different clients are written to file
+
 parser.set_defaults(connect=False)
 arguments = parser.parse_args()
 connect = arguments.connect
