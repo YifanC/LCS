@@ -23,10 +23,10 @@ class Controls(Base):
     def encoder_start(self, dry_run=False, ext_trig=False, ref_run=False, send_data=True):
         # TODO: Reset encoder before first start. Make sure that the encoder is in a nice state when we try to turn it on.
         args = ""
+        self.printMsg("Starting Encoder")
         if dry_run is True:
             command = self.path_services + "/" + "test_client.o"
         if dry_run is False:
-            self.printMsg("Starting Encoder")
             command = self.path_devices + "/" + "encoder.o"
             if send_data is True:
                 # send data to zmq server
