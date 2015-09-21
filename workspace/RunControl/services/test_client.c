@@ -93,6 +93,9 @@ int main (void)
         printf ("Sending Data Package: %d\n", request_nbr);
 
 	    my_laser_event.TriggerCount = (float) request_nbr;
+        my_laser_event.LinearPosDeg = request_nbr * 1234;          //Position Linear Heidenhain Encoder
+        my_laser_event.RotaryPosDeg = request_nbr * 1234;      //Number of pulses shot with UV laser
+
 
 	    memcpy(&BufferInfo, &EncoderInfo, sizeof(EncoderInfo));
 	    memcpy(&BufferData, &my_laser_event, sizeof(my_laser_event));
