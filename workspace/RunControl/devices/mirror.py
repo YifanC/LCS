@@ -119,7 +119,7 @@ class Mirror(Motor):
         self.com_send(self.InstructionSet[parameter], value)
 
     def getParameter(self, parameter):
-        reply = self.com_send(self.InstructionSet["getParameter"], self.InstructionSet[parameter])
+        reply = self.com_send(self.InstructionSet["getParameter"], [self.InstructionSet[parameter],0,0,0])
         return reply
 
     def setSerial(self, serial):
@@ -131,7 +131,7 @@ class Mirror(Motor):
         setbits = pow(2, 14) + pow(2, 15)
 
         self.printMsg("Disableing LEDs")
-        self.setParameter("Mode", setbits)
+        self.setParameter("Mode", self.translate_pos(setbits))
         return 0
 
     def getSerial(self):
