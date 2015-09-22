@@ -1,5 +1,6 @@
 from datetime import datetime
 import argparse
+import signal
 
 from base.controls import *
 from services.communication import Producer
@@ -25,6 +26,19 @@ arguments = parser.parse_args()
 
 RunNumber = arguments.RunNumber
 warmup = arguments.warmup
+
+def sigint_handler(signal, frame):
+    rc.printMsg("Stopping laser run on user request (sigint)")
+    stop()
+    raise SystemExit(0)
+
+
+def stop():
+    rc.laser.closeShutter()
+    rc.ft_linear.stopMovement()
+    rc.ft_rotary.stopMovement()
+    rc.attenuator.stopMovement()
+
 
 def finalize():
     # ----------------------------------------------------
@@ -65,6 +79,7 @@ def initMotors():
     time.sleep(1)
 
     # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
+    rc.ft_rotary.printMsg("Performing movement to detect reference marks")
     rc.ft_rotary.moveRelative(50000, monitor=True)
     # homing Attenuator
 
@@ -173,6 +188,9 @@ def run():
 # ----------------------- Init -----------------------
 # ----------------------------------------------------
 # Construct needed instances
+
+signal.signal(signal.SIGINT, sigint_handler)
+
 rc = Controls(RunNumber=RunNumber)
 data = LaserData(RunNumber=RunNumber)
 pos = Positions(RunNumber=RunNumber)
@@ -186,33 +204,34 @@ rc.attenuator = Attenuator(RunNumber=RunNumber)
 #rc.mirror_x = Mirror("mirror221", 1)  # not yet defined correctly
 #rc.mirror_y = Mirror("mirror222", 2)  # not yet defined correctly
 
-# define data
-data.laserid = rc.ft_linear.server
-
-# Start broker / encoder
-rc.broker_start()
-rc.assembler_start(senddata=False)
-time.sleep(2)
-
-# Load Positions from file
-pos.load("./services/config.csv")
-
-# Dry run configuration
-rc.laser.comDryRun = True
-rc.attenuator.comDryRun = True
-rc.ft_rotary.comDryRun = True
-rc.ft_linear.comDryRun = True
-
-# init
-init()
-
-# Start up devices
-startup()
-
-# Ask for the start
-raw_input("Start Laser Scan?")
-
 try:
+    # define data
+    data.laserid = rc.ft_linear.server
+
+    # Start broker / encoder
+    rc.broker_start()
+    rc.assembler_start(senddata=False)
+    time.sleep(2)
+
+    # Load Positions from file
+    pos.load("./services/config.csv")
+
+    # Dry run configuration
+    rc.laser.comDryRun = True
+    rc.attenuator.comDryRun = True
+    rc.ft_rotary.comDryRun = True
+    rc.ft_linear.comDryRun = True
+
+    # init
+    init()
+
+    # Start up devices
+    startup()
+
+    # Ask for the start
+    raw_input("Start Laser Scan?")
+
+
     run()
     rc.assembler_alive()
     rc.broker_alive()
