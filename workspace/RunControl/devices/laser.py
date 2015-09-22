@@ -5,9 +5,9 @@ from base.device import *
 from laser_error import ErrorCodeLaser
 
 class Laser(Device):
-    def __init__(self):
+    def __init__(self,RunNumber):
         self.name = "laser"
-        super(Laser, self).__init__(name=self.name)
+        super(Laser, self).__init__(name=self.name, logit=True, RunNumber=RunNumber)
         self.state = 0
         self.comBaudrate = 9600
         self.comTimeout = 2

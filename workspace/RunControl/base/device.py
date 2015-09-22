@@ -3,8 +3,8 @@ __author__ = 'matthias'
 from comserial import *
 
 class Device(ComSerial):
-    def __init__(self, name=''):
-        super(Device, self).__init__(name=name)
+    def __init__(self, name='', RunNumber=0, logit=True):
+        super(Device, self).__init__(name=name, RunNumber=RunNumber, logit=logit)
         self.InstructionSet = {"getInfo": None,
                                "getName": None}
 

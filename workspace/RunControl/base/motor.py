@@ -4,8 +4,8 @@ from device import *
 class Motor(Device):
     """" At the moment only an idea of a nice classe """
 
-    def __init__(self, name=''):
-        super(Motor, self).__init__(name=name)
+    def __init__(self, name='', RunNumber=0):
+        super(Motor, self).__init__(name=name, RunNumber=RunNumber, logit=True)
         self.InstructionSet = {"getInfo": None,
                                "getName": None,
                                "maxSpeed": None,

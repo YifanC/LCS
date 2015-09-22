@@ -126,8 +126,9 @@ class Base(object):
         else:
             LogFilePath = ""
 
-        # TODO: Make the logfiles merge into eachother, so only one logfile is generated
-
+        # TODO: Make the logfiles merge into eachother, so only one logfile is generated. This would work in the
+        # TODO: following way: instead of handling the logging separately one would start a logging instance in the
+        # TODO: runControl.py and add all the handlers also in there.
 
         log = logging.getLogger(self.name)
 
@@ -141,8 +142,8 @@ class Base(object):
             log.addHandler(logging.NullHandler())
         # printing out to console
         # console = logging.StreamHandler()
-        #console.setLevel(logging.INFO)
-        #logging.getLogger(self.name).addHandler(console)
+        # console.setLevel(logging.INFO)
+        # logging.getLogger(self.name).addHandler(console)
 
         return log
 
@@ -151,13 +152,17 @@ class Base(object):
 
     class Device_Config():
         """" Config class just to translate the json file into a dict for actual device configurations """
+
         def __init__(self, f):
             self.__dict__ = f
 
     class Com_Config():
         """" Config class just to translate the json file into a dict for com port configuration of server """
+
         def __init__(self, f):
             self.__dict__ = f
+
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'

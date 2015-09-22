@@ -2,8 +2,8 @@ __author__ = 'matthias'
 from base import *
 
 class ComSerial(Base):
-    def __init__(self, name=""):  # , comport):
-        super(ComSerial, self).__init__(name=name)
+    def __init__(self, name="", RunNumber=0, logit=True):  # , comport):
+        super(ComSerial, self).__init__(name=name, RunNumber=RunNumber, logit=logit)
         self.com = serial.Serial()
         self.comBaudrate = 9600
         self.comTimeout = 0.1
