@@ -54,7 +54,7 @@ class Controls(Base):
         self.printMsg("Starting Assembler")
         if senddata is True:
             self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py",
-                                                     args="-c -r " + str(self.RunNumber), py=True)
+                                                     args="-r " + str(self.RunNumber) + " -c", py=True)
         else:
             self.proc_assembler = self.process_start(self.path_macros + "/" + "assembler.py",
                                                      args="-r " + str(self.RunNumber), py=True)
@@ -95,7 +95,8 @@ class Controls(Base):
             self.printError("do not know how to execute!")
             return False
         if args is not "":
-            command.append(args)
+            for i in range(len(args.split())):
+                command.append(args.split()[i])
         # For debugging
         # process = subprocess.Popen(command)
         process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=False)
