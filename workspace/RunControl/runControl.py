@@ -210,7 +210,7 @@ try:
 
     # Start broker / encoder
     rc.broker_start()
-    rc.assembler_start(senddata=False)
+    rc.assembler_start(senddata=True)
     time.sleep(2)
 
     # Load Positions from file
@@ -236,6 +236,9 @@ try:
     rc.assembler_alive()
     rc.broker_alive()
     rc.encoder_alive()
+
+except Exception as e:
+    print e
 
 finally:
     finalize()
