@@ -21,7 +21,7 @@ class Base(object):
                           1: "Ready",
                           2: "Error"}
         # switch this to false if using bpython
-        self.color = True
+        self.color = False
         self.config = None
         self.config_com = None
         self.RunNumber = RunNumber  # TODO: Implement passing of run number from the instance
