@@ -2,8 +2,12 @@ __author__ = 'matthias'
 from services.tcp import *
 from services.data import *
 
+SERVER = "localhost"
+PORT_SERVER = 33487
+PORT_CLIENT = 33488
 
-server = TCP("localhost", port_server=33487, port_client=33488)  # Just for local tests
+
+server = TCP(SERVER, port_server=PORT_SERVER, port_client=PORT_CLIENT)  # Just for local tests
 data = LaserData()
 server.printMsg("Starting server")
 server.start_server()
