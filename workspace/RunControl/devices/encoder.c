@@ -374,6 +374,8 @@ int main(int argc, char *argv[])
    CheckError(EIB7ConfigDataPacket(eib, packet, 3));
    
 
+
+   /* set up trigger */
    if(ExtTrigger)
    {
       /* enable external trigger */
@@ -415,7 +417,7 @@ int main(int argc, char *argv[])
       CheckError(EIB7ClearRefStatus(axis[RotaryEncoder]));
 
       /* Do a reference movement for the rotarty encoder (get two reference marks) */
-      CheckError(EIB7StartRef(axis[RotaryEncoder], EIB7_RP_RefPos1)); // start waiting for 2 reference marks on the rotary axis
+      CheckError(EIB7StartRef(axis[RotaryEncoder], EIB7_RP_RefPos2)); // start waiting for 2 reference marks on the rotary axis
       active = 1;   
       while(active==1) {
          CheckError(EIB7GetRefActive(axis[RotaryEncoder], &active));
