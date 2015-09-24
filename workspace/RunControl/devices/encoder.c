@@ -517,7 +517,8 @@ int main(int argc, char *argv[])
 		 
          /* calculate vertical position */
          LinearCounts = LinearEncoderData.position  - 7728478;
-         EventData.LinearPosDeg = ((float) LinearCounts) /69994.7111;
+	 EventData.LinearPosDeg = (float) LinearEncoderData.position;
+         //EventData.LinearPosDeg = ((float) LinearCounts) /69994.7111;
 
 	     /* Add time to the struct which is sent to the server */
    	     EventData.SystemTime_sec = (float) (SystemTime.tv_sec - 1431636031);
