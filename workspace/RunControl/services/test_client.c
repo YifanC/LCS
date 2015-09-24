@@ -117,7 +117,7 @@ int main (void)
             stop = 1;
         }
         request_nbr += 1;
-        sleep(1);
+        usleep(1000000);
     }
 
     printf ("Shutting down.");
