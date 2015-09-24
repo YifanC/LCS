@@ -75,7 +75,7 @@ def initMotors():
 
     # start the encoder just before we do the reference run, the wait a short time to let it set things up.
     # Also the zmq server will be ready at this point
-    rc.encoder_start(dry_run=True, ext_trig=True, ref_run=True)
+    rc.encoder_start(dry_run=True, ext_trig=False, ref_run=True)
     time.sleep(1)
 
     # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
@@ -210,7 +210,7 @@ try:
 
     # Start broker / encoder
     rc.broker_start()
-    rc.assembler_start(senddata=True)
+    rc.assembler_start(senddata=False)
     time.sleep(2)
 
     # Load Positions from file
