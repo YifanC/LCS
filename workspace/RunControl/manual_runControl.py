@@ -46,7 +46,10 @@ def finalize():
     # ----------------------------------------------------
     rc.laser.closeShutter()
     rc.laser.setRate(0)
-    rc.laser.stop()
+    
+    # Just for now!
+    #rc.laser.stop()
+
     # Close com ports
     # rc.ft_linear.com_close()
     #rc.ft_rotary.com_close()
@@ -68,19 +71,19 @@ def finalize():
 def initMotors():
 
     # Homing Feedtrough
-    #rc.ft_linear.initAxis()
-    #rc.ft_rotary.initAxis()
+    rc.ft_linear.initAxis()
+    rc.ft_rotary.initAxis()
     #rc.ft_linear.homeAxis()
     #rc.ft_rotary.homeAxis()
 
     # start the encoder just before we do the reference run, the wait a short time to let it set things up.
     # Also the zmq server will be ready at this point
-    rc.encoder_start(dry_run=True, ext_trig=False, ref_run=True)
+    rc.encoder_start(dry_run=False, ext_trig=False, ref_run=False)
     time.sleep(1)
 
     # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
-    rc.ft_rotary.printMsg("Performing movement to detect reference marks")
-    rc.ft_rotary.moveRelative(50000, monitor=True)
+    #rc.ft_rotary.printMsg("Performing movement to detect reference marks")
+    #rc.ft_rotary.moveRelative(250000, monitor=True)
     # homing Attenuator
 
 
@@ -209,23 +212,24 @@ data.laserid = rc.ft_linear.server
 
 # Start broker / encoder
 rc.broker_start()
-rc.assembler_start(senddata=False)
+rc.assembler_start(senddata=True)
 time.sleep(2)
 
 # Load Positions from file
 pos.load("./services/config.csv")
 
 # Dry run configuration
-rc.laser.comDryRun = True
-rc.attenuator.comDryRun = True
-rc.ft_rotary.comDryRun = True
-rc.ft_linear.comDryRun = True
+#rc.laser.comDryRun = True
+#rc.attenuator.comDryRun = True
+#rc.ft_rotary.comDryRun = True
+#rc.ft_linear.comDryRun = True
 
 # init
 init()
 
 # Start up devices
 startup()
+rc.com.send_data(data)
 
 # Ask for the start
 
