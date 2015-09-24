@@ -31,20 +31,30 @@ def sigint_handler(signal, frame):
     raise SystemExit(1)
 
 
-SERVER = "localhost"
-PORT_SERVER = 33487
+#SERVER = "localhost"
+#PORT_SERVER = 33487
+#PORT_CLIENT = 33488
+
+SERVER = ''
+PORT_SERVER = 33488
 PORT_CLIENT = 33488
+
 signal.signal(signal.SIGINT, sigint_handler)
 data = LaserData(RunNumber=arguments.RunNumber)
-client = TCP("localhost", port_server=PORT_SERVER, port_client=PORT_CLIENT)  # Just for local tests
+client = TCP(SERVER, port_server=PORT_SERVER, port_client=PORT_CLIENT)  # Just for local tests
 
 assembler = Consumer("assembler")
 assembler.start()
 assembler.color = False
 # assembler.open_logfile()
+assembler.printDebug("starting")
+
 if connect is True:
     while client.start_server() is False:
+	assembler.printDebug("trying to connect to client")
         time.sleep(1)
+
+assembler.printDebug("starting server is over...")
 
 print "------------ Wait for Hello ------------"
 ready = False
@@ -59,6 +69,7 @@ while True:
     # only write if new encoder data arrived
     if source_id == 2:
         if connect is True:
+	    assembler.printDebug(data)
             client.send_server(data)
         data.writeTxt()
     print "trigger " + str(data.count_trigger)
