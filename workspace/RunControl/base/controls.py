@@ -31,7 +31,7 @@ class Controls(Base):
             if send_data is True:
                 # send data to zmq server
                 args += '-s'
-            if ext_trig is True:
+            if ext_trig is False:
                 # Trigger every second
                 args += ' -t 1000'
             if ref_run is True:
