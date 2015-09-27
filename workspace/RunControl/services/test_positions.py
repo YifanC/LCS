@@ -3,7 +3,7 @@ __author__ = 'matthias'
 from services.positions import *
 
 pos = Positions(123)
-pos.load('./config.csv')
+pos.load('./config_demo.csv')
 
 
 pos.plotMovement()

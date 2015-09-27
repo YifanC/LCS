@@ -104,8 +104,11 @@ class Positions(Base):
         print x, y
         fig, a = plt.subplots()
         a.add_collection(lc)
-        a.set_xlim(0, 200000)
-        a.set_ylim(0, 10000)
+        a.set_xlabel("horizontal steps [microsteps]")
+        a.set_ylabel("vertical steps [microsteps]")
+        a.set_title("scanning pattern")
+        a.set_xlim(0, 300000)
+        a.set_ylim(0, 200000)
         plt.show()
 
 
