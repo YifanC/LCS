@@ -5,5 +5,7 @@
     "rotary_actuator":  "/dev/ttyUSB0",
     "laser":            "/dev/ttyUSB4",
     "mirror221":        "/dev/ttyUSB6",
-    "mirror221":        "/dev/ttyUSB6"
+    "mirror221":        "/dev/ttyUSB6",
+    "mirror211":        "/dev/ttyUSB3",
+    "mirror211":        "/dev/ttyUSB3"
 }
