@@ -2,8 +2,8 @@ __author__ = 'matthias'
 from services.tcp import *
 from services.data import *
 
-SERVER = "localhost"
-PORT_SERVER = 33487
+SERVER = ""
+PORT_SERVER = 33488
 PORT_CLIENT = 33488
 
 
