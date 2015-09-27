@@ -425,7 +425,8 @@ int main(int argc, char *argv[])
 		CheckError(EIB7StopRef(axis[RotaryEncoder]));
 		break;
 	}
-         printf("waiting for reference run...\r");
+         printf("waiting for reference run...\n");
+	 usleep(100000);
       }
    }
 
