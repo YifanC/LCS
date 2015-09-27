@@ -74,11 +74,11 @@ def initMotors():
     rc.ft_linear.initAxis()
     rc.ft_rotary.initAxis()
     #rc.ft_linear.homeAxis()
-    #rc.ft_rotary.homeAxis()
+    rc.ft_rotary.homeAxis()
 
     # start the encoder just before we do the reference run, the wait a short time to let it set things up.
     # Also the zmq server will be ready at this point
-    rc.encoder_start(dry_run=False, ext_trig=False, ref_run=False)
+    rc.encoder_start(dry_run=False, ext_trig=False, ref_run=True)
     time.sleep(1)
 
     # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
@@ -101,8 +101,8 @@ def init():
     rc.laser.com_init()
     rc.attenuator.com_init()
     #rc.aperture.com_init()
-    #rc.mirror_x.com_init()
-    #rc.mirror_y.com = rc.mirror_x.com
+    rc.mirror_x.com_init()
+    rc.mirror_y.com = rc.mirror_x.com
 
 
 def startup():
@@ -204,15 +204,15 @@ rc.laser = Laser(RunNumber=RunNumber)
 rc.attenuator = Attenuator(RunNumber=RunNumber)
 
 # rc.aperture = Aperture()
-#rc.mirror_x = Mirror("mirror221", 1)  # not yet defined correctly
-#rc.mirror_y = Mirror("mirror222", 2)  # not yet defined correctly
+rc.mirror_x = Mirror("mirror221", 1)  # not yet defined correctly
+rc.mirror_y = Mirror("mirror222", 2)  # not yet defined correctly
 
 # define data
 data.laserid = rc.ft_linear.server
 
 # Start broker / encoder
 rc.broker_start()
-rc.assembler_start(senddata=True)
+rc.assembler_start(senddata=False)
 time.sleep(2)
 
 # Load Positions from file
