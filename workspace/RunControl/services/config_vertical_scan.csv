@@ -1,0 +1,25 @@
+#N      HRM,     VRM,       HS,    VS,  S,  SC,    AT, AP
+ 0,       0,  -550000,        0, 15000,  1,   0, 12000, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0, 12000, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0, 11500, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0, 11500, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0, 11000, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0, 11000, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0, 10500, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0, 10500, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0, 10000, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0, 10000, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0,  9500, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0,  9500, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0,  9000, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0,  9000, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0,  8500, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0,  8500, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0,  8000, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0,  8000, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0,  7500, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0,  7500, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0,  6000, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0,  6000, -1     # shooting at 1 Hz while moving
+ 0,       0,  -550000,        0, 15000,  1,   0,  5500, -1     # shooting at 1 Hz while moving
+ 0,       0,   550000,        0, 15000,  1,   0,  5500, -1     # shooting at 1 Hz while moving
