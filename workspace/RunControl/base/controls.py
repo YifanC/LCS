@@ -99,7 +99,7 @@ class Controls(Base):
                 command.append(args.split()[i])
         # For debugging
         # process = subprocess.Popen(command)
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=False)
+        process = subprocess.Popen(command, shell=False)
         return process
 
     def process_alive(self, process):

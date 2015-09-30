@@ -56,12 +56,12 @@ if connect is True:
 
 assembler.printDebug("starting server is over...")
 
-print "------------ Wait for Hello ------------"
+assembler.printMsg("------------ Wait for Hello ------------")
 ready = False
 assembler.timeout = 5
 while not ready:
     ready = assembler.recv_hellos()
-print "--------------- Start DAQ --------------"
+assembler.printMsg("--------------- Start DAQ --------------")
 while True:
     [source_id, state] = assembler.recv(data)
     data.writeBinary('test.bin')
@@ -72,4 +72,4 @@ while True:
 	    assembler.printDebug(data)
             client.send_server(data)
         data.writeTxt()
-    print "trigger " + str(data.count_trigger)
+    assembler.printMsg("recieved data trigger: " + str(data.count_trigger))
