@@ -48,11 +48,14 @@ def finalize():
     rc.laser.setRate(0)
     rc.laser.stop()
     # Close com ports
-    # rc.ft_linear.com_close()
-    #rc.ft_rotary.com_close()
+    rc.ft_linear.com_close()
+    rc.ft_rotary.com_close()
     rc.laser.com_close()
     #rc.attenuator.com_close()
     #rc.aperture.com_close()
+
+    rc.mirror111.com_close()
+    rc.mirror121.com_close()
 
     time.sleep(1)
     rc.assembler_stop()
@@ -64,6 +67,7 @@ def finalize():
     rc.assembler_alive()
     rc.broker_alive()
     rc.encoder_alive()
+
 
 def initMotors():
     # Homing Feedtrough
@@ -97,15 +101,19 @@ def init():
     rc.ft_linear.com = rc.ft_rotary.com
     rc.laser.com_init()
     rc.attenuator.com_init()
-    #rc.aperture.com_init()
+    # rc.aperture.com_init()
+
+    # mirror laser box
     rc.mirror111.com_init()
     rc.mirror112.com = rc.mirror111.com
+
+    # mirro feedthrough
     rc.mirror121.com_init()
-    rc.mirror122 = rc.mirror121.com
+    rc.mirror122.com = rc.mirror121.com
 
 
 def startup():
-    rc.laser.timeout = 0.01*60  # seconds
+    rc.laser.timeout = 0.01 * 60  # seconds
     start_time = datetime.today()
 
     initialized = False
@@ -114,7 +122,9 @@ def startup():
     if warmup:
         elapsed_time = (datetime.today() - start_time).seconds
         while elapsed_time < rc.laser.timeout:
-            rc.laser.printMsg(str("waiting for laser to warm up: " + str(rc.laser.timeout- elapsed_time) + " seconds left \r"), nonewline=True)
+            rc.laser.printMsg(
+                str("waiting for laser to warm up: " + str(rc.laser.timeout - elapsed_time) + " seconds left \r"),
+                nonewline=True)
             if initialized is False:
                 # Initialize and setup communication
                 initMotors()
@@ -123,17 +133,22 @@ def startup():
             time.sleep(1)
             elapsed_time = (datetime.today() - start_time).seconds
     else:
-         initMotors()
+        initMotors()
 
     rc.laser.setRate(0)
     rc.laser.closeShutter()
 
-def update_data():
-    # get mirror positions  
+
+def update_mirror_data():
+    # get mirror positions
+
     data.pos_tomg_1_axis1 = rc.mirror111.getPosition()
     data.pos_tomg_1_axis2 = rc.mirror112.getPosition()
     data.pos_tomg_2_axis1 = rc.mirror121.getPosition()
     data.pos_tomg_2_axis2 = rc.mirror122.getPosition()
+
+    data.count_laser = rc.laser.getShots()
+    rc.com.send_data(data)
 
 
 def run():
@@ -159,7 +174,7 @@ def run():
         if pos.getShotFreq(scanstep) > 0:
             rc.printMsg("Moving and shooting @ " + str(pos.getShotFreq(scanstep)) + "Hz")
             rc.laser.setRate(pos.getShotFreq(scanstep))
-    	    time.sleep(1)
+            time.sleep(1)
             rc.laser.openShutter()
         else:
             rc.laser.setRate(0)
@@ -199,8 +214,8 @@ def run():
 # ----------------------------------------------------
 # ----------------------- Init -----------------------
 # ----------------------------------------------------
-# Construct needed instances
 
+# Construct needed instances
 signal.signal(signal.SIGINT, sigint_handler)
 
 rc = Controls(RunNumber=RunNumber)
@@ -218,35 +233,42 @@ rc.mirror112 = Mirror("mirror112", 2)  # not yet defined correctly
 rc.mirror121 = Mirror("mirror121", 1)  # not yet defined correctly
 rc.mirror122 = Mirror("mirror122", 2)  # not yet defined correctly
 
+
+# define data
+data.laserid = rc.ft_linear.server
+
+# Start broker and assembler (encoder comes up later)
+rc.broker_start()
+rc.assembler_start(senddata=False)
+
+# Load Positions from file
+pos.load("./services/config_vertical_scan.csv")
+
+# Dry run configuration
+dryRun = False
+rc.mirror111.comDryRun = dryRun
+rc.mirror112.comDryRun = dryRun
+rc.mirror121.comDryRun = dryRun
+rc.mirror122.comDryRun = dryRun
+rc.laser.comDryRun = dryRun
+rc.attenuator.comDryRun = dryRun
+rc.ft_rotary.comDryRun = dryRun
+rc.ft_linear.comDryRun = dryRun
+
 try:
-    # define data
-    data.laserid = rc.ft_linear.server
-
-    # Start broker / encoder
-    rc.broker_start()
-    rc.assembler_start(senddata=False)
-    time.sleep(2)
-
-    # Load Positions from file
-    pos.load("./services/config_vertical_scan.csv")
-
-    # Dry run configuration
-    rc.laser.comDryRun = False
-    rc.attenuator.comDryRun = False
-    rc.ft_rotary.comDryRun = False
-    rc.ft_linear.comDryRun = False
-
     # init
     init()
 
     # Start up devices
     startup()
-    
+    rc.assembler_alive()
+    rc.broker_alive()
+    rc.encoder_alive()
 
+    update_mirror_data()
 
     # Ask for the start
     raw_input("Start Laser Scan?")
-
 
     run()
     rc.assembler_alive()
@@ -254,6 +276,7 @@ try:
     rc.encoder_alive()
 
 except Exception as e:
+    print "ERROR"
     print e
 
 finally:
