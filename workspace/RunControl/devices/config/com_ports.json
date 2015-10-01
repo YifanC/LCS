@@ -4,6 +4,12 @@
     "linear_actuator":  "/dev/ttyUSB0",
     "rotary_actuator":  "/dev/ttyUSB0",
     "laser":            "/dev/ttyUSB6",
-    "mirror221":        "/dev/ttyUSB3",
-    "mirror221":        "/dev/ttyUSB4"
+    "mirror111":        "/dev/ttyUSB0",
+    "mirror112":        "/dev/ttyUSB0",
+    "mirror121":        "/dev/ttyUSB0",
+    "mirror122":        "/dev/ttyUSB0",
+    "mirror211":        "/dev/ttyUSB0",
+    "mirror212":        "/dev/ttyUSB0",
+    "mirror221":        "/dev/ttyUSB0",
+    "mirror222":        "/dev/ttyUSB0"
 }
