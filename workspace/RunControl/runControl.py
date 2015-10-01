@@ -66,22 +66,22 @@ def finalize():
     rc.encoder_alive()
 
 def initMotors():
-
     # Homing Feedtrough
-    #rc.ft_linear.initAxis()
-    #rc.ft_rotary.initAxis()
+    rc.ft_linear.initAxis()
+    rc.ft_rotary.initAxis()
     #rc.ft_linear.homeAxis()
-    #rc.ft_rotary.homeAxis()
+    rc.ft_rotary.homeAxis()
 
     # start the encoder just before we do the reference run, the wait a short time to let it set things up.
     # Also the zmq server will be ready at this point
-    rc.encoder_start(dry_run=True, ext_trig=False, ref_run=True)
-    time.sleep(1)
+    rc.encoder_start(dry_run=False, ext_trig=True, ref_run=True)
+    time.sleep(5)
 
     # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
     rc.ft_rotary.printMsg("Performing movement to detect reference marks")
-    rc.ft_rotary.moveRelative(50000, monitor=True)
+    rc.ft_rotary.moveRelative(250000, monitor=True)
     # homing Attenuator
+    rc.ft_rotary.homeAxis()
 
 
 def init():
@@ -214,19 +214,21 @@ try:
     time.sleep(2)
 
     # Load Positions from file
-    pos.load("./services/config.csv")
+    pos.load("./services/config_vertical_scan.csv")
 
     # Dry run configuration
-    rc.laser.comDryRun = True
-    rc.attenuator.comDryRun = True
-    rc.ft_rotary.comDryRun = True
-    rc.ft_linear.comDryRun = True
+    rc.laser.comDryRun = False
+    rc.attenuator.comDryRun = False
+    rc.ft_rotary.comDryRun = False
+    rc.ft_linear.comDryRun = False
 
     # init
     init()
 
     # Start up devices
     startup()
+    
+
 
     # Ask for the start
     raw_input("Start Laser Scan?")
