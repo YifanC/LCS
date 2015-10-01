@@ -48,7 +48,8 @@ class Mirror(Motor):
 
 
     def com_send(self, command, instruction=0):
-        self.com.flushInput()
+        if not self.comDryRun:
+            self.com.flushInput()
         time.sleep(0.1)
         if instruction == 0:
             instruction = [0, 0, 0, 0]
