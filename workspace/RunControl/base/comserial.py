@@ -28,6 +28,8 @@ class ComSerial(Base):
         self.comReplyEnd = ""  # is used to determine the reply length when the device sends back an echo
         self.comEnd = ""  # is added to any message sent to the device
 
+        # TODO: Migate the comDryRun variable form here to self.com.DryRun so when we copy com instances we do not have
+        # TODO: to set the variable too.
         self.comDryRun = False
 
 
