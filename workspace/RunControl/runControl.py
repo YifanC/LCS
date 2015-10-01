@@ -98,8 +98,10 @@ def init():
     rc.laser.com_init()
     rc.attenuator.com_init()
     #rc.aperture.com_init()
-    #rc.mirror_x.com_init()
-    #rc.mirror_y.com = rc.mirror_x.com
+    rc.mirror111.com_init()
+    rc.mirror112.com = rc.mirror111.com
+    rc.mirror121.com_init()
+    rc.mirror122 = rc.mirror121.com
 
 
 def startup():
@@ -125,6 +127,14 @@ def startup():
 
     rc.laser.setRate(0)
     rc.laser.closeShutter()
+
+def update_data():
+    # get mirror positions  
+    data.pos_tomg_1_axis1 = rc.mirror111.getPosition()
+    data.pos_tomg_1_axis2 = rc.mirror112.getPosition()
+    data.pos_tomg_2_axis1 = rc.mirror121.getPosition()
+    data.pos_tomg_2_axis2 = rc.mirror122.getPosition()
+
 
 def run():
     # ----------------------------------------------------
@@ -201,8 +211,10 @@ rc.laser = Laser(RunNumber=RunNumber)
 rc.attenuator = Attenuator(RunNumber=RunNumber)
 
 # rc.aperture = Aperture()
-#rc.mirror_x = Mirror("mirror221", 1)  # not yet defined correctly
-#rc.mirror_y = Mirror("mirror222", 2)  # not yet defined correctly
+rc.mirror111 = Mirror("mirror111", 1)  # not yet defined correctly
+rc.mirror112 = Mirror("mirror112", 2)  # not yet defined correctly
+rc.mirror121 = Mirror("mirror121", 1)  # not yet defined correctly
+rc.mirror122 = Mirror("mirror122", 2)  # not yet defined correctly
 
 try:
     # define data
