@@ -51,8 +51,8 @@ int main (void)
     my_laser_event.SystemTime_sec = -1;
     my_laser_event.SystemTime_usec = -1;
     my_laser_event.RotaryPosDeg = -1.;          //Position Rotary Heidenhain Encoder
-    my_laser_event.LinearPosDeg = -1.0;          //Position Linear Heidenhain Encoder
-    my_laser_event.TriggerCount = -1.0;      //Number of pulses shot with UV laser
+    my_laser_event.LinearPosDeg = -123.0;          //Position Linear Heidenhain Encoder
+    my_laser_event.TriggerCount = -123.0;      //Number of pulses shot with UV laser
 
 	unsigned char BufferInfo[ sizeof (EncoderInfo) ];
 	memcpy(&BufferInfo, &EncoderInfo, sizeof(EncoderInfo));
@@ -93,8 +93,8 @@ int main (void)
         printf ("Sending Data Package: %d\n", request_nbr);
 
 	    my_laser_event.TriggerCount = (float) request_nbr;
-        my_laser_event.LinearPosDeg = request_nbr * 1234;          //Position Linear Heidenhain Encoder
-        my_laser_event.RotaryPosDeg = request_nbr * 1234;      //Number of pulses shot with UV laser
+        my_laser_event.LinearPosDeg = request_nbr * 100;          //Position Linear Heidenhain Encoder
+        my_laser_event.RotaryPosDeg = request_nbr * 100;      //Number of pulses shot with UV laser
 
 
 	    memcpy(&BufferInfo, &EncoderInfo, sizeof(EncoderInfo));
