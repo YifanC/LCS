@@ -153,11 +153,13 @@ def run():
         data.pos_att = rc.attenuator.getPosition()
         # just for debugging:
         data.pos_att = pos.getAttenuator(scanstep)
+        rc.com.send_data(data)
 
         # Configure the Laser to shoot at a given frequency while moving
         if pos.getShotFreq(scanstep) > 0:
             rc.printMsg("Moving and shooting @ " + str(pos.getShotFreq(scanstep)) + "Hz")
             rc.laser.setRate(pos.getShotFreq(scanstep))
+    	    time.sleep(1)
             rc.laser.openShutter()
         else:
             rc.laser.setRate(0)
