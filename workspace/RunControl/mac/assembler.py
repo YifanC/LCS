@@ -20,7 +20,6 @@ parser.add_argument("-c", "-connect", dest='connect', required=False, action="st
 parser.set_defaults(connect=False)
 arguments = parser.parse_args()
 connect = arguments.connect
-print connect
 
 
 def sigint_handler(signal, frame):
