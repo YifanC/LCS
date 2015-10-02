@@ -105,7 +105,7 @@ class Positions(Base):
         for i in range(self.len):
             dt += self.time_step(i)
 
-        self.scanning_time = dt.seconds
+        self.scanning_time = dt
 
 
     def printStep(self, i):
