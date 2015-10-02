@@ -41,6 +41,7 @@ arguments = parser.parse_args()
 RunNumber = arguments.RunNumber
 warmup = arguments.warmup
 
+
 def sigint_handler(signal, frame):
     rc.printMsg("Stopping laser run on user request (sigint)")
     stop()
@@ -66,7 +67,7 @@ def finalize():
     rc.ft_rotary.com_close()
     rc.laser.com_close()
     rc.attenuator.com_close()
-    #rc.aperture.com_close()
+    # rc.aperture.com_close()
 
     rc.mirror111.com_close()
     rc.mirror121.com_close()
@@ -89,17 +90,18 @@ def initMotors():
         # These need special replies which are not fullfiled in a dry run
         rc.ft_linear.initAxis()
         rc.ft_rotary.initAxis()
-        #rc.ft_linear.homeAxis()
+        # rc.ft_linear.homeAxis()
         rc.ft_rotary.homeAxis()
 
+    rc.encoder_start(dry_run=arguments.dry_run, ext_trig=arguments.int_trig, ref_run=arguments.ref_run)
     # start the encoder just before we do the reference run, the wait a short time to let it set things up.
     # Also the zmq server will be ready at this point
+
     if arguments.ref_run is True:
-	# move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
+        # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
         rc.ft_rotary.printMsg("Performing movement to detect reference marks")
         rc.ft_rotary.moveRelative(200000, monitor=True)
         rc.ft_rotary.homeAxis()
-    rc.encoder_start(dry_run=False, ext_trig=True, ref_run=True)
     time.sleep(1)
 
     # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
@@ -107,6 +109,7 @@ def initMotors():
     rc.ft_rotary.moveRelative(220000, monitor=True)
     # homing Attenuator
     rc.ft_rotary.homeAxis()
+
 
 def init():
     # init communication
@@ -170,6 +173,7 @@ def update_mirror_data():
     data.count_laser = rc.laser.getShots()
     rc.com.send_data(data)
 
+
 def config_dryRun():
     rc.mirror111.comDryRun = True
     rc.mirror112.comDryRun = True
@@ -179,6 +183,7 @@ def config_dryRun():
     rc.attenuator.comDryRun = True
     rc.ft_rotary.comDryRun = True
     rc.ft_linear.comDryRun = True
+
 
 def run():
     # ----------------------------------------------------
@@ -279,7 +284,6 @@ rc.printMsg("  - Send Data:        " + str(arguments.send_data))
 rc.printMsg("  - Reference Run:    " + str(arguments.ref_run))
 rc.printMsg("  - Internal Trigger: " + str(arguments.int_trig))
 rc.printMsg("----------------------------------------")
-pos.load("./services/config_scan.csv")
 
 try:
     # Start broker and assembler (encoder comes up later)
@@ -306,7 +310,6 @@ try:
     run()
     rc.assembler_alive()
     rc.broker_alive()
-
 
     rc.encoder_alive()
 
