@@ -232,4 +232,4 @@ class Producer(Communication):
 
     def recv_ack(self):
         pass
-        print "Control Message: ID=", self.ID, " Status=", self.Status
+        self.printMsg("Control Message: ID=" + str(self.ID) + " Status=" + str(self.Status))
