@@ -69,8 +69,8 @@ def finalize():
     rc.attenuator.com_close()
     # rc.aperture.com_close()
 
-    rc.mirror111.com_close()
-    rc.mirror121.com_close()
+    rc.mirror_box_axis1.com_close()
+    rc.mirror_can_axis1.com_close()
 
     time.sleep(1)
     rc.assembler_stop()
@@ -127,12 +127,12 @@ def init():
     # rc.aperture.com_init()
 
     # mirror laser box
-    rc.mirror111.com_init()
-    rc.mirror112.com = rc.mirror111.com
+    rc.mirror_box_axis1.com_init()
+    rc.mirror_box_axis2.com = rc.mirror_box_axis1.com
 
     # mirro feedthrough
-    rc.mirror121.com_init()
-    rc.mirror122.com = rc.mirror121.com
+    rc.mirror_can_axis1.com_init()
+    rc.mirror_can_axis2.com = rc.mirror_can_axis1.com
 
 
 def startup():
@@ -165,20 +165,20 @@ def startup():
 def update_mirror_data():
     # get mirror positions
 
-    data.pos_tomg_1_axis1 = rc.mirror111.getPosition()
-    data.pos_tomg_1_axis2 = rc.mirror112.getPosition()
-    data.pos_tomg_2_axis1 = rc.mirror121.getPosition()
-    data.pos_tomg_2_axis2 = rc.mirror122.getPosition()
+    data.pos_tomg_1_axis1 = rc.mirror_box_axis1.getPosition()
+    data.pos_tomg_1_axis2 = rc.mirror_box_axis2.getPosition()
+    data.pos_tomg_2_axis1 = rc.mirror_can_axis1.getPosition()
+    data.pos_tomg_2_axis2 = rc.mirror_can_axis2.getPosition()
 
     data.count_laser = rc.laser.getShots()
     rc.com.send_data(data)
 
 
 def config_dryRun():
-    rc.mirror111.comDryRun = True
-    rc.mirror112.comDryRun = True
-    rc.mirror121.comDryRun = True
-    rc.mirror122.comDryRun = True
+    rc.mirror_box_axis1.comDryRun = True
+    rc.mirror_box_axis2.comDryRun = True
+    rc.mirror_can_axis1.comDryRun = True
+    rc.mirror_can_axis2.comDryRun = True
     rc.laser.comDryRun = True
     rc.attenuator.comDryRun = True
     rc.ft_rotary.comDryRun = True
@@ -252,6 +252,7 @@ def run():
 # Construct needed instances
 signal.signal(signal.SIGINT, sigint_handler)
 
+
 rc = Controls(RunNumber=RunNumber)
 data = LaserData(RunNumber=RunNumber)
 pos = Positions(RunNumber=RunNumber)
@@ -261,15 +262,29 @@ rc.ft_rotary = Feedtrough("rotary_actuator", RunNumber=RunNumber)
 rc.laser = Laser(RunNumber=RunNumber)
 rc.attenuator = Attenuator(RunNumber=RunNumber)
 
-# rc.aperture = Aperture()
-rc.mirror111 = Mirror("mirror111", 1)
-rc.mirror112 = Mirror("mirror112", 2)
-rc.mirror121 = Mirror("mirror121", 1)
-rc.mirror122 = Mirror("mirror122", 2)
-
-
 # define data
 data.laserid = rc.ft_linear.server
+
+
+# rc.aperture = Aperture()
+if data.laserid == 1:
+    # We are on LCS1
+    rc.mirror_box_axis1 = Mirror("mirror111", 1)
+    rc.mirror_box_axis2 = Mirror("mirror112", 2)
+    rc.mirror_can_axis1 = Mirror("mirror121", 1)
+    rc.mirror_can_axis2 = Mirror("mirror122", 2)
+if data.laserid == 2:
+    # We are on LCS2
+    rc.mirror_box_axis1 = Mirror("mirror211", 1)
+    rc.mirror_box_axis2 = Mirror("mirror212", 2)
+    rc.mirror_can_axis1 = Mirror("mirror221", 1)
+    rc.mirror_can_axis2 = Mirror("mirror222", 2)
+else:
+    # We do not run on any of the laser servers
+    rc.mirror_box_axis1 = Mirror("mirror111", 1)
+    rc.mirror_box_axis2 = Mirror("mirror112", 2)
+    rc.mirror_can_axis1 = Mirror("mirror121", 1)
+    rc.mirror_can_axis2 = Mirror("mirror122", 2)
 
 # Load Positions from file
 pos.load(arguments.configfile)
@@ -277,6 +292,7 @@ pos.load(arguments.configfile)
 rc.printMsg("----------------------------------------")
 rc.printMsg(" Configuration: ")
 rc.printMsg("  - Run Number:       " + str(RunNumber))
+rc.printMsg("  - Laser ID:         " + str(data.laserid))
 rc.printMsg("  - Using config:     " + str(arguments.configfile))
 rc.printMsg("  - Scanning time     " + str(pos.scanning_time))
 rc.printMsg("  - Dry Run:          " + str(arguments.dry_run))
