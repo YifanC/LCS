@@ -36,6 +36,9 @@ parser.add_argument("-i", "--int_trig", action='store_true', dest='int_trig', de
 parser.add_argument("-noref", "--no_ref_run", action='store_true', dest='ref_run', default=True, required=False,
                     help='Do not perform a reference run for the encoder.')
 
+parser.add_argument("-m", "--manual", action='store_true', dest='manual', default=False, required=False,
+                    help='Initializ the system but then go into manual control mode.')
+
 arguments = parser.parse_args()
 
 RunNumber = arguments.RunNumber
@@ -301,7 +304,45 @@ rc.printMsg("  - Reference Run:    " + str(arguments.ref_run))
 rc.printMsg("  - Internal Trigger: " + str(arguments.int_trig))
 rc.printMsg("----------------------------------------")
 
-try:
+if arguments.manual is False:
+    try:
+        # Start broker and assembler (encoder comes up later)
+        rc.broker_start()
+        rc.assembler_start(senddata=arguments.send_data)
+
+        # Dry run configuration
+        if arguments.dry_run is True:
+            config_dryRun()
+        # init
+        init()
+
+        # Start up devices
+        startup()
+        rc.assembler_alive()
+        rc.broker_alive()
+        rc.encoder_alive()
+
+        update_mirror_data()
+
+        # Ask for the start
+        raw_input("Start Laser Scan?")
+        run()
+
+        rc.assembler_alive()
+        rc.broker_alive()
+        rc.encoder_alive()
+
+    except Exception as e:
+        print "ERROR"
+        print e
+        SystemExit(-1)
+
+    finally:
+        finalize()
+
+if arguments.manual is True:
+    rc.printMsg("This is manual mode! You have to update the runcontrol data yourself!")
+    rc.printMsg("Have fun & Take care")
     # Start broker and assembler (encoder comes up later)
     rc.broker_start()
     rc.assembler_start(senddata=arguments.send_data)
@@ -320,20 +361,8 @@ try:
 
     update_mirror_data()
 
-    # Ask for the start
-    raw_input("Start Laser Scan?")
+    raise SystemExit
 
-    run()
-    rc.assembler_alive()
-    rc.broker_alive()
 
-    rc.encoder_alive()
 
-except Exception as e:
-    print "ERROR"
-    print e
-    SystemExit(-1)
-
-finally:
-    finalize()
 
