@@ -79,11 +79,11 @@ def initMotors():
     # start the encoder just before we do the reference run, the wait a short time to let it set things up.
     # Also the zmq server will be ready at this point
     rc.encoder_start(dry_run=False, ext_trig=True, ref_run=True)
-    time.sleep(5)
+    time.sleep(1)
 
     # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
     rc.ft_rotary.printMsg("Performing movement to detect reference marks")
-    rc.ft_rotary.moveRelative(250000, monitor=True)
+    rc.ft_rotary.moveRelative(220000, monitor=True)
     # homing Attenuator
     rc.ft_rotary.homeAxis()
 
@@ -242,7 +242,7 @@ rc.broker_start()
 rc.assembler_start(senddata=False)
 
 # Load Positions from file
-pos.load("./services/config_vertical_scan.csv")
+pos.load("./services/config_scan.csv")
 
 # Dry run configuration
 dryRun = False
