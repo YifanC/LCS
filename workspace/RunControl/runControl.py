@@ -279,7 +279,7 @@ rc.printMsg("  - Send Data:        " + str(arguments.send_data))
 rc.printMsg("  - Reference Run:    " + str(arguments.ref_run))
 rc.printMsg("  - Internal Trigger: " + str(arguments.int_trig))
 rc.printMsg("----------------------------------------")
-pos.load("./services/config_scan.csv")
+
 
 try:
     # Start broker and assembler (encoder comes up later)
