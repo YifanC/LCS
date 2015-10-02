@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser(description='Script controlling the start and s
 parser.add_argument("-r", "-runnumber", dest='RunNumber', required=True, action="store",
                     help='Neccessary run number where to store the data for the txt file.')
 
-parser.add_argument("-c", "-connect", dest='connect', required=False, action="store_true",
+parser.add_argument("-c", "-connect", dest='connect', required=False, action="store_true", default=False,
                     help='If set assembler will try to connect over a pipe to seb10 abd send data.')
 
 # TODO: Implement a logic so states from the different clients are written to file
@@ -24,20 +24,19 @@ print connect
 
 
 def sigint_handler(signal, frame):
-    print "stopping assembler"
-    print 'signal: ' + str(signal)
+    assembler.printMsg("stopping assembler")
     assembler.stop()
 
     raise SystemExit(1)
 
 
-#SERVER = "localhost"
-#PORT_SERVER = 33487
-#PORT_CLIENT = 33488
-
-SERVER = ''
-PORT_SERVER = 33488
+SERVER = "localhost"
+PORT_SERVER = 33487
 PORT_CLIENT = 33488
+
+# SERVER = ''
+#PORT_SERVER = 33488
+#PORT_CLIENT = 33488
 
 signal.signal(signal.SIGINT, sigint_handler)
 data = LaserData(RunNumber=arguments.RunNumber)
@@ -51,7 +50,7 @@ assembler.printDebug("starting")
 
 if connect is True:
     while client.start_server() is False:
-	assembler.printDebug("trying to connect to client")
+        assembler.printDebug("trying to connect to client")
         time.sleep(1)
 
 assembler.printDebug("starting server is over...")
@@ -69,7 +68,7 @@ while True:
     # only write if new encoder data arrived
     if source_id == 2:
         if connect is True:
-	    assembler.printDebug(data)
+            assembler.printDebug(data)
             client.send_server(data)
         data.writeTxt()
     assembler.printMsg("recieved data trigger: " + str(data.count_trigger))
