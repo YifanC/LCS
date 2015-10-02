@@ -1,4 +1,3 @@
-from datetime import datetime
 import argparse
 import signal
 
@@ -13,14 +12,29 @@ from devices.attenuator import *
 from devices.aperture import *
 from devices.mirror import *
 
-# Ask for the runnumber
+# Ask for the arguments
 parser = argparse.ArgumentParser(description='Script to control the UV laser system')
 
 parser.add_argument("-r", "--runnumber", action='store', dest='RunNumber', required=True,
                     help='current run number issued by DAQ', type=int)
 
-parser.add_argument("-n", "--nowarmup", action='store_false', dest='warmup', default='true', required=False,
+parser.add_argument("-c", "--configfile", action='store', dest='configfile', required=True,
+                    help='Please supply path to movement configuration', type=str)
+
+parser.add_argument("-n", "--nowarmup", action='store_false', dest='warmup', default=True, required=False,
                     help='do not wait 20 minutes for the laser to warm up')
+
+parser.add_argument("-dry", "--dry_run", action='store_true', dest='dry_run', default=False, required=False,
+                    help='perform a dry run. No com ports opened. Using a fake position producer')
+
+parser.add_argument("-s", "--send_data", action='store_false', dest='send_data', default=True, required=False,
+                    help='Do not send data to uboone DAQ.')
+
+parser.add_argument("-i", "--int_trig", action='store_true', dest='int_trig', default=False, required=False,
+                    help='Use internal trigger (every second) for position encoding')
+
+parser.add_argument("-noref", "--no_ref_run", action='store_true', dest='ref_run', default=True, required=False,
+                    help='Do not perform a reference run for the encoder.')
 
 arguments = parser.parse_args()
 
@@ -51,7 +65,7 @@ def finalize():
     rc.ft_linear.com_close()
     rc.ft_rotary.com_close()
     rc.laser.com_close()
-    #rc.attenuator.com_close()
+    rc.attenuator.com_close()
     #rc.aperture.com_close()
 
     rc.mirror111.com_close()
@@ -71,21 +85,23 @@ def finalize():
 
 def initMotors():
     # Homing Feedtrough
-    rc.ft_linear.initAxis()
-    rc.ft_rotary.initAxis()
-    #rc.ft_linear.homeAxis()
-    rc.ft_rotary.homeAxis()
+    if arguments.dry_run is False:
+        # These need special replies which are not fullfiled in a dry run
+        rc.ft_linear.initAxis()
+        rc.ft_rotary.initAxis()
+        #rc.ft_linear.homeAxis()
+        rc.ft_rotary.homeAxis()
 
     # start the encoder just before we do the reference run, the wait a short time to let it set things up.
     # Also the zmq server will be ready at this point
-    rc.encoder_start(dry_run=False, ext_trig=True, ref_run=True)
-    time.sleep(5)
+    rc.encoder_start(dry_run=arguments.dry_run, ext_trig=arguments.int_trig, ref_run=arguments.ref_run)
+    time.sleep(2)
 
     # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
-    rc.ft_rotary.printMsg("Performing movement to detect reference marks")
-    rc.ft_rotary.moveRelative(250000, monitor=True)
-    # homing Attenuator
-    rc.ft_rotary.homeAxis()
+    if arguments.ref_run is True:
+        rc.ft_rotary.printMsg("Performing movement to detect reference marks")
+        rc.ft_rotary.moveRelative(200000, monitor=True)
+        rc.ft_rotary.homeAxis()
 
 
 def init():
@@ -114,13 +130,13 @@ def init():
 
 def startup():
     rc.laser.timeout = 0.01 * 60  # seconds
-    start_time = datetime.today()
+    start_time = datetime.datetime.today()
 
     initialized = False
     rc.laser.start()
 
     if warmup:
-        elapsed_time = (datetime.today() - start_time).seconds
+        elapsed_time = (datetime.datetime.today() - start_time).seconds
         while elapsed_time < rc.laser.timeout:
             rc.laser.printMsg(
                 str("waiting for laser to warm up: " + str(rc.laser.timeout - elapsed_time) + " seconds left \r"),
@@ -131,7 +147,7 @@ def startup():
                 initialized = True
 
             time.sleep(1)
-            elapsed_time = (datetime.today() - start_time).seconds
+            elapsed_time = (datetime.datetime.today() - start_time).seconds
     else:
         initMotors()
 
@@ -150,6 +166,15 @@ def update_mirror_data():
     data.count_laser = rc.laser.getShots()
     rc.com.send_data(data)
 
+def config_dryRun():
+    rc.mirror111.comDryRun = True
+    rc.mirror112.comDryRun = True
+    rc.mirror121.comDryRun = True
+    rc.mirror122.comDryRun = True
+    rc.laser.comDryRun = True
+    rc.attenuator.comDryRun = True
+    rc.ft_rotary.comDryRun = True
+    rc.ft_linear.comDryRun = True
 
 def run():
     # ----------------------------------------------------
@@ -228,34 +253,35 @@ rc.laser = Laser(RunNumber=RunNumber)
 rc.attenuator = Attenuator(RunNumber=RunNumber)
 
 # rc.aperture = Aperture()
-rc.mirror111 = Mirror("mirror111", 1)  # not yet defined correctly
-rc.mirror112 = Mirror("mirror112", 2)  # not yet defined correctly
-rc.mirror121 = Mirror("mirror121", 1)  # not yet defined correctly
-rc.mirror122 = Mirror("mirror122", 2)  # not yet defined correctly
+rc.mirror111 = Mirror("mirror111", 1)
+rc.mirror112 = Mirror("mirror112", 2)
+rc.mirror121 = Mirror("mirror121", 1)
+rc.mirror122 = Mirror("mirror122", 2)
 
 
 # define data
 data.laserid = rc.ft_linear.server
 
-# Start broker and assembler (encoder comes up later)
-rc.broker_start()
-rc.assembler_start(senddata=False)
-
 # Load Positions from file
-pos.load("./services/config_vertical_scan.csv")
+pos.load(arguments.configfile)
 
-# Dry run configuration
-dryRun = False
-rc.mirror111.comDryRun = dryRun
-rc.mirror112.comDryRun = dryRun
-rc.mirror121.comDryRun = dryRun
-rc.mirror122.comDryRun = dryRun
-rc.laser.comDryRun = dryRun
-rc.attenuator.comDryRun = dryRun
-rc.ft_rotary.comDryRun = dryRun
-rc.ft_linear.comDryRun = dryRun
-
+rc.printMsg("----------------------------------------")
+rc.printMsg(" Configuration: ")
+rc.printMsg("  - Run Number:       " + str(RunNumber))
+rc.printMsg("  - Using config:     " + str(arguments.configfile))
+rc.printMsg("  - Dry Run:          " + str(arguments.dry_run))
+rc.printMsg("  - Send Data:        " + str(arguments.send_data))
+rc.printMsg("  - Reference Run:    " + str(arguments.ref_run))
+rc.printMsg("  - Internal Trigger: " + str(arguments.int_trig))
+rc.printMsg("----------------------------------------")
 try:
+    # Start broker and assembler (encoder comes up later)
+    rc.broker_start()
+    rc.assembler_start(senddata=arguments.send_data)
+
+    # Dry run configuration
+    if arguments.dry_run is True:
+        config_dryRun()
     # init
     init()
 
@@ -273,11 +299,14 @@ try:
     run()
     rc.assembler_alive()
     rc.broker_alive()
+
+
     rc.encoder_alive()
 
 except Exception as e:
     print "ERROR"
     print e
+    SystemExit(-1)
 
 finally:
     finalize()
