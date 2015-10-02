@@ -27,8 +27,8 @@ parser.add_argument("-n", "--nowarmup", action='store_false', dest='warmup', def
 parser.add_argument("-dry", "--dry_run", action='store_true', dest='dry_run', default=False, required=False,
                     help='perform a dry run. No com ports opened. Using a fake position producer')
 
-parser.add_argument("-s", "--send_data", action='store_false', dest='send_data', default=True, required=False,
-                    help='Do not send data to uboone DAQ.')
+parser.add_argument("-l", "--local_mode", action='store_false', dest='send_data', default=True, required=False,
+                    help='Do not send data to uboone DAQ on seb10.')
 
 parser.add_argument("-i", "--int_trig", action='store_true', dest='int_trig', default=False, required=False,
                     help='Use internal trigger (every second) for position encoding')
