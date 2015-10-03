@@ -44,11 +44,15 @@ arguments = parser.parse_args()
 RunNumber = arguments.RunNumber
 warmup = arguments.warmup
 
+def sigterm_handler(signal,frame):
+    rc.printMsg("Stopping laser run on user request (sigint)")
+    stop()
+    raise SystemExit(0)
 
 def sigint_handler(signal, frame):
     rc.printMsg("Stopping laser run on user request (sigint)")
     stop()
-    raise SystemExit(0)
+
 
 
 def stop():
@@ -99,19 +103,15 @@ def initMotors():
     rc.encoder_start(dry_run=arguments.dry_run, ext_trig=arguments.int_trig, ref_run=arguments.ref_run)
     # start the encoder just before we do the reference run, the wait a short time to let it set things up.
     # Also the zmq server will be ready at this point
+    time.sleep(1)
 
     if arguments.ref_run is True:
         # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
         rc.ft_rotary.printMsg("Performing movement to detect reference marks")
         rc.ft_rotary.moveRelative(200000, monitor=True)
         rc.ft_rotary.homeAxis()
-    time.sleep(1)
 
-    # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
-    rc.ft_rotary.printMsg("Performing movement to detect reference marks")
-    rc.ft_rotary.moveRelative(220000, monitor=True)
-    # homing Attenuator
-    rc.ft_rotary.homeAxis()
+
 
 
 def init():
@@ -252,10 +252,11 @@ def run():
 # ----------------------- Init -----------------------
 # ----------------------------------------------------
 
-# Construct needed instances
+# Handle user input
 signal.signal(signal.SIGINT, sigint_handler)
+signal.signal(signal.SIGTERM, sigterm_handler)
 
-
+# Construct needed instances
 rc = Controls(RunNumber=RunNumber)
 data = LaserData(RunNumber=RunNumber)
 pos = Positions(RunNumber=RunNumber)
@@ -341,8 +342,7 @@ if arguments.manual is False:
         finalize()
 
 if arguments.manual is True:
-    rc.printMsg("This is manual mode! You have to update the runcontrol data yourself!")
-    rc.printMsg("Have fun & Take care")
+
     # Start broker and assembler (encoder comes up later)
     rc.broker_start()
     rc.assembler_start(senddata=arguments.send_data)
@@ -361,7 +361,10 @@ if arguments.manual is True:
 
     update_mirror_data()
 
-    raise SystemExit
+    rc.printMsg("This is manual mode! You have to update the runcontrol data yourself!")
+    rc.printMsg("Have fun & Take care")
+
+
 
 
 
