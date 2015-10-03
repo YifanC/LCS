@@ -4,8 +4,9 @@ from base.base import *
 from base.device import *
 from laser_error import ErrorCodeLaser
 
+
 class Laser(Device):
-    def __init__(self,RunNumber):
+    def __init__(self, RunNumber):
         self.name = "laser"
         super(Laser, self).__init__(name=self.name, logit=True, RunNumber=RunNumber)
         self.state = 0
@@ -14,7 +15,7 @@ class Laser(Device):
         self.InfoInstruction = "SE"
         self.InfoMsgLength = 10
         self.StandartMsgLength = 10
-	self.comDefaultReplyLength = 10
+        self.comDefaultReplyLength = 10
         self.comPrefix = ""
         self.comEnd = "\r"
 
@@ -57,30 +58,31 @@ class Laser(Device):
     def getShots(self):
         reply = self.getParameter("getShots")
         self.printMsg(reply)
-	return int(reply)
+        return int(reply)
 
     def start(self):
         self.setParameter("start", 1)
         # msg = self.InstructionSet["start"]
-        #self.com_write(msg)
+        # self.com_write(msg)
 
     def stop(self):
         msg = self.InstructionSet["stop"]
         self.com_write(msg)
 
     def openShutter(self):
-	self.setParameter("Shutter", 1)        
-	#msg = self.InstructionSet["openShutter"]
+        self.setParameter("Shutter", 1)
+
+        # msg = self.InstructionSet["openShutter"]
         #self.com_write(msg)
 
 
     def closeShutter(self):
-	self.setParameter("Shutter", 0)
+        self.setParameter("Shutter", 0)
 
     def singleShot(self):
         msg = self.InstructionSet["singleShot"]
         reply = self.com_write(msg)
-	self.printMsg(reply)
+        self.printMsg(reply)
 
 
     def setRate(self, rate):
@@ -104,4 +106,4 @@ class Laser(Device):
             return -1
 
     def reply_filter(self, msg):
-	return msg.replace("\r","")
+        return msg.replace("\r", "")
