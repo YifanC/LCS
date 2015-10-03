@@ -93,7 +93,7 @@ def initMotors():
         # These need special replies which are not fullfiled in a dry run
         rc.ft_linear.initAxis()
         rc.ft_rotary.initAxis()
-        # rc.ft_linear.homeAxis()
+        rc.ft_linear.homeAxis()
         rc.ft_rotary.homeAxis()
 
     rc.encoder_start(dry_run=arguments.dry_run, ext_trig=arguments.int_trig, ref_run=arguments.ref_run)
