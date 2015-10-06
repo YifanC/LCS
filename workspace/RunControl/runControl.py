@@ -42,21 +42,21 @@ parser.add_argument("-m", "--manual", action='store_true', dest='manual', defaul
 parser.add_argument("-nl", "--no_laser", action='store_true', dest='no_laser', default=False, required=False,
                     help='Use the laser in dry mode.')
 
-
 arguments = parser.parse_args()
 
 RunNumber = arguments.RunNumber
 warmup = arguments.warmup
 
-def sigterm_handler(signal,frame):
+
+def sigterm_handler(signal, frame):
     rc.printMsg("Stopping laser run on user request (sigint)")
     stop()
     raise SystemExit(0)
 
+
 def sigint_handler(signal, frame):
     rc.printMsg("Stopping laser run on user request (sigint)")
     stop()
-
 
 
 def stop():
@@ -115,8 +115,6 @@ def initMotors():
         rc.ft_rotary.printMsg("Performing movement to detect reference marks")
         rc.ft_rotary.moveRelative(260000, monitor=True)
         rc.ft_rotary.homeAxis()
-
-
 
 
 def init():
@@ -200,8 +198,8 @@ def run():
     rc.com.send_data(data)
     for scanstep in range(len(pos)):
 
-	if scanstep == 1:
-	    # Ask for the start
+        if scanstep == 1:
+            # Ask for the start
             raw_input("Start Laser Scan?")
 
         pos.printStep(scanstep)
@@ -328,9 +326,9 @@ if arguments.manual is False:
         # Dry run configuration
         if arguments.dry_run is True:
             config_dryRun()
-	if arguments.no_laser is True:
-	    rc.laser.comDryRun = True 
-        # init
+        if arguments.no_laser is True:
+            rc.laser.comDryRun = True
+            # init
         init()
 
         # Start up devices
@@ -341,7 +339,7 @@ if arguments.manual is False:
 
         update_mirror_data()
 
-	run()
+        run()
 
         rc.assembler_alive()
         rc.broker_alive()
