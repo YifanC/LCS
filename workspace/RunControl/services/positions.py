@@ -145,7 +145,7 @@ class Positions(Base):
         a.set_ylabel("vertical steps [microsteps]")
         a.set_title("scanning pattern")
         a.set_xlim(-10000, 2500000)
-        a.set_ylim(0, 1100000)
+        a.set_ylim(-1100000, 1100000)
         plt.show()
 
 
