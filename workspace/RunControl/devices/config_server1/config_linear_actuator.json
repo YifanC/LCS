@@ -10,5 +10,6 @@
     "HOMINGVELOCITY":            5000,
     "MAX_HOMING_OVERSHOOT":      -18000,
     "HOME_SWITCH":               "S2",
-    "HOME_DIRECTION":            1
+    "HOME_DIRECTION":            1,
+    "IDLE_POSITION":             -10000
 }
