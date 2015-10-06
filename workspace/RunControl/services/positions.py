@@ -48,11 +48,8 @@ class Positions(Base):
         return np.size(self.data, axis=0)
 
     def load(self, filename):
-        try:
-            self.data = np.genfromtxt(filename, comments="#", delimiter=", ", dtype=int)
-        except:
-            self.printError("Configuration file does not exist")
-            raise SystemExit
+        self.data = np.genfromtxt(filename, comments="#", delimiter=", ", dtype=int)
+
         self.len = np.size(self.data, axis=0)
         self.calc_scanning_time()
 

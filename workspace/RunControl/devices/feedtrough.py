@@ -50,6 +50,7 @@ class Feedtrough(Motor):
         self.MAX_HOMING_OVERSHOOT = self.config.MAX_HOMING_OVERSHOOT
         self.HOME_SWITCH = self.config.HOME_SWITCH
         self.HOME_DIRECTION = self.config.HOME_DIRECTION
+	self.IDLE_POSITION = self.config.IDLE_POSITION
 
         self.comPrefix = str(self.axis)  # this string is put in front of any message transmitted
 
@@ -187,7 +188,12 @@ class Feedtrough(Motor):
         out_of_bounds = False
         change_dir = False
         pos_old = self.getPosition()
-        dir_old = -1  # lets assume we home in the negative direction
+	if self.HOME_DIRECTION == 1:
+		homing_dir = -1
+        	dir_old = -1  # we home in the negative direction
+	elif self.HOME_DIRECTION == 3:
+		homing_dir = 1
+		dir_old = 1
         while self.isMoving():
             time.sleep(0.2)
             pos_now = self.getPosition()
@@ -196,11 +202,18 @@ class Feedtrough(Motor):
 
             if dir_now != dir_old:
                 change_dir = True
+	    if self.HOME_DIRECTION == 1:
+            	if pos_now < self.MAX_HOMING_OVERSHOOT * homing_dir:
+                	out_of_bounds = True
+            	if pos_now > abs(self.MAX_HOMING_OVERSHOOT) and change_dir is True:
+                	out_of_bounds = True
 
-            if pos_now < self.MAX_HOMING_OVERSHOOT:
-                out_of_bounds = True
-            if pos_now > abs(self.MAX_HOMING_OVERSHOOT) and change_dir is True:
-                out_of_bounds = True
+	    if self.HOME_DIRECTION == 3:
+            	if pos_now > self.MAX_HOMING_OVERSHOOT * homing_dir:
+                	out_of_bounds = True
+            	if abs(pos_now) > abs(self.MAX_HOMING_OVERSHOOT) and change_dir is True:
+                	out_of_bounds = True
+
 
             if out_of_bounds is True:
                 self.stopMovement()
@@ -215,6 +228,11 @@ class Feedtrough(Motor):
         self.setLimitSwitches(0)
         self.setParameter("VM", self.ENDVELOCITY)
         self.setParameter("R1", counts + 1)
+
+    def gotoIdlePosition(self):
+	self.printMsg("Going to idle position: " + str(self.IDLE_POSITION))
+	self.moveAbsolute(self.IDLE_POSITION, monitor=False)
+	
 
     def monitorMovement(self, show=True):
         while self.isMoving():

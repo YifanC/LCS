@@ -8,7 +8,8 @@
     "HOLDCURRENT":               10,
     "RUNCURRENT":                75,
     "HOMINGVELOCITY":            5000,
-    "MAX_HOMING_OVERSHOOT":      -18000,
-    "HOME_SWITCH":               "S2",
-    "HOME_DIRECTION":            1
+    "MAX_HOMING_OVERSHOOT":      22000,
+    "HOME_SWITCH":               "S1",
+    "HOME_DIRECTION":            3
+    "IDLE_POSITION":             -10000
 }
