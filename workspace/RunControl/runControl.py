@@ -39,6 +39,10 @@ parser.add_argument("-noref", "--no_ref_run", action='store_true', dest='ref_run
 parser.add_argument("-m", "--manual", action='store_true', dest='manual', default=False, required=False,
                     help='Initializ the system but then go into manual control mode.')
 
+parser.add_argument("-nl", "--no_laser", action='store_true', dest='no_laser', default=False, required=False,
+                    help='Use the laser in dry mode.')
+
+
 arguments = parser.parse_args()
 
 RunNumber = arguments.RunNumber
@@ -66,10 +70,6 @@ def finalize():
     # ----------------------------------------------------
     # -------------------- Finalize ----------------------
     # ----------------------------------------------------
-
-    # Don't drive into home switch and stay there for too long
-    rc.ft_rotary.gotoIdlePosition()
-    rc.ft_linear.gotoIdlePosition()
 
     rc.laser.closeShutter()
     rc.laser.setRate(0)
@@ -257,6 +257,10 @@ def run():
         # send the data to the assembler
         rc.com.send_data(data)
 
+    # Don't drive into home switch and stay there for too long
+    rc.ft_rotary.gotoIdlePosition()
+    rc.ft_linear.gotoIdlePosition()
+
 
 # ----------------------------------------------------
 # ----------------------- Init -----------------------
@@ -324,7 +328,8 @@ if arguments.manual is False:
         # Dry run configuration
         if arguments.dry_run is True:
             config_dryRun()
-	rc.laser.comDryRun = True
+	if arguments.no_laser is True:
+	    rc.laser.comDryRun = True 
         # init
         init()
 
