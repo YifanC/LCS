@@ -30,7 +30,7 @@ parser.add_argument("-dry", "--dry_run", action='store_true', dest='dry_run', de
 parser.add_argument("-l", "--local_mode", action='store_false', dest='send_data', default=True, required=False,
                     help='Do not send data to uboone DAQ on seb10.')
 
-parser.add_argument("-i", "--int_trig", action='store_true', dest='int_trig', default=False, required=False,
+parser.add_argument("-i", "--int_trig", action='store_false', dest='int_trig', default=True, required=False,
                     help='Use internal trigger (every second) for position encoding')
 
 parser.add_argument("-noref", "--no_ref_run", action='store_true', dest='ref_run', default=True, required=False,
@@ -66,6 +66,11 @@ def finalize():
     # ----------------------------------------------------
     # -------------------- Finalize ----------------------
     # ----------------------------------------------------
+
+    # Don't drive into home switch and stay there for too long
+    rc.ft_rotary.gotoIdlePosition()
+    rc.ft_linear.gotoIdlePosition()
+
     rc.laser.closeShutter()
     rc.laser.setRate(0)
     rc.laser.stop()
@@ -108,7 +113,7 @@ def initMotors():
     if arguments.ref_run is True:
         # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
         rc.ft_rotary.printMsg("Performing movement to detect reference marks")
-        rc.ft_rotary.moveRelative(200000, monitor=True)
+        rc.ft_rotary.moveRelative(260000, monitor=True)
         rc.ft_rotary.homeAxis()
 
 
@@ -194,6 +199,11 @@ def run():
     # ----------------------------------------------------
     rc.com.send_data(data)
     for scanstep in range(len(pos)):
+
+	if scanstep == 1:
+	    # Ask for the start
+            raw_input("Start Laser Scan?")
+
         pos.printStep(scanstep)
         data.count_run = scanstep
         # Set scanning speeds of axis
@@ -314,6 +324,7 @@ if arguments.manual is False:
         # Dry run configuration
         if arguments.dry_run is True:
             config_dryRun()
+	rc.laser.comDryRun = True
         # init
         init()
 
@@ -325,9 +336,7 @@ if arguments.manual is False:
 
         update_mirror_data()
 
-        # Ask for the start
-        raw_input("Start Laser Scan?")
-        run()
+	run()
 
         rc.assembler_alive()
         rc.broker_alive()
