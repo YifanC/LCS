@@ -50,6 +50,7 @@ class Feedtrough(Motor):
         self.MAX_HOMING_OVERSHOOT = self.config.MAX_HOMING_OVERSHOOT
         self.HOME_SWITCH = self.config.HOME_SWITCH
         self.HOME_DIRECTION = self.config.HOME_DIRECTION
+	self.IDLE_POSITION = self.config.IDLE_POSITION
 
         self.comPrefix = str(self.axis)  # this string is put in front of any message transmitted
 
@@ -227,6 +228,11 @@ class Feedtrough(Motor):
         self.setLimitSwitches(0)
         self.setParameter("VM", self.ENDVELOCITY)
         self.setParameter("R1", counts + 1)
+
+    def gotoIdlePosition(self):
+	self.printMsg("Going to idle position: " + str(self.IDLE_POSITION))
+	self.moveAbsolute(self.IDLE_POSITION, monitor=False)
+	
 
     def monitorMovement(self, show=True):
         while self.isMoving():

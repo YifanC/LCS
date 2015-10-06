@@ -11,4 +11,5 @@
     "MAX_HOMING_OVERSHOOT":      22000,
     "HOME_SWITCH":               "S1",
     "HOME_DIRECTION":            3
+    "IDLE_POSITION":             -10000
 }

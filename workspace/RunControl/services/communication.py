@@ -97,7 +97,7 @@ class Consumer(Communication):
         poller = zmq.Poller()
         poller.register(self.socket, zmq.POLLIN)
 
-        if poller.poll(100000):
+        if poller.poll(10000000):
             self.printMsg("Waiting for Hello")
             [reply_id, reply_state] = self.recv(hello_data)
 

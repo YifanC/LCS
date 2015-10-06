@@ -30,7 +30,7 @@ parser.add_argument("-dry", "--dry_run", action='store_true', dest='dry_run', de
 parser.add_argument("-l", "--local_mode", action='store_false', dest='send_data', default=True, required=False,
                     help='Do not send data to uboone DAQ on seb10.')
 
-parser.add_argument("-i", "--int_trig", action='store_true', dest='int_trig', default=False, required=False,
+parser.add_argument("-i", "--int_trig", action='store_false', dest='int_trig', default=True, required=False,
                     help='Use internal trigger (every second) for position encoding')
 
 parser.add_argument("-noref", "--no_ref_run", action='store_true', dest='ref_run', default=True, required=False,
@@ -39,16 +39,24 @@ parser.add_argument("-noref", "--no_ref_run", action='store_true', dest='ref_run
 parser.add_argument("-m", "--manual", action='store_true', dest='manual', default=False, required=False,
                     help='Initializ the system but then go into manual control mode.')
 
+parser.add_argument("-nl", "--no_laser", action='store_true', dest='no_laser', default=False, required=False,
+                    help='Use the laser in dry mode.')
+
+
 arguments = parser.parse_args()
 
 RunNumber = arguments.RunNumber
 warmup = arguments.warmup
 
+def sigterm_handler(signal,frame):
+    rc.printMsg("Stopping laser run on user request (sigint)")
+    stop()
+    raise SystemExit(0)
 
 def sigint_handler(signal, frame):
     rc.printMsg("Stopping laser run on user request (sigint)")
     stop()
-    raise SystemExit(0)
+
 
 
 def stop():
@@ -62,6 +70,7 @@ def finalize():
     # ----------------------------------------------------
     # -------------------- Finalize ----------------------
     # ----------------------------------------------------
+
     rc.laser.closeShutter()
     rc.laser.setRate(0)
     rc.laser.stop()
@@ -93,25 +102,21 @@ def initMotors():
         # These need special replies which are not fullfiled in a dry run
         rc.ft_linear.initAxis()
         rc.ft_rotary.initAxis()
-        # rc.ft_linear.homeAxis()
+        rc.ft_linear.homeAxis()
         rc.ft_rotary.homeAxis()
 
     rc.encoder_start(dry_run=arguments.dry_run, ext_trig=arguments.int_trig, ref_run=arguments.ref_run)
     # start the encoder just before we do the reference run, the wait a short time to let it set things up.
     # Also the zmq server will be ready at this point
+    time.sleep(1)
 
     if arguments.ref_run is True:
         # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
         rc.ft_rotary.printMsg("Performing movement to detect reference marks")
-        rc.ft_rotary.moveRelative(200000, monitor=True)
+        rc.ft_rotary.moveRelative(260000, monitor=True)
         rc.ft_rotary.homeAxis()
-    time.sleep(1)
 
-    # move rotary ft a bit to get the encoder to read the reference marks (50000 microsteps is enough)
-    rc.ft_rotary.printMsg("Performing movement to detect reference marks")
-    rc.ft_rotary.moveRelative(220000, monitor=True)
-    # homing Attenuator
-    rc.ft_rotary.homeAxis()
+
 
 
 def init():
@@ -194,6 +199,11 @@ def run():
     # ----------------------------------------------------
     rc.com.send_data(data)
     for scanstep in range(len(pos)):
+
+	if scanstep == 1:
+	    # Ask for the start
+            raw_input("Start Laser Scan?")
+
         pos.printStep(scanstep)
         data.count_run = scanstep
         # Set scanning speeds of axis
@@ -247,15 +257,20 @@ def run():
         # send the data to the assembler
         rc.com.send_data(data)
 
+    # Don't drive into home switch and stay there for too long
+    rc.ft_rotary.gotoIdlePosition()
+    rc.ft_linear.gotoIdlePosition()
+
 
 # ----------------------------------------------------
 # ----------------------- Init -----------------------
 # ----------------------------------------------------
 
-# Construct needed instances
+# Handle user input
 signal.signal(signal.SIGINT, sigint_handler)
+signal.signal(signal.SIGTERM, sigterm_handler)
 
-
+# Construct needed instances
 rc = Controls(RunNumber=RunNumber)
 data = LaserData(RunNumber=RunNumber)
 pos = Positions(RunNumber=RunNumber)
@@ -313,6 +328,8 @@ if arguments.manual is False:
         # Dry run configuration
         if arguments.dry_run is True:
             config_dryRun()
+	if arguments.no_laser is True:
+	    rc.laser.comDryRun = True 
         # init
         init()
 
@@ -324,9 +341,7 @@ if arguments.manual is False:
 
         update_mirror_data()
 
-        # Ask for the start
-        raw_input("Start Laser Scan?")
-        run()
+	run()
 
         rc.assembler_alive()
         rc.broker_alive()
@@ -341,8 +356,7 @@ if arguments.manual is False:
         finalize()
 
 if arguments.manual is True:
-    rc.printMsg("This is manual mode! You have to update the runcontrol data yourself!")
-    rc.printMsg("Have fun & Take care")
+
     # Start broker and assembler (encoder comes up later)
     rc.broker_start()
     rc.assembler_start(senddata=arguments.send_data)
@@ -361,7 +375,10 @@ if arguments.manual is True:
 
     update_mirror_data()
 
-    raise SystemExit
+    rc.printMsg("This is manual mode! You have to update the runcontrol data yourself!")
+    rc.printMsg("Have fun & Take care")
+
+
 
 
 
