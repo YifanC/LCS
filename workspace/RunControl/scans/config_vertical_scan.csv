@@ -1,5 +1,5 @@
 #N      HRM,     VRM,       HS,    VS,   S,  SC,    AT, AP
- 0, 2220000,        0,        0, 8000,  0,   0, 12000, 0     # shooting at 1 Hz while moving
+ 0, 2220000,  -630000,    15000, 8000,  0,   0, 12000, 0     # shooting at 1 Hz while moving
  0,       0,  -800000,        0, 8000,  1,   0, 12000, 0     # shooting at 1 Hz while moving
  0,       0,   800000,        0, 8000,  1,   0, 12000, 0     # shooting at 1 Hz while moving
  0,       0,  -800000,        0, 8000,  1,   0, 11500, 0     # shooting at 1 Hz while moving
