@@ -116,6 +116,16 @@ def initMotors():
         rc.ft_rotary.moveRelative(260000, monitor=True)
         rc.ft_rotary.homeAxis()
 
+    # Going to first position
+    pos.printStep(0)
+    data.count_run = 0
+
+    rc.ft_rotary.setParameter("VM", pos.getHorSpeed(0))
+    rc.ft_linear.setParameter("VM", pos.getVerSpeed(0))
+
+    rc.ft_rotary.moveRelative(pos.getHorRelativeMovement(0), monitor=True)
+    rc.ft_linear.moveRelative(pos.getVerRelativeMovement(0), monitor=True)
+
 
 def init():
     # init communication
@@ -142,7 +152,7 @@ def init():
 
 
 def startup():
-    rc.laser.timeout = 0.01 * 60  # seconds
+    rc.laser.timeout = 20 * 60  # seconds
     start_time = datetime.datetime.today()
 
     initialized = False
@@ -196,11 +206,10 @@ def run():
     # --------------------- Operation --------------------
     # ----------------------------------------------------
     rc.com.send_data(data)
-    for scanstep in range(len(pos)):
 
-        if scanstep == 1:
-            # Ask for the start
-            raw_input("Start Laser Scan?")
+    raw_input("Start Laser Scan?")
+
+    for scanstep in range(1,len(pos)):
 
         pos.printStep(scanstep)
         data.count_run = scanstep
