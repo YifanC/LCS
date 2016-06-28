@@ -8,7 +8,7 @@ att.comport = "/dev/ttyUSB9"
 
 # startup
 att.com_init()
-att.getName()
+#att.getName()
 att.enableMotor()
 #att.home(monitor=True, display=True)
 
@@ -25,7 +25,7 @@ att.enableMotor()
 #att.moveRelative(-1300, monitor=True, display=True)
 
 # finalize
-#att.disableMotor()
+att.disableMotor()
 
 
 
