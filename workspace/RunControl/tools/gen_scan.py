@@ -86,7 +86,7 @@ power_steps =[power2steps(steps) for steps in power_coeff]
 polar_drive_speed = 15000
 azimu_drive_speed = 15000
 polar_scan_speed = 8000
-azimu_scan_speed = 4000
+azimu_scan_speed = 3000
 
 # shhoting frequencies
 shot_freq = 4
@@ -101,13 +101,13 @@ file.write("#N      HRM,     VRM,       HS,    VS,   S,  SC,    AT, AP\n")
 
 instructions = []
 # go to first positions
-instructions.append([0, azimu_start_steps, polar_start_steps, azimu_drive_speed, polar_drive_speed, 0, 0, 0])
+instructions.append([0, azimu_start_steps, polar_start_steps, azimu_drive_speed, polar_drive_speed, 0, 0, power_steps[0], 0])
 
 for line in range(1, n_polar_steps+1):
     # do a horizontal scan:
-    instructions.append([2*line-1, (-1)**line*azimu_range_steps, 0, azimu_scan_speed, polar_scan_speed, shot_freq, power_steps[line-2], 0])
+    instructions.append([2*line-1, (-1)**line*azimu_range_steps, 0, azimu_scan_speed, polar_scan_speed, shot_freq, 0, power_steps[line-2], 0])
     # move a bit
-    instructions.append([2*line, 0, polar_range_steps[line-2], azimu_scan_speed, polar_scan_speed, 0, 0, 0])
+    instructions.append([2*line, 0, polar_range_steps[line-2], azimu_scan_speed, polar_scan_speed, 0, 0, power_steps[line-2], 0])
 
 for i in instructions:
     file.write(', '.join(str(e) for e in i) + "\n")
