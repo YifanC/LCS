@@ -47,8 +47,10 @@ power_pol_coeff = []        # coefficients of the power to angle polynomial fit
 
 # load settings according for the selected system
 if id == 1:
-    offsets = [0, 0]
-    power_pol_coeff = []
+    offsets_steps = [0, 0]
+    offsets_deg = [0., 0.]
+    power_range = [12500, 8000]
+    power_pol_coeff = [9.42032760E-01, 3.64403908E-03, -1.14119451E-04, 3.96052294E-07]
 elif id == 2:
     offsets_steps = [174000, 970000]
     offsets_deg = [28.8218, -4.62600708]
@@ -108,6 +110,6 @@ for line in range(1, n_polar_steps+1):
     instructions.append([2*line, 0, polar_range_steps[line-2], azimu_scan_speed, polar_scan_speed, 0, 0, 0])
 
 for i in instructions:
-    file.write(' '.join(str(e) for e in i) + "\n")
+    file.write(', '.join(str(e) for e in i) + "\n")
 
 
