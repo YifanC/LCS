@@ -122,9 +122,10 @@ def initMotors():
 
     rc.ft_rotary.setParameter("VM", pos.getHorSpeed(0))
     rc.ft_linear.setParameter("VM", pos.getVerSpeed(0))
-
-    rc.ft_rotary.moveRelative(pos.getHorRelativeMovement(0), monitor=True)
-    rc.ft_linear.moveRelative(pos.getVerRelativeMovement(0), monitor=True)
+    
+    if arguments.manual is False:
+        rc.ft_rotary.moveRelative(pos.getHorRelativeMovement(0), monitor=True)
+        rc.ft_linear.moveRelative(pos.getVerRelativeMovement(0), monitor=True)
 
 
 def init():
@@ -371,7 +372,9 @@ if arguments.manual is True:
     # Dry run configuration
     if arguments.dry_run is True:
         config_dryRun()
-    # init
+    if arguments.no_laser is True:
+        rc.laser.comDryRun = True    
+
     init()
 
     # Start up devices
