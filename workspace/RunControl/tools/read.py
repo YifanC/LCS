@@ -45,10 +45,11 @@ time = data.iloc[:, 6] + data.iloc[:, 7] / 1000000 - data.iloc[0, 6]
 
 if args.entries:
     for entry in args.entries:
-        print "entry ", entry
-        print " thetha ", thetha[entry]
-        print " phi    ", phi[entry]
-        print " power  ", power[entry]
+        print "entry ", entry, "@", time[entry], "s"
+        print "         calib         raw"
+        print " thetha ", thetha[entry], data.iloc[entry, 3]
+        print " phi    ", phi[entry], data.iloc[entry, 2]
+        print " power  ", power[entry], data.iloc[entry, 4]
 
 # ------------ Plotting ------------
 f, axarr = plt.subplots(3, sharex=True)

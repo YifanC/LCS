@@ -6,7 +6,6 @@
 #  - scanning step size (horizontal / vertical)
 #  - number of steps (horizontal / vertical)
 
-import services.positions
 from numpy.polynomial import polynomial as pol
 import numpy as np
 from datetime import datetime
@@ -33,7 +32,7 @@ def polar_abs_deg2steps(deg):
 
 def polar_deg2steps(deg):
     steps_deg = 0.000178683
-    return int(deg / steps_deg)
+    return dir[0] * int(deg / steps_deg)
 
 def azimu_abs_deg2steps(deg):
     steps_deg = 0.00008064
@@ -41,7 +40,7 @@ def azimu_abs_deg2steps(deg):
 
 def azimu_deg2steps(deg):
     steps_deg = 0.00008064
-    return int(deg / steps_deg)
+    return dir[1] * int(deg / steps_deg)
 
 def power2steps(power):
     range = power_range[0] - power_range[1]
@@ -53,18 +52,22 @@ StartingPosition = 0
 ScanningSteps = [0, 0]      # polar, azimuthal
 ScanningStepsize = [1,2]    # horizontal, vertical
 
+dir = []                    # direction calibration for encoders [polar, azimuth]
 offsets_deg = []            # horizontal, vertical calibration in deg
 offsets_steps = []          # offsets in microsteps
 power_range = []           # power calibration in steps (first: maximum, second: minimum)
 power_pol_coeff = []        # coefficients of the power to angle polynomial fit
 
 # load settings according for the selected system
+# these values are rather crude some put in enough safety margin
 if id == 1:
-    offsets_steps = [0, 0]
-    offsets_deg = [0., 0.]
+    dir = [1, 1]
+    offsets_steps = [-630000, 2470000]
+    offsets_deg = [148.275, -14.4791]
     power_range = [12500, 8000]
     power_pol_coeff = [9.42032760E-01, 3.64403908E-03, -1.14119451E-04, 3.96052294E-07]
 elif id == 2:
+    dir = [1, 1]
     offsets_steps = [174000, 970000]
     offsets_deg = [28.8218, -4.62600708]
     power_range = [12500, 8000]
@@ -87,6 +90,7 @@ azimu_end = args.azimu[1]
 n_polar_steps = int(args.polar[2])
 
 polar_range = np.linspace(polar_start, polar_end, n_polar_steps)
+
 polar_start_steps = polar_abs_deg2steps(polar_start)
 polar_range_steps = [polar_deg2steps(x) for x in np.diff(polar_range)]
 
