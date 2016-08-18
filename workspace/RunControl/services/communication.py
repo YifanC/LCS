@@ -140,7 +140,7 @@ class Consumer(Communication):
 
             # Something here is very strange: Serialization seems to be different from c and python. Floats and ints
             # work, but everythin else ends up crookend: So in some time we will have a problem here!
-            data.trigger_time_sec += 1431636031
+            data.trigger_time_sec += 1471533965
         elif ID == self.ID_RUNCONTROL:  # data from encoder
             self.printMsg("Received data from run control")
             self.unpack_runcontrol(data_string, data)
