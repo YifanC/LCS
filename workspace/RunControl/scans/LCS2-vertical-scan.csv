@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #N,     HRM,      VRM,       HS,    VS,  S,  SC,    AT, AP
  0, 1010400,   993000,    15000, 15000,  0,   0, 12000, 0     # shooting at 1 Hz while moving
  0,       0,  -713000,        0,  8000,  2,   0, 12000, 0     # shooting at 1 Hz while moving
