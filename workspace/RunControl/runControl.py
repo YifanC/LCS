@@ -208,9 +208,16 @@ def run():
     # ----------------------------------------------------
     rc.com.send_data(data)
 
+    # prepare aperture checks
+    aperture_change = [pos.getAperture(i) != pos.getAperture(i-1) for i in range(1, len(pos))]
+    aperture_change.insert(0, True)
     raw_input("Start Laser Scan?")
 
     for scanstep in range(1,len(pos)):
+
+        if aperture_change[scanstep]:
+            rc.printMsg("Adjust Aperture now to " + str(pos.getAperture(scanstep)) + str("/878"))
+            raw_input("Done?")
 
         pos.printStep(scanstep)
         data.count_run = scanstep
