@@ -210,7 +210,8 @@ def run():
 
     # prepare aperture checks
     aperture_change = [pos.getAperture(i) != pos.getAperture(i-1) for i in range(1, len(pos))]
-    aperture_change.insert(0, True)
+    aperture_change[0] = True
+    aperture_change.insert(0, False)
     raw_input("Start Laser Scan?")
 
     for scanstep in range(1,len(pos)):
