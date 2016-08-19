@@ -1,0 +1,8 @@
+# for laser system 2
+#
+# description: Movement to fixed position, there we shoot at
+#              0.5 Hz for 2 hours
+#
+# N      HRM,     VRM,       HS,    VS,   S,  SC,    AT, AP
+0, 1010041, 650000, 15000, 15000,    0,    0,  7500, 0
+1,       0,      0,  4000,  8000, -0.5, 3600,  7500, 0
