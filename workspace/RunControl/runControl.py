@@ -262,6 +262,7 @@ def run():
             if pos.getShotCount(scanstep) > 0:
                 rc.printMsg("Shooting at given position @ " + str(-pos.getShotFreq(scanstep)) + "Hz for " +
                             str(pos.getShotCount(scanstep) / float(abs(pos.getShotFreq(scanstep)))) + " seconds")
+                time.sleep(1)
                 rc.laser.setRate(abs(pos.getShotFreq(scanstep)))
                 time.sleep(1)
                 rc.laser.openShutter()
