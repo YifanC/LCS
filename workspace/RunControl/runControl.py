@@ -231,6 +231,7 @@ def run():
         data.pos_att = rc.attenuator.getPosition()
         # just for debugging:
         data.pos_att = pos.getAttenuator(scanstep)
+        data.pos_iris = pos.getAperture(scanstep)
         rc.com.send_data(data)
 
         # Configure the Laser to shoot at a given frequency while moving
