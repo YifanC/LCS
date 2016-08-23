@@ -1,0 +1,7 @@
+# generated for laser system 2
+#
+# description: polar  start:  single layer horizontal scan
+#
+# N    HRM,    VRM,    HS,    VS,    S,  SC ,   AT,  AP
+0, 1098645, 650000, 15000, 15000,    0,   0   5500,  80
+1, -781250,      0,  2000,  8000,    4,   0, 11500, 150
