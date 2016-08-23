@@ -1,0 +1,26 @@
+#N      HRM,     VRM,       HS,    VS,   S, SC,    AT, AP
+ 0, 2220000,  -630000,    15000, 8000,  0,   0, 12000, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0, 12000, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0, 12000, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0, 11500, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0, 11500, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0, 11000, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0, 11000, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0, 10500, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0, 10500, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0,  8000, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0,  8000, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0,  9500, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0,  9500, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0,  9000, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0,  9000, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0,  8500, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0,  8500, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0,  8000, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0,  8000, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0,  7500, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0,  7500, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0,  6000, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0,  6000, 0     # shooting at 1 Hz while moving
+ 0,       0,  -800000,        0, 8000,  1,   0,  5500, 0     # shooting at 1 Hz while moving
+ 0,       0,   800000,        0, 8000,  1,   0,  5500, 0     # shooting at 1 Hz while moving
