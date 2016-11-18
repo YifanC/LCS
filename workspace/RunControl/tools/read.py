@@ -40,16 +40,18 @@ thetha = data.iloc[:, 3] * lin_tick / lin_convert + lin_offset[id]    # polar an
 phi = data.iloc[:, 2]  + rot_offset[id]                                            # azimuthal angle
 
 power = (data.iloc[:, 4] - power_calib[id][0]) / (power_calib[id][1] - power_calib[id][0]) * 100
+time_abs = data.iloc[:, 6] + data.iloc[:, 7] / 1000000
 time = data.iloc[:, 6] + data.iloc[:, 7] / 1000000 - data.iloc[0, 6]
 
 
 if args.entries:
     for entry in args.entries:
         print "entry ", entry, "@", time[entry], "s"
-        print "         calib         raw"
-        print " thetha ", thetha[entry], data.iloc[entry, 3]
-        print " phi    ", phi[entry], data.iloc[entry, 2]
-        print " power  ", power[entry], data.iloc[entry, 4]
+        print "abs time: ", time_abs[entry]
+        print "          calib         raw"
+        print " thetha  ", thetha[entry], data.iloc[entry, 3]
+        print " phi     ", phi[entry], data.iloc[entry, 2]
+        print " power   ", power[entry], data.iloc[entry, 4]
 
 # ------------ Plotting ------------
 f, axarr = plt.subplots(3, sharex=True)
