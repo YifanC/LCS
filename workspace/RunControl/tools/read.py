@@ -16,9 +16,10 @@ args = parser.parse_args()
 
 os.path.isfile(args.filepath)
 
-data = pandas.read_csv(args.filepath, delim_whitespace=True)
+data = pandas.read_csv(args.filepath, delim_whitespace=False, comment='#', header=None)
 
-id = int(data.iloc[1,0] -1)
+#id = int(data.iloc[1,0] -1)
+id = 1
 
 # conversion factors for linear encoder: ticks to mm and mm to angle
 lin_convert = 0.3499  # conversion from mm to deg
@@ -34,15 +35,19 @@ power_calib = [[4000,12500], [8000, 12500]] # first: power minimum, second: powe
 
 
 # reading data
-i = data.iloc[:,8]
+i = data.iloc[:,0]
 
 thetha = data.iloc[:, 3] * lin_tick / lin_convert + lin_offset[id]    # polar angle
 phi = data.iloc[:, 2]  + rot_offset[id]                                            # azimuthal angle
 
-power = (data.iloc[:, 4] - power_calib[id][0]) / (power_calib[id][1] - power_calib[id][0]) * 100
+power = (data.iloc[:, 7] - power_calib[id][0]) / (power_calib[id][1] - power_calib[id][0]) * 100
 time_abs = data.iloc[:, 6] + data.iloc[:, 7] / 1000000
 time = data.iloc[:, 6] + data.iloc[:, 7] / 1000000 - data.iloc[0, 6]
 
+abs_thetha = np.cumsum(data.iloc[:, 1])
+abs_phi = np.cumsum(data.iloc[:, 2])
+
+thetha = data.iloc[:, 3] * lin_tick / lin_convert + lin_offset[id]    # polar angle
 
 if args.entries:
     for entry in args.entries:
@@ -54,22 +59,23 @@ if args.entries:
         print " power   ", power[entry], data.iloc[entry, 4]
 
 # ------------ Plotting ------------
-f, axarr = plt.subplots(3, sharex=True)
+f, axarr = plt.subplots(2,) # sharex=True)
 
 # Plots
-axarr[0].plot(i, thetha, "*")
-axarr[1].plot(i, phi, "*")
-axarr[2].plot(i, power, "*")
+axarr[0].plot(abs_thetha, abs_phi, "-*")
+axarr[1].plot(i, power, "*")
 
 # Axis settings
-axarr[0].set_ylabel("Polar Angle [deg]")
-axarr[1].set_ylabel("Azimuthal Angle [deg]")
-axarr[2].set_ylabel("Laser Energy [%]")
+fontsize = 12
+axarr[0].set_ylabel("Polar Steps", fontsize=fontsize)
+axarr[0].set_xlabel("Azimuthal Steps", fontsize=fontsize)
+
+axarr[1].set_ylabel("Laser Energy [%]", fontsize=fontsize)
 
 for ax in axarr:
     ax.grid(True)
 
 #plt.suptitle('Run ' + str(RunNumber))
-plt.xlabel("Event Number")
+plt.xlabel("Step", fontsize=fontsize)
 
 plt.show()
